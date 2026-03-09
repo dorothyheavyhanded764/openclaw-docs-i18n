@@ -175,7 +175,7 @@ git push
 
 ## 高级说明
 
--   多代理路由可以为每个代理使用不同的工作区。有关路由配置，请参阅[通道路由](../channels/channel-routing.md)。
+-   多智能体路由可以为每个代理使用不同的工作区。有关路由配置，请参阅[通道路由](../channels/channel-routing.md)。
 -   如果启用了 `agents.defaults.sandbox`，非主会话可以使用 `agents.defaults.sandbox.workspaceRoot` 下的每个会话沙箱工作区。
 
 [上下文](./context.md)[OAuth](./oauth.md)

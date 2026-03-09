@@ -4,7 +4,7 @@
   
 # OpenClaw
 
-  **面向 WhatsApp、Telegram、Discord、iMessage 等全平台 AI 代理网关。**
+  **面向 WhatsApp、Telegram、Discord、iMessage 等全平台 AI 智能体网关。**
   
 
   发消息即可获得代理回复。插件支持 Mattermost 等更多平台。

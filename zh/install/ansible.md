@@ -99,7 +99,7 @@ nmap -p- YOUR_SERVER_IP
 
 ### Docker 可用性
 
-安装 Docker 是为了**代理沙箱**（隔离的工具执行），而不是为了运行网关本身。网关仅绑定到 localhost，并且只能通过 Tailscale VPN 访问。有关沙箱配置，请参阅[多代理沙箱与工具](../tools/multi-agent-sandbox-tools.md)。
+安装 Docker 是为了**代理沙箱**（隔离的工具执行），而不是为了运行网关本身。网关仅绑定到 localhost，并且只能通过 Tailscale VPN 访问。有关沙箱配置，请参阅[多智能体沙箱与工具](../tools/multi-agent-sandbox-tools.md)。
 
 ## 手动安装
 
@@ -195,6 +195,6 @@ openclaw channels login
 -   [openclaw-ansible](https://github.com/openclaw/openclaw-ansible) — 完整部署指南
 -   [Docker](./docker.md) — 容器化网关设置
 -   [沙箱化](../gateway/sandboxing.md) — 代理沙箱配置
--   [多代理沙箱与工具](../tools/multi-agent-sandbox-tools.md) — 每个代理的隔离
+-   [多智能体沙箱与工具](../tools/multi-agent-sandbox-tools.md) — 每个代理的隔离
 
 [Nix](./nix.md)[Bun (实验性)](./bun.md)

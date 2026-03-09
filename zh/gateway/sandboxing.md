@@ -166,9 +166,9 @@ Docker 安装和容器化网关位于此处：[Docker](../install/docker.md) 对
 -   使用 `openclaw sandbox explain` 来检查有效的沙盒模式、工具策略和修复配置键。
 -   有关“为什么这个被阻止？”的思维模型，请参见[沙盒 vs 工具策略 vs 提升](./sandbox-vs-tool-policy-vs-elevated.md)。保持锁定状态。
 
-## 多代理覆盖
+## 多智能体覆盖
 
-每个代理都可以覆盖沙盒和工具：`agents.list[].sandbox` 和 `agents.list[].tools`（以及 `agents.list[].tools.sandbox.tools` 用于沙盒工具策略）。有关优先级，请参见[多代理沙盒与工具](../tools/multi-agent-sandbox-tools.md)。
+每个代理都可以覆盖沙盒和工具：`agents.list[].sandbox` 和 `agents.list[].tools`（以及 `agents.list[].tools.sandbox.tools` 用于沙盒工具策略）。有关优先级，请参见[多智能体沙盒与工具](../tools/multi-agent-sandbox-tools.md)。
 
 ## 最小启用示例
 
@@ -189,7 +189,7 @@ Docker 安装和容器化网关位于此处：[Docker](../install/docker.md) 对
 ## 相关文档
 
 -   [沙盒配置](./configuration.md#agentsdefaults-sandbox)
--   [多代理沙盒与工具](../tools/multi-agent-sandbox-tools.md)
+-   [多智能体沙盒与工具](../tools/multi-agent-sandbox-tools.md)
 -   [安全](./security.md)
 
 [安全](./security.md)[沙盒 vs 工具策略 vs 提升](./sandbox-vs-tool-policy-vs-elevated.md)

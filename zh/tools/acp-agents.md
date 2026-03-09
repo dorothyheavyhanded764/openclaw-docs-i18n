@@ -530,4 +530,4 @@ openclaw config set plugins.entries.acpx.config.nonInteractivePermissions fail
 | ACP 会话早期失败且输出很少 | 权限提示被 `permissionMode`/`nonInteractivePermissions` 阻止。 | 检查网关日志中的 `AcpRuntimeError`。对于完全权限，设置 `permissionMode=approve-all`；对于优雅降级，设置 `nonInteractivePermissions=deny`。 |
 | ACP 会话在工作完成后无限期停滞 | 工具进程已完成但 ACP 会话未报告完成。 | 使用 `ps aux \| grep acpx` 监控；手动终止陈旧进程。 |
 
-[子代理](./subagents.md)[多代理沙盒与工具](./multi-agent-sandbox-tools.md)
+[子代理](./subagents.md)[多智能体沙盒与工具](./multi-agent-sandbox-tools.md)

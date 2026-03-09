@@ -196,7 +196,7 @@ curl -X POST http://127.0.0.1:18789/hooks/gmail \
 -   将钩子端点保持在环回、tailnet 或受信任的反向代理之后。
 -   使用专用的钩子令牌；不要重用网关认证令牌。
 -   同一客户端地址的重复认证失败会被限速，以减缓暴力破解尝试。
--   如果你使用多代理路由，请设置 `hooks.allowedAgentIds` 以限制显式的 `agentId` 选择。
+-   如果你使用多智能体路由，请设置 `hooks.allowedAgentIds` 以限制显式的 `agentId` 选择。
 -   除非你需要调用者选择会话，否则保持 `hooks.allowRequestSessionKey=false`。
 -   如果你启用请求 `sessionKey`，请限制 `hooks.allowedSessionKeyPrefixes`（例如，`["hook:"]`）。
 -   避免在 webhook 日志中包含敏感的原始负载。

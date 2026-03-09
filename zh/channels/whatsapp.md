@@ -327,7 +327,7 @@ WhatsApp 网关运行时应使用 Node。Bun 被标记为与稳定的 WhatsApp/T
 
 -   [配对](./pairing.md)
 -   [频道路由](./channel-routing.md)
--   [多代理路由](../concepts/multi-agent.md)
+-   [多智能体路由](../concepts/multi-agent.md)
 -   [故障排除](./troubleshooting.md)
 
 [Twitch](./twitch.md)[Zalo](./zalo.md)

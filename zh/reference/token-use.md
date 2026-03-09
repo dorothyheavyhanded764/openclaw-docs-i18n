@@ -66,7 +66,7 @@ models.providers.<provider>.models[].cost
 
 ## 缓存 TTL 和修剪的影响
 
-提供商提示缓存仅在缓存 TTL 窗口内有效。OpenClaw 可以选择运行**缓存 TTL 修剪**：一旦缓存 TTL 过期，它会修剪会话，然后重置缓存窗口，以便后续请求可以重新使用新缓存的上下文，而不是重新缓存完整的历史记录。这可以在会话闲置超过 TTL 后保持较低的缓存写入成本。在[网关配置](../gateway/configuration.md)中配置此功能，并在[会话修剪](../concepts/session-pruning.md)中查看行为详情。心跳可以保持缓存在闲置间隙中处于**预热**状态。如果您的模型缓存 TTL 是 `1h`，将心跳间隔设置为略低于此值（例如 `55m`）可以避免重新缓存完整提示，从而降低缓存写入成本。在多代理设置中，您可以保留一个共享的模型配置，并通过 `agents.list[].params.cacheRetention` 为每个代理调整缓存行为。完整的逐项指南，请参见[提示缓存](./prompt-caching.md)。对于 Anthropic API 定价，缓存读取比输入令牌便宜得多，而缓存写入则按更高的乘数计费。有关最新费率和 TTL 乘数，请参阅 Anthropic 的提示缓存定价：[https://docs.anthropic.com/docs/build-with-claude/prompt-caching](https://docs.anthropic.com/docs/build-with-claude/prompt-caching)
+提供商提示缓存仅在缓存 TTL 窗口内有效。OpenClaw 可以选择运行**缓存 TTL 修剪**：一旦缓存 TTL 过期，它会修剪会话，然后重置缓存窗口，以便后续请求可以重新使用新缓存的上下文，而不是重新缓存完整的历史记录。这可以在会话闲置超过 TTL 后保持较低的缓存写入成本。在[网关配置](../gateway/configuration.md)中配置此功能，并在[会话修剪](../concepts/session-pruning.md)中查看行为详情。心跳可以保持缓存在闲置间隙中处于**预热**状态。如果您的模型缓存 TTL 是 `1h`，将心跳间隔设置为略低于此值（例如 `55m`）可以避免重新缓存完整提示，从而降低缓存写入成本。在多智能体设置中，您可以保留一个共享的模型配置，并通过 `agents.list[].params.cacheRetention` 为每个代理调整缓存行为。完整的逐项指南，请参见[提示缓存](./prompt-caching.md)。对于 Anthropic API 定价，缓存读取比输入令牌便宜得多，而缓存写入则按更高的乘数计费。有关最新费率和 TTL 乘数，请参阅 Anthropic 的提示缓存定价：[https://docs.anthropic.com/docs/build-with-claude/prompt-caching](https://docs.anthropic.com/docs/build-with-claude/prompt-caching)
 
 ### 示例：通过心跳保持 1 小时缓存预热
 

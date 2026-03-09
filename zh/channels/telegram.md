@@ -653,7 +653,7 @@ Telegram 特有的高信号字段：
 
 -   [配对](./pairing.md)
 -   [频道路由](./channel-routing.md)
--   [多代理路由](../concepts/multi-agent.md)
+-   [多智能体路由](../concepts/multi-agent.md)
 -   [故障排除](./troubleshooting.md)
 
 [Slack](./slack.md)[Tlon](./tlon.md)

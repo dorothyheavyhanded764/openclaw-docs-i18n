@@ -7,7 +7,7 @@
 
 管理隔离代理（工作空间 + 认证 + 路由）。相关概念：
 
--   多代理路由：[多代理路由](../concepts/multi-agent.md)
+-   多智能体路由：[多智能体路由](../concepts/multi-agent.md)
 -   代理工作空间：[代理工作空间](../concepts/agent-workspace.md)
 
 ## 示例

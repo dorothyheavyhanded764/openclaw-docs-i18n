@@ -294,7 +294,7 @@ Lobster 返回一个 JSON 信封，包含以下三种状态之一：
 
 ## OpenProse
 
-OpenProse 与 Lobster 配合良好：使用 `/prose` 编排多代理准备，然后运行 Lobster 管道进行确定性审批。如果 Prose 程序需要 Lobster，可以通过 `tools.subagents.tools` 为子代理允许 `lobster` 工具。参见 [OpenProse](../prose.md)。
+OpenProse 与 Lobster 配合良好：使用 `/prose` 编排多智能体准备，然后运行 Lobster 管道进行确定性审批。如果 Prose 程序需要 Lobster，可以通过 `tools.subagents.tools` 为子代理允许 `lobster` 工具。参见 [OpenProse](../prose.md)。
 
 ## 安全性
 

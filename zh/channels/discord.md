@@ -954,7 +954,7 @@ openclaw logs --follow
 
 -   [配对](./pairing.md)
 -   [频道路由](./channel-routing.md)
--   [多代理路由](../concepts/multi-agent.md)
+-   [多智能体路由](../concepts/multi-agent.md)
 -   [故障排除](./troubleshooting.md)
 -   [斜杠命令](../tools/slash-commands.md)
 

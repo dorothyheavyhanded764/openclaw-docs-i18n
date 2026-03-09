@@ -446,15 +446,15 @@ docker compose run --rm openclaw-cli devices list --url ws://127.0.0.1:18789
 
 警告：`scope: "shared"` 禁用了跨会话隔离。所有会话共享一个容器和一个工作空间。
 
-### 按代理沙箱配置文件（多代理）
+### 按代理沙箱配置文件（多智能体）
 
-如果你使用多代理路由，每个代理可以覆盖沙箱 + 工具设置：`agents.list[].sandbox` 和 `agents.list[].tools`（以及 `agents.list[].tools.sandbox.tools`）。这让你可以在一个网关中运行混合访问级别：
+如果你使用多智能体路由，每个代理可以覆盖沙箱 + 工具设置：`agents.list[].sandbox` 和 `agents.list[].tools`（以及 `agents.list[].tools.sandbox.tools`）。这让你可以在一个网关中运行混合访问级别：
 
 -   完全访问（个人代理）
 -   只读工具 + 只读工作空间（家庭/工作代理）
 -   无文件系统/Shell 工具（公共代理）
 
-示例、优先级和故障排除参见[多代理沙箱与工具](../tools/multi-agent-sandbox-tools.md)。
+示例、优先级和故障排除参见[多智能体沙箱与工具](../tools/multi-agent-sandbox-tools.md)。
 
 ### 默认行为
 
@@ -542,7 +542,7 @@ docker compose run --rm openclaw-cli devices list --url ws://127.0.0.1:18789
 }
 ```
 
-加固开关位于 `agents.defaults.sandbox.docker` 下：`network`、`user`、`pidsLimit`、`memory`、`memorySwap`、`cpus`、`ulimits`、`seccompProfile`、`apparmorProfile`、`dns`、`extraHosts`、`dangerouslyAllowContainerNamespaceJoin`（仅限紧急情况）。多代理：通过 `agents.list[].sandbox.{docker,browser,prune}.*` 覆盖每个代理的 `agents.defaults.sandbox.{docker,browser,prune}.*`（当 `agents.defaults.sandbox.scope` / `agents.list[].sandbox.scope` 为 `"shared"` 时忽略）。
+加固开关位于 `agents.defaults.sandbox.docker` 下：`network`、`user`、`pidsLimit`、`memory`、`memorySwap`、`cpus`、`ulimits`、`seccompProfile`、`apparmorProfile`、`dns`、`extraHosts`、`dangerouslyAllowContainerNamespaceJoin`（仅限紧急情况）。多智能体：通过 `agents.list[].sandbox.{docker,browser,prune}.*` 覆盖每个代理的 `agents.defaults.sandbox.{docker,browser,prune}.*`（当 `agents.defaults.sandbox.scope` / `agents.list[].sandbox.scope` 为 `"shared"` 时忽略）。
 
 ### 构建默认沙箱镜像
 

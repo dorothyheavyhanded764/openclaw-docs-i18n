@@ -5,7 +5,7 @@
   
 # 群组消息
 
-目标：让 Clawd 驻留在 WhatsApp 群组中，仅在收到 ping 时唤醒，并保持该线程与个人私聊会话分离。注意：`agents.list[].groupChat.mentionPatterns` 现在也被 Telegram/Discord/Slack/iMessage 使用；本文档重点介绍 WhatsApp 特定的行为。对于多代理设置，请为每个代理设置 `agents.list[].groupChat.mentionPatterns`（或使用 `messages.groupChat.mentionPatterns` 作为全局回退）。
+目标：让 Clawd 驻留在 WhatsApp 群组中，仅在收到 ping 时唤醒，并保持该线程与个人私聊会话分离。注意：`agents.list[].groupChat.mentionPatterns` 现在也被 Telegram/Discord/Slack/iMessage 使用；本文档重点介绍 WhatsApp 特定的行为。对于多智能体设置，请为每个代理设置 `agents.list[].groupChat.mentionPatterns`（或使用 `messages.groupChat.mentionPatterns` 作为全局回退）。
 
 ## 已实现的功能 (2025-12-03)
 
