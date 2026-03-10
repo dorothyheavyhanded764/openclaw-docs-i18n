@@ -9,7 +9,7 @@
 
 ## 启用插件
 
-1.  启用插件：
+1. 启用插件：
 
 ```json
 {
@@ -21,7 +21,7 @@
 }
 ```
 
-2.  将工具加入允许列表（该工具注册时带有 `optional: true` 属性）：
+2. 将工具加入允许列表（该工具注册时带有 `optional: true` 属性）：
 
 ```json
 {
@@ -62,15 +62,15 @@
 
 ## 工具参数
 
--   `prompt` (字符串，必需)
--   `input` (任意类型，可选)
--   `schema` (对象，可选的 JSON Schema)
--   `provider` (字符串，可选)
--   `model` (字符串，可选)
--   `authProfileId` (字符串，可选)
--   `temperature` (数字，可选)
--   `maxTokens` (数字，可选)
--   `timeoutMs` (数字，可选)
+- `prompt`（字符串，必需）
+- `input`（任意类型，可选）
+- `schema`（对象，可选的 JSON Schema）
+- `provider`（字符串，可选）
+- `model`（字符串，可选）
+- `authProfileId`（字符串，可选）
+- `temperature`（数字，可选）
+- `maxTokens`（数字，可选）
+- `timeoutMs`（数字，可选）
 
 ## 输出
 
@@ -99,10 +99,10 @@ openclaw.invoke --tool llm-task --action json --args-json '{
 
 ## 安全注意事项
 
--   该工具**仅输出 JSON**，并指示模型只输出 JSON（没有代码块，没有注释）。
--   此运行不会向模型暴露任何其他工具。
--   除非使用 `schema` 进行验证，否则应将输出视为不可信。
--   在任何具有副作用（发送、发布、执行）的步骤之前，请设置审批环节。
+- 该工具**仅输出 JSON**，并指示模型只输出 JSON（没有代码块，没有注释）。
+- 此运行不会向模型暴露任何其他工具。
+- 除非使用 `schema` 进行验证，否则应将输出视为不可信。
+- 在任何具有副作用（发送、发布、执行）的步骤之前，请设置审批环节。
 
 [Firecrawl](./firecrawl.md)[Lobster](./lobster.md)
 

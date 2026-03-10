@@ -3,28 +3,28 @@
   引导
 
   
-# 代理引导
+# 智能体引导
 
-引导是**首次运行**的初始化流程，用于准备代理工作区并收集身份详细信息。它发生在入门之后，即代理首次启动时。
+引导/初始化是智能体**首次运行**时的核心流程，用于准备工作区并收集身份信息。它发生在入门引导之后，也就是智能体第一次启动的时候。
 
-## 引导的作用
+## 引导流程做了什么
 
-在代理首次运行时，OpenClaw 会引导工作区（默认为 `~/.openclaw/workspace`）：
+智能体首次启动时，OpenClaw 会对工作区进行初始化（默认路径为 `~/.openclaw/workspace`）：
 
--   创建种子文件 `AGENTS.md`、`BOOTSTRAP.md`、`IDENTITY.md`、`USER.md`。
--   运行简短的问答流程（一次一个问题）。
--   将身份信息和偏好设置写入 `IDENTITY.md`、`USER.md`、`SOUL.md`。
--   完成后移除 `BOOTSTRAP.md`，确保该流程仅运行一次。
+-   创建初始文件：`AGENTS.md`、`BOOTSTRAP.md`、`IDENTITY.md`、`USER.md`
+-   运行简短的问答流程，逐个问题收集信息
+-   将身份信息和偏好设置写入 `IDENTITY.md`、`USER.md`、`SOUL.md`
+-   完成后自动删除 `BOOTSTRAP.md`，确保流程只执行一次
 
-## 运行位置
+## 在哪里运行
 
-引导始终在**网关主机**上运行。如果 macOS 应用程序连接到远程网关，则工作区和引导文件将位于该远程机器上。
+引导流程始终在**网关主机**上执行。如果你使用 macOS 应用连接到远程网关，工作区和引导文件都会存放在那台远程机器上。
 
-> **ℹ️** 当网关在另一台机器上运行时，请在网关主机上编辑工作区文件（例如，`user@gateway-host:~/.openclaw/workspace`）。
+> **ℹ️** 当网关运行在另一台机器上时，请直接在网关主机上编辑工作区文件（例如 `user@gateway-host:~/.openclaw/workspace`）。
 
 ## 相关文档
 
--   macOS 应用程序入门：[入门指南](./onboarding.md)
--   工作区布局：[代理工作区](../concepts/agent-workspace.md)
+-   macOS 应用入门：[入门引导](./onboarding.md)
+-   工作区结构：[智能体工作区](../concepts/agent-workspace.md)
 
 [OAuth](../concepts/oauth.md)[会话管理](../concepts/session.md)

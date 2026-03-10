@@ -5,49 +5,64 @@
   
 # Agent Send
 
-`openclaw agent` 无需传入聊天消息即可运行单次智能体轮次。默认情况下，它会**通过网关**运行；添加 `--local` 参数可强制在当前机器上使用嵌入式运行时。
+有时候，你可能需要主动让智能体做点什么——比如定时生成报告、批量处理任务，或者从其他系统触发一个回复。`openclaw agent` 命令就是为这种场景设计的：它无需等待聊天消息传入，就能直接运行一次智能体轮次。默认情况下，命令会**通过网关（Gateway）**执行；如果加 `--local` 参数，则会强制使用本机的嵌入式运行时。
 
-## 行为
+## 命令行为
 
--   必需：`--message <文本>`
--   会话选择：
-    -   `--to <目标>` 派生会话密钥（群组/频道目标保持隔离；直接聊天合并为 `main`），**或**
-    -   `--session-id ` 按 id 重用现有会话，**或**
-    -   `--agent ` 直接定位到已配置的智能体（使用该智能体的 `main` 会话密钥）
--   运行与正常传入回复相同的嵌入式智能体运行时。
--   思考/详细标志会持久化到会话存储中。
--   输出：
-    -   默认：打印回复文本（加上 `MEDIA:` 行）
-    -   `--json`：打印结构化负载 + 元数据
--   可选地使用 `--deliver` + `--channel` 将回复交付回某个渠道（目标格式与 `openclaw message --target` 匹配）。
--   使用 `--reply-channel`/`--reply-to`/`--reply-account` 来覆盖交付目标，而无需更改会话。
+**必需参数**：`--message <文本内容>`
 
-如果网关无法访问，CLI 将**回退**到嵌入式本地运行。
+**会话选择**（三选一）：
 
-## 示例
+- `--to <目标>`：根据目标派生会话密钥。群组/频道会保持各自的隔离会话，而私聊会统一合并到 `main` 会话。
+- `--session-id `：直接复用一个已存在的会话。
+- `--agent `：指定一个已配置好的智能体（会使用该智能体的 `main` 会话密钥）。
+
+**运行机制**：使用与正常聊天回复相同的嵌入式智能体运行时。思考（thinking）和详细输出（verbose）的设置会持久化保存到会话中。
+
+**输出格式**：
+
+- 默认：直接打印回复文本（如有媒体则会附带 `MEDIA:` 行）
+- `--json`：输出结构化的 JSON 数据，包含完整负载和元数据
+
+**投递选项**：加上 `--deliver` 和 `--channel`，可以把回复自动发回指定的聊天渠道（目标格式与 `openclaw message --target` 一致）。还可以用 `--reply-channel`、`--reply-to`、`--reply-account` 来覆盖投递目标，而不影响当前会话。
+
+**容错机制**：如果网关不可达，CLI 会自动**回退**到本地嵌入式运行。
+
+## 使用示例
 
 ```bash
+# 向手机号发送消息并获取回复
 openclaw agent --to +15555550123 --message "status update"
+
+# 让 ops 智能体总结日志
 openclaw agent --agent ops --message "Summarize logs"
+
+# 复用已有会话，开启中等思考级别
 openclaw agent --session-id 1234 --message "Summarize inbox" --thinking medium
+
+# 详细模式 + JSON 输出
 openclaw agent --to +15555550123 --message "Trace logs" --verbose on --json
+
+# 将回复投递回原渠道
 openclaw agent --to +15555550123 --message "Summon reply" --deliver
+
+# 让 ops 智能体生成报告，并投递到 Slack 频道
 openclaw agent --agent ops --message "Generate report" --deliver --reply-channel slack --reply-to "#reports"
 ```
 
-## 标志
+## 命令标志
 
--   `--local`：本地运行（需要 shell 中的模型提供商 API 密钥）
--   `--deliver`：将回复发送到所选渠道
--   `--channel`：交付渠道 (`whatsapp|telegram|discord|googlechat|slack|signal|imessage`，默认：`whatsapp`)
--   `--reply-to`：交付目标覆盖
--   `--reply-channel`：交付渠道覆盖
--   `--reply-account`：交付账户 ID 覆盖
--   `--thinking <off|minimal|low|medium|high|xhigh>`：持久化思考级别（仅限 GPT-5.2 + Codex 模型）
--   `--verbose <on|full|off>`：持久化详细级别
--   `--timeout <秒>`：覆盖智能体超时时间
--   `--json`：输出结构化 JSON
+| 标志 | 说明 |
+|------|------|
+| `--local` | 本地运行（需要在 shell 环境中配置好模型提供商的 API 密钥） |
+| `--deliver` | 将回复发送到指定渠道 |
+| `--channel` | 投递渠道，可选值：`whatsapp`、`telegram`、`discord`、`googlechat`、`slack`、`signal`、`imessage`，默认为 `whatsapp` |
+| `--reply-to` | 覆盖投递目标 |
+| `--reply-channel` | 覆盖投递渠道 |
+| `--reply-account` | 覆盖投递账户 ID |
+| `--thinking <级别>` | 持久化思考级别，可选：`off`、`minimal`、`low`、`medium`、`high`、`xhigh`（仅 GPT-5.2 和 Codex 模型支持） |
+| `--verbose <级别>` | 持久化详细输出级别，可选：`on`、`full`、`off` |
+| `--timeout <秒>` | 覆盖智能体超时时间 |
+| `--json` | 输出结构化 JSON |
 
 [浏览器故障排除](./browser-linux-troubleshooting.md)[子智能体](./subagents.md)
-
----

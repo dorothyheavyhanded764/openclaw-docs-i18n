@@ -5,9 +5,9 @@
   
 # OpenCode Zen
 
-OpenCode Zen 是 OpenCode 团队为编程代理推荐的**精选模型列表**。它是一个可选的、托管的模型访问路径，使用 API 密钥和 `opencode` 提供商。Zen 目前处于测试阶段。
+本节介绍如何通过 OpenCode Zen 快速接入适合编程智能体（agent）的模型。OpenCode Zen 是 OpenCode 团队精心挑选的模型列表，为编程智能体提供优化过的模型访问路径。作为可选的托管服务，您只需配置 API 密钥并使用 `opencode` 提供商（provider）即可开始。Zen 目前处于测试阶段。
 
-## CLI 设置
+## 命令行设置
 
 ```bash
 openclaw onboard --auth-choice opencode-zen
@@ -15,7 +15,7 @@ openclaw onboard --auth-choice opencode-zen
 openclaw onboard --opencode-zen-api-key "$OPENCODE_API_KEY"
 ```
 
-## 配置片段
+## 配置示例
 
 ```json
 {
@@ -26,10 +26,8 @@ openclaw onboard --opencode-zen-api-key "$OPENCODE_API_KEY"
 
 ## 注意事项
 
--   也支持 `OPENCODE_ZEN_API_KEY`。
--   您需要登录 Zen，添加账单信息，并复制您的 API 密钥。
--   OpenCode Zen 按请求计费；请查看 OpenCode 仪表板了解详情。
+- 环境变量 `OPENCODE_ZEN_API_KEY` 也受支持。
+- 需要登录 Zen 平台，完善账单信息后获取 API 密钥。
+- OpenCode Zen 采用按请求计费模式，具体详情请查看 OpenCode 仪表板。
 
 [OpenAI](./openai.md)[OpenRouter](./openrouter.md)
-
----

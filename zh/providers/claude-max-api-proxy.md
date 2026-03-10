@@ -11,10 +11,10 @@
 
 ## 为什么使用这个？
 
-| 方法 | 成本 | 最适合 |
-| --- | --- | --- |
-| Anthropic API | 按 token 付费（Opus 约 15美元/百万输入，75美元/百万输出） | 生产应用，高用量 |
-| Claude Max 订阅 | 200美元/月（固定） | 个人使用，开发，无限用量 |
+|| 方法 | 成本 | 最适合 |
+|| --- | --- | --- |
+|| Anthropic API | 按 token 付费（Opus 约 15美元/百万输入，75美元/百万输出） | 生产应用，高用量 |
+|| Claude Max 订阅 | 200美元/月（固定） | 个人使用，开发，无限用量 |
 
 如果您拥有 Claude Max 订阅，并希望将其用于 OpenAI 兼容的工具，此代理可能会降低某些工作流的成本。对于生产用途，API 密钥仍然是政策上更清晰的路径。
 
@@ -27,9 +27,9 @@
 
 该代理：
 
-1.  在 `http://localhost:3456/v1/chat/completions` 接受 OpenAI 格式的请求
-2.  将其转换为 Claude Code CLI 命令
-3.  以 OpenAI 格式返回响应（支持流式传输）
+1. 在 `http://localhost:3456/v1/chat/completions` 接受 OpenAI 格式的请求
+2. 将其转换为 Claude Code CLI 命令
+3. 以 OpenAI 格式返回响应（支持流式传输）
 
 ## 安装
 
@@ -88,11 +88,11 @@ curl http://localhost:3456/v1/chat/completions \
 
 ## 可用模型
 
-| 模型 ID | 映射到 |
-| --- | --- |
-| `claude-opus-4` | Claude Opus 4 |
-| `claude-sonnet-4` | Claude Sonnet 4 |
-| `claude-haiku-4` | Claude Haiku 4 |
+|| 模型 ID | 映射到 |
+|| --- | --- |
+|| `claude-opus-4` | Claude Opus 4 |
+|| `claude-sonnet-4` | Claude Sonnet 4 |
+|| `claude-haiku-4` | Claude Haiku 4 |
 
 ## 在 macOS 上自动启动
 
@@ -129,20 +129,20 @@ launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.claude-max-api.plist
 
 ## 链接
 
--   **npm:** [https://www.npmjs.com/package/claude-max-api-proxy](https://www.npmjs.com/package/claude-max-api-proxy)
--   **GitHub:** [https://github.com/atalovesyou/claude-max-api-proxy](https://github.com/atalovesyou/claude-max-api-proxy)
--   **问题反馈:** [https://github.com/atalovesyou/claude-max-api-proxy/issues](https://github.com/atalovesyou/claude-max-api-proxy/issues)
+- **npm:** [https://www.npmjs.com/package/claude-max-api-proxy](https://www.npmjs.com/package/claude-max-api-proxy)
+- **GitHub:** [https://github.com/atalovesyou/claude-max-api-proxy](https://github.com/atalovesyou/claude-max-api-proxy)
+- **问题反馈:** [https://github.com/atalovesyou/claude-max-api-proxy/issues](https://github.com/atalovesyou/claude-max-api-proxy/issues)
 
 ## 注意事项
 
--   这是一个**社区工具**，并非由 Anthropic 或 OpenClaw 官方支持
--   需要有效的 Claude Max/Pro 订阅，且 Claude Code CLI 已认证
--   代理在本地运行，不会将数据发送到任何第三方服务器
--   完全支持流式响应
+- 这是一个**社区工具**，并非由 Anthropic 或 OpenClaw 官方支持
+- 需要有效的 Claude Max/Pro 订阅，且 Claude Code CLI 已认证
+- 代理在本地运行，不会将数据发送到任何第三方服务器
+- 完全支持流式响应
 
 ## 另请参阅
 
--   [Anthropic 提供商](./anthropic.md) - 使用 Claude setup-token 或 API 密钥的原生 OpenClaw 集成
--   [OpenAI 提供商](./openai.md) - 用于 OpenAI/Codex 订阅
+- [Anthropic 提供商](./anthropic.md) - 使用 Claude setup-token 或 API 密钥的原生 OpenClaw 集成
+- [OpenAI 提供商](./openai.md) - 用于 OpenAI/Codex 订阅
 
 [Cloudflare AI 网关](./cloudflare-ai-gateway.md)[Deepgram](./deepgram.md)

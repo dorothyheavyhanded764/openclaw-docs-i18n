@@ -48,7 +48,7 @@ IR（示意图）：
 ## 使用场景
 
 -   Slack、Telegram 和 Signal 的外发适配器从 IR 进行渲染。
--   其他频道（WhatsApp、iMessage、MS Teams、Discord）仍使用纯文本或其自身的格式化规则，在启用时，Markdown 表格转换会在分块前应用。
+-   其他频道（WhatsApp、iMessage、MS Teams、Discord）仍使用纯文本或其自身的格式化规则。当启用 Markdown 表格转换时，会在分块前应用。
 
 ## 表格处理
 

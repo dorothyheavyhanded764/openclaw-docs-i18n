@@ -5,16 +5,16 @@
   
 # 文档中心
 
-> **ℹ️** 如果你是 OpenClaw 的新手，请从 [入门指南](./getting-started.md) 开始。
+> **ℹ️** 如果你刚接触 OpenClaw，建议从 [入门指南](./getting-started.md) 开始。
 
-使用这些中心来发现每个页面，包括左侧导航中未显示的深度解析和参考文档。
+这份文档中心收录了所有页面，包括左侧导航中未显示的深度解析和参考文档。
 
 ## 从这里开始
 
 -   [首页](../home.md)
 -   [入门指南](./getting-started.md)
 -   [快速开始](./quickstart.md)
--   [新手上路](./onboarding.md)
+-   [新手引导](./onboarding.md)
 -   [向导](./wizard.md)
 -   [设置](./setup.md)
 -   [仪表板（本地网关）](http://127.0.0.1:18789/)
@@ -26,11 +26,11 @@
 -   [展示](./showcase.md)
 -   [背景故事](./lore.md)
 
-## 安装 + 更新
+## 安装与更新
 
 -   [Docker](../install/docker.md)
 -   [Nix](../install/nix.md)
--   [更新 / 回滚](../install/updating.md)
+-   [更新/回滚](../install/updating.md)
 -   [Bun 工作流（实验性）](../install/bun.md)
 
 ## 核心概念
@@ -42,7 +42,7 @@
 -   [智能体工作区](../concepts/agent-workspace.md)
 -   [记忆](../concepts/memory.md)
 -   [智能体循环](../concepts/agent-loop.md)
--   [流式处理 + 分块](../concepts/streaming.md)
+-   [流式处理与分块](../concepts/streaming.md)
 -   [多智能体路由](../concepts/multi-agent.md)
 -   [压缩](../concepts/compaction.md)
 -   [会话](../concepts/session.md)
@@ -54,7 +54,7 @@
 -   [TypeBox 模式](../concepts/typebox.md)
 -   [时区处理](../concepts/timezone.md)
 -   [在线状态](../concepts/presence.md)
--   [发现 + 传输](../gateway/discovery.md)
+-   [发现与传输](../gateway/discovery.md)
 -   [Bonjour](../gateway/bonjour.md)
 -   [频道路由](../channels/channel-routing.md)
 -   [群组](../channels/groups.md)
@@ -62,7 +62,7 @@
 -   [模型故障转移](../concepts/model-failover.md)
 -   [OAuth](../concepts/oauth.md)
 
-## 提供商 + 入口
+## 提供商与入口
 
 -   [聊天频道中心](../channels.md)
 -   [模型提供商中心](../providers/models.md)
@@ -70,16 +70,16 @@
 -   [Telegram](../channels/telegram.md)
 -   [Slack](../channels/slack.md)
 -   [Discord](../channels/discord.md)
--   [Mattermost](../channels/mattermost.md) (插件)
+-   [Mattermost](../channels/mattermost.md)（插件）
 -   [Signal](../channels/signal.md)
 -   [BlueBubbles (iMessage)](../channels/bluebubbles.md)
--   [iMessage (旧版)](../channels/imessage.md)
+-   [iMessage（旧版）](../channels/imessage.md)
 -   [位置解析](../channels/location.md)
 -   [网页聊天](../web/webchat.md)
 -   [Webhooks](../automation/webhook.md)
 -   [Gmail Pub/Sub](../automation/gmail-pubsub.md)
 
-## 网关 + 运维
+## 网关与运维
 
 -   [网关运行手册](../gateway.md)
 -   [网络模型](../gateway/network-model.md)
@@ -99,7 +99,7 @@
 -   [安全性](../gateway/security.md)
 -   [故障排除](../gateway/troubleshooting.md)
 
-## 工具 + 自动化
+## 工具与自动化
 
 -   [工具概览](../tools.md)
 -   [OpenProse](../prose.md)
@@ -109,7 +109,7 @@
 -   [提升权限模式](../tools/elevated.md)
 -   [Cron 任务](../automation/cron-jobs.md)
 -   [Cron 与心跳对比](../automation/cron-vs-heartbeat.md)
--   [思考 + 详细模式](../tools/thinking.md)
+-   [思考与详细模式](../tools/thinking.md)
 -   [模型](../concepts/models.md)
 -   [子智能体](../tools/subagents.md)
 -   [智能体发送 CLI](../tools/agent-send.md)
@@ -159,7 +159,7 @@
 -   [macOS 技能](../platforms/mac/skills.md)
 -   [macOS Peekaboo](../platforms/mac/peekaboo.md)
 
-## 工作区 + 模板
+## 工作区与模板
 
 -   [技能](../tools/skills.md)
 -   [ClawHub](../tools/clawhub.md)
@@ -175,7 +175,7 @@
 
 ## 实验（探索性）
 
--   [新手上路配置协议](../experiments/onboarding-config-protocol.md)
+-   [新手引导配置协议](../experiments/onboarding-config-protocol.md)
 -   [研究：记忆](../experiments/research/memory.md)
 -   [模型配置探索](../experiments/proposals/model-config.md)
 
@@ -183,7 +183,7 @@
 
 -   [致谢](../reference/credits.md)
 
-## 测试 + 发布
+## 测试与发布
 
 -   [测试](../reference/test.md)
 -   [发布清单](../reference/RELEASING.md)

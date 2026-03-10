@@ -1,6 +1,6 @@
 
 
-  macOS 配套应用
+  macOS 伴侣应用
 
   
 # macOS 日志记录
@@ -10,9 +10,9 @@
 OpenClaw 通过 swift-log（默认使用统一日志记录）路由 macOS 应用日志，并可在需要持久捕获时，将本地滚动文件日志写入磁盘。
 
 -   详细级别：**调试面板 → 日志 → 应用日志记录 → 详细级别**
--   启用：**调试面板 → 日志 → 应用日志记录 → “写入滚动诊断日志 (JSONL)”**
+-   启用：**调试面板 → 日志 → 应用日志记录 → "写入滚动诊断日志 (JSONL)"**
 -   位置：`~/Library/Logs/OpenClaw/diagnostics.jsonl`（自动滚动；旧文件后缀为 `.1`、`.2`……）
--   清除：**调试面板 → 日志 → 应用日志记录 → “清除”**
+-   清除：**调试面板 → 日志 → 应用日志记录 → "清除"**
 
 注意事项：
 
@@ -21,7 +21,7 @@ OpenClaw 通过 swift-log（默认使用统一日志记录）路由 macOS 应用
 
 ## macOS 统一日志记录中的私有数据
 
-统一日志记录会隐藏大多数负载，除非子系统选择加入 `privacy -off`。根据 Peter 关于 macOS [日志记录隐私问题](https://steipete.me/posts/2025/logging-privacy-shenanigans)（2025 年）的文章，这由 `/Library/Preferences/Logging/Subsystems/` 目录中按子系统名称键控的 plist 文件控制。只有新的日志条目会获取该标志，因此请在复现问题前启用它。
+统一日志记录会隐藏大多数负载，除非子系统选择启用 `privacy -off`。根据 Peter 关于 macOS [日志记录隐私问题](https://steipete.me/posts/2025/logging-privacy-shenanigans)（2025 年）的文章，这由 `/Library/Preferences/Logging/Subsystems/` 目录中按子系统名称键控的 plist 文件控制。只有新的日志条目会获取该标志，因此请在复现问题前启用它。
 
 ## 为 OpenClaw (ai.openclaw) 启用
 
@@ -51,6 +51,6 @@ sudo install -m 644 -o root -g wheel /tmp/ai.openclaw.plist /Library/Preferences
 
 -   移除覆盖文件：`sudo rm /Library/Preferences/Logging/Subsystems/ai.openclaw.plist`。
 -   可选运行 `sudo log config --reload` 以强制 logd 立即丢弃覆盖。
--   请注意，此记录表面可能包含电话号码和消息正文；仅在您确实需要额外详细信息时保留该 plist 文件。
+-   请注意，此日志可能包含电话号码和消息正文；仅在确实需要额外详细信息时保留该 plist 文件。
 
 [菜单栏图标](./icon.md)[macOS 权限](./permissions.md)

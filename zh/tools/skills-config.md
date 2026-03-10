@@ -5,7 +5,7 @@
   
 # 技能配置
 
-所有与技能相关的配置都位于 `~/.openclaw/openclaw.json` 文件的 `skills` 部分下。
+所有技能相关的配置都集中在 `~/.openclaw/openclaw.json` 文件的 `skills` 字段下。你可以在这里控制哪些技能可用、从哪里加载自定义技能、以及为每个技能单独设置环境变量和密钥。
 
 ```json
 {
@@ -18,12 +18,12 @@
     },
     install: {
       preferBrew: true,
-      nodeManager: "npm", // npm | pnpm | yarn | bun (Gateway 运行时仍为 Node；不推荐 bun)
+      nodeManager: "npm", // npm | pnpm | yarn | bun（Gateway 运行时仍为 Node，不建议用 bun）
     },
     entries: {
       "nano-banana-pro": {
         enabled: true,
-        apiKey: { source: "env", provider: "default", id: "GEMINI_API_KEY" }, // 或纯文本字符串
+        apiKey: { source: "env", provider: "default", id: "GEMINI_API_KEY" }, // 或直接写明文字符串
         env: {
           GEMINI_API_KEY: "GEMINI_KEY_HERE",
         },
@@ -37,34 +37,36 @@
 
 ## 字段说明
 
--   `allowBundled`: 可选，仅针对**捆绑**技能的允许列表。设置后，只有列表中的捆绑技能才可用（不影响托管/工作区技能）。
--   `load.extraDirs`: 要扫描的额外技能目录（优先级最低）。
--   `load.watch`: 监视技能文件夹并刷新技能快照（默认：true）。
--   `load.watchDebounceMs`: 技能监视器事件的防抖时间（毫秒）（默认：250）。
--   `install.preferBrew`: 在可用时优先使用 brew 安装器（默认：true）。
--   `install.nodeManager`: Node 安装器偏好（`npm` | `pnpm` | `yarn` | `bun`，默认：npm）。这仅影响**技能安装**；Gateway 运行时仍应为 Node（不推荐将 Bun 用于 WhatsApp/Telegram）。
--   `entries.`: 每项技能的覆盖设置。
+### 全局配置字段
 
-每项技能的字段：
+- `allowBundled`：可选，用于限制**内置技能**的白名单。设置后，只有列表中的内置技能会被加载（不影响托管技能和工作区技能）。
+- `load.extraDirs`：额外的技能目录路径，OpenClaw 会扫描这些目录（优先级最低）。
+- `load.watch`：是否监听技能文件夹变化并自动刷新（默认：`true`）。
+- `load.watchDebounceMs`：监听事件的防抖间隔，单位毫秒（默认：`250`）。
+- `install.preferBrew`：安装依赖时优先使用 Homebrew（默认：`true`）。
+- `install.nodeManager`：Node 包管理器选择（`npm` | `pnpm` | `yarn` | `bun`，默认：`npm`）。注意这只影响**技能安装**，Gateway 运行时仍需 Node（Bun 对 WhatsApp/Telegram 支持不佳，不推荐）。
+- `entries.`：针对单个技能的覆盖配置。
 
--   `enabled`: 设置为 `false` 以禁用某项技能，即使它是捆绑/已安装的。
--   `env`: 为智能体运行注入的环境变量（仅在尚未设置时生效）。
--   `apiKey`: 可选，为声明了主要环境变量的技能提供便利。支持纯文本字符串或 SecretRef 对象（`{ source, provider, id }`）。
+### 单技能配置字段
+
+在 `entries` 下，你可以为每个技能单独设置：
+
+- `enabled`：设为 `false` 可禁用某个技能，即使它已内置或安装。
+- `env`：为智能体运行时注入环境变量（仅当该变量尚未设置时生效）。
+- `apiKey`：便捷字段，用于需要 API 密钥的技能。支持明文字符串或 SecretRef 对象（格式：`{ source, provider, id }`）。
 
 ## 注意事项
 
--   `entries` 下的键默认映射到技能名称。如果技能定义了 `metadata.openclaw.skillKey`，则使用该键。
--   当监视器启用时，对技能的更改会在智能体的下一个回合被拾取。
+- `entries` 下的键名默认对应技能名称。如果技能在 `metadata.openclaw.skillKey` 中定义了自定义键名，则使用该键名。
+- 开启监听后，技能文件的修改会在智能体的下一轮对话中自动生效。
 
-### 沙盒化技能 + 环境变量
+### 沙盒模式下的环境变量
 
-当会话处于**沙盒化**状态时，技能进程在 Docker 内运行。沙盒**不会**继承主机的 `process.env`。请使用以下方法之一：
+当会话运行在**沙盒模式**时，技能进程会在 Docker 容器内执行。沙盒环境**不会**继承主机的 `process.env`，你需要通过以下方式传递环境变量：
 
--   `agents.defaults.sandbox.docker.env`（或每个智能体的 `agents.list[].sandbox.docker.env`）
--   将环境变量烘焙到您的自定义沙盒镜像中
+- 在 `agents.defaults.sandbox.docker.env` 中设置（或针对单个智能体设置 `agents.list[].sandbox.docker.env`）
+- 将环境变量直接打包到自定义沙盒镜像中
 
-全局的 `env` 和 `skills.entries..env/apiKey` 仅适用于**主机**运行。
+注意：全局 `env` 和 `skills.entries..env/apiKey` 仅对**主机模式**运行有效。
 
 [技能](./skills.md)[ClawHub](./clawhub.md)
-
----

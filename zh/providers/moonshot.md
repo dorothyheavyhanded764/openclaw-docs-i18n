@@ -1,31 +1,39 @@
 
 
-  提供商
+  提供商（provider）
 
   
 # Moonshot AI
 
-Moonshot 通过 OpenAI 兼容的端点提供 Kimi API。配置该提供商并将默认模型设置为 `moonshot/kimi-k2.5`，或使用 `kimi-coding/k2p5` 来启用 Kimi Coding。当前的 Kimi K2 模型 ID：
+本节帮助你快速接入 Moonshot 的 Kimi API。Moonshot 提供与 OpenAI 兼容的 API 端点，你可以将默认模型设置为 `moonshot/kimi-k2.5`，或者使用 `kimi-coding/k2p5` 启用 Kimi Coding 服务。
 
--   `kimi-k2.5`
--   `kimi-k2-0905-preview`
--   `kimi-k2-turbo-preview`
--   `kimi-k2-thinking`
--   `kimi-k2-thinking-turbo`
+当前可用的 Kimi K2 模型 ID：
+
+- `kimi-k2.5`
+- `kimi-k2-0905-preview`
+- `kimi-k2-turbo-preview`
+- `kimi-k2-thinking`
+- `kimi-k2-thinking-turbo`
+
+## 快速配置
+
+使用以下命令启动 Moonshot API 的配置向导：
 
 ```bash
 openclaw onboard --auth-choice moonshot-api-key
 ```
 
-Kimi Coding：
+如果你需要配置 Kimi Coding，请使用：
 
 ```bash
 openclaw onboard --auth-choice kimi-code-api-key
 ```
 
-注意：Moonshot 和 Kimi Coding 是独立的提供商。密钥不能互换，端点不同，模型引用也不同（Moonshot 使用 `moonshot/...`，Kimi Coding 使用 `kimi-coding/...`）。
+> **重要提示**：Moonshot 和 Kimi Coding 是两个独立的提供商（provider）。它们的 API 密钥（API key）不能互换，端点地址不同，模型引用方式也有区别——Moonshot 使用 `moonshot/...` 前缀，而 Kimi Coding 使用 `kimi-coding/...` 前缀。
 
-## 配置片段 (Moonshot API)
+## Moonshot API 配置示例
+
+以下是一个完整的 Moonshot API 配置片段：
 
 ```json
 {
@@ -106,7 +114,9 @@ openclaw onboard --auth-choice kimi-code-api-key
 }
 ```
 
-## Kimi Coding
+## Kimi Coding 配置示例
+
+如果你使用的是 Kimi Coding 服务，配置会更加简洁：
 
 ```json
 {
@@ -124,11 +134,9 @@ openclaw onboard --auth-choice kimi-code-api-key
 
 ## 注意事项
 
--   Moonshot 模型引用使用 `moonshot/`。Kimi Coding 模型引用使用 `kimi-coding/`。
--   如有需要，可在 `models.providers` 中覆盖定价和上下文元数据。
--   如果 Moonshot 发布了模型的不同上下文限制，请相应调整 `contextWindow`。
--   国际端点使用 `https://api.moonshot.ai/v1`，中国端点使用 `https://api.moonshot.cn/v1`。
+- **模型引用格式**：Moonshot 模型使用 `moonshot/` 格式，Kimi Coding 模型使用 `kimi-coding/` 格式。
+- **自定义定价**：如有需要，可以在 `models.providers` 中覆盖默认的定价和上下文元数据。
+- **上下文窗口**：如果 Moonshot 对某个模型发布了不同的上下文限制，请相应调整 `contextWindow` 的值。
+- **端点选择**：国际用户使用 `https://api.moonshot.ai/v1`，国内用户使用 `https://api.moonshot.cn/v1`。
 
 [MiniMax](./minimax.md)[Mistral](./mistral.md)
-
----

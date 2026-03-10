@@ -5,7 +5,7 @@
   
 # Vercel AI Gateway
 
-[Vercel AI Gateway](https://vercel.com/ai-gateway) 提供了一个统一的 API，通过单一端点访问数百个模型。
+如果你想通过一个统一的 API 端点访问数百种 AI 模型，[Vercel AI Gateway](https://vercel.com/ai-gateway) 是个不错的选择。本节将帮助你快速完成配置。
 
 -   提供商：`vercel-ai-gateway`
 -   认证：`AI_GATEWAY_API_KEY`
@@ -13,7 +13,9 @@
 
 ## 快速开始
 
-1.  设置 API 密钥（推荐：为 Gateway 存储它）：
+只需要两步就能跑起来：
+
+1.  设置 API 密钥（推荐做法是存储为网关专用密钥）：
 
 ```bash
 openclaw onboard --auth-choice ai-gateway-api-key
@@ -31,7 +33,9 @@ openclaw onboard --auth-choice ai-gateway-api-key
 }
 ```
 
-## 非交互式示例
+## 非交互式配置
+
+如果你需要在脚本或自动化流程中使用，可以这样配置：
 
 ```bash
 openclaw onboard --non-interactive \
@@ -40,17 +44,15 @@ openclaw onboard --non-interactive \
   --ai-gateway-api-key "$AI_GATEWAY_API_KEY"
 ```
 
-## 环境说明
+## 环境变量注意事项
 
-如果 Gateway 作为守护进程（launchd/systemd）运行，请确保 `AI_GATEWAY_API_KEY` 对该进程可用（例如，在 `~/.openclaw/.env` 中或通过 `env.shellEnv`）。
+当网关以守护进程方式运行（如 launchd 或 systemd）时，请确保 `AI_GATEWAY_API_KEY` 对该进程可见。你可以把它放在 `~/.openclaw/.env` 文件中，或者通过 `env.shellEnv` 配置。
 
 ## 模型 ID 简写
 
-OpenClaw 接受 Vercel Claude 简写模型引用，并在运行时将其规范化：
+OpenClaw 支持使用简写形式的模型名称，会在运行时自动转换为完整格式：
 
--   `vercel-ai-gateway/claude-opus-4.6` -> `vercel-ai-gateway/anthropic/claude-opus-4.6`
--   `vercel-ai-gateway/opus-4.6` -> `vercel-ai-gateway/anthropic/claude-opus-4-6`
+-   `vercel-ai-gateway/claude-opus-4.6` → `vercel-ai-gateway/anthropic/claude-opus-4.6`
+-   `vercel-ai-gateway/opus-4.6` → `vercel-ai-gateway/anthropic/claude-opus-4-6`
 
 [Together](./together.md)[Venice AI](./venice.md)
-
----

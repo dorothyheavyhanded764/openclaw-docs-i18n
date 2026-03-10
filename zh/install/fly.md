@@ -5,21 +5,21 @@
   
 # Fly.io
 
-**目标：** 在 [Fly.io](https://fly.io) 机器上运行 OpenClaw Gateway，并配置持久化存储、自动 HTTPS 以及 Discord/频道访问。
+**目标：** 在 [Fly.io](https://fly.io) 机器上运行 OpenClaw 网关（Gateway），并配置持久化存储、自动 HTTPS 以及 Discord/频道访问。
 
 ## 准备工作
 
--   已安装 [flyctl CLI](https://fly.io/docs/hands-on/install-flyctl/)
--   Fly.io 账户（免费套餐可用）
--   模型认证：所选模型提供商的 API 密钥
--   频道凭证：Discord 机器人令牌、Telegram 令牌等。
+- 已安装 [flyctl CLI](https://fly.io/docs/hands-on/install-flyctl/)
+- Fly.io 账户（免费套餐可用）
+- 模型认证：所选模型提供商的 API 密钥
+- 频道凭证：Discord 机器人令牌、Telegram 令牌等。
 
 ## 新手快速路径
 
-1.  克隆仓库 → 自定义 `fly.toml`
-2.  创建应用 + 卷 → 设置密钥
-3.  使用 `fly deploy` 部署
-4.  SSH 进入以创建配置或使用控制界面
+1. 克隆仓库 → 自定义 `fly.toml`
+2. 创建应用 + 卷 → 设置密钥
+3. 使用 `fly deploy` 部署
+4. SSH 进入以创建配置或使用控制界面
 
 ## 1) 创建 Fly 应用
 
@@ -76,13 +76,13 @@ primary_region = "iad"
 
 **关键设置：**
 
-| 设置 | 原因 |
-| --- | --- |
-| `--bind lan` | 绑定到 `0.0.0.0`，以便 Fly 的代理可以访问网关 |
-| `--allow-unconfigured` | 无需配置文件即可启动（之后你将创建一个） |
-| `internal_port = 3000` | 必须与 `--port 3000`（或 `OPENCLAW_GATEWAY_PORT`）匹配，以便 Fly 进行健康检查 |
-| `memory = "2048mb"` | 512MB 太小；推荐 2GB |
-| `OPENCLAW_STATE_DIR = "/data"` | 在卷上持久化状态 |
+|| 设置 | 原因 |
+|| --- | --- |
+|| `--bind lan` | 绑定到 `0.0.0.0`，以便 Fly 的代理可以访问网关 |
+|| `--allow-unconfigured` | 无需配置文件即可启动（之后你将创建一个） |
+|| `internal_port = 3000` | 必须与 `--port 3000`（或 `OPENCLAW_GATEWAY_PORT`）匹配，以便 Fly 进行健康检查 |
+|| `memory = "2048mb"` | 512MB 太小；推荐 2GB |
+|| `OPENCLAW_STATE_DIR = "/data"` | 在卷上持久化状态 |
 
 ## 3) 设置密钥
 
@@ -103,9 +103,9 @@ fly secrets set DISCORD_BOT_TOKEN=MTQ...
 
 **注意：**
 
--   非环回绑定（`--bind lan`）需要 `OPENCLAW_GATEWAY_TOKEN` 以确保安全。
--   将这些令牌视为密码。
--   **所有 API 密钥和令牌优先使用环境变量而非配置文件**。这可以防止密钥被意外暴露或记录在 `openclaw.json` 中。
+- 非环回绑定（`--bind lan`）需要 `OPENCLAW_GATEWAY_TOKEN` 以确保安全。
+- 将这些令牌视为密码。
+- **所有 API 密钥和令牌优先使用环境变量而非配置文件**。这可以防止密钥被意外暴露或记录在 `openclaw.json` 中。
 
 ## 4) 部署
 
@@ -191,10 +191,12 @@ cat > /data/openclaw.json << 'EOF'
 EOF
 ```
 
-**注意：** 使用 `OPENCLAW_STATE_DIR=/data` 时，配置文件路径为 `/data/openclaw.json`。**注意：** Discord 令牌可以来自以下任一方式：
+**注意：** 使用 `OPENCLAW_STATE_DIR=/data` 时，配置文件路径为 `/data/openclaw.json`。
 
--   环境变量：`DISCORD_BOT_TOKEN`（推荐用于密钥）
--   配置文件：`channels.discord.token`
+**注意：** Discord 令牌可以来自以下任一方式：
+
+- 环境变量：`DISCORD_BOT_TOKEN`（推荐用于密钥）
+- 配置文件：`channels.discord.token`
 
 如果使用环境变量，则无需在配置中添加令牌。网关会自动读取 `DISCORD_BOT_TOKEN`。重启以应用更改：
 
@@ -230,7 +232,7 @@ fly ssh console
 
 ## 故障排除
 
-### ”应用未在预期地址监听”
+### "应用未在预期地址监听"
 
 网关绑定到 `127.0.0.1` 而不是 `0.0.0.0`。**修复：** 在 `fly.toml` 的进程命令中添加 `--bind lan`。
 
@@ -257,7 +259,7 @@ fly machine update <machine-id> --vm-memory 2048 -y
 
 ### 网关锁问题
 
-网关因“已在运行”错误而拒绝启动。当容器重启但 PID 锁文件在卷上持久存在时会发生这种情况。**修复：** 删除锁文件：
+网关因"已在运行"错误而拒绝启动。当容器重启但 PID 锁文件在卷上持久存在时会发生这种情况。**修复：** 删除锁文件：
 
 ```bash
 fly ssh console --command "rm -f /data/gateway.*.lock"
@@ -334,10 +336,10 @@ fly machine update <machine-id> --vm-memory 2048 --command "node dist/index.js g
 
 ### 何时使用私有部署
 
--   你只进行**出站**调用/消息（无入站 webhook）
--   你使用 **ngrok 或 Tailscale** 隧道处理任何 webhook 回调
--   你通过 **SSH、代理或 WireGuard** 访问网关，而非浏览器
--   你希望部署**对互联网扫描器隐藏**
+- 你只进行**出站**调用/消息（无入站 webhook）
+- 你使用 **ngrok 或 Tailscale** 隧道处理任何 webhook 回调
+- 你通过 **SSH、代理或 WireGuard** 访问网关，而非浏览器
+- 你希望部署**对互联网扫描器隐藏**
 
 ### 设置
 
@@ -375,7 +377,9 @@ v6       fdaa:x:x:x:x::x      private          global
 
 ### 访问私有部署
 
-由于没有公共 URL，请使用以下方法之一：**选项 1：本地代理（最简单）**
+由于没有公共 URL，请使用以下方法之一：
+
+**选项 1：本地代理（最简单）**
 
 ```bash
 # 将本地端口 3000 转发到应用
@@ -404,9 +408,9 @@ fly ssh console -a my-openclaw
 
 如果你需要 webhook 回调（Twilio、Telnyx 等）但又不想公开暴露：
 
-1.  **ngrok 隧道** - 在容器内或作为 sidecar 运行 ngrok
-2.  **Tailscale Funnel** - 通过 Tailscale 暴露特定路径
-3.  **仅出站** - 某些提供商（Twilio）在没有 webhook 的情况下也能正常工作
+1. **ngrok 隧道** - 在容器内或作为 sidecar 运行 ngrok
+2. **Tailscale Funnel** - 通过 Tailscale 暴露特定路径
+3. **仅出站** - 某些提供商（Twilio）在没有 webhook 的情况下也能正常工作
 
 使用 ngrok 的语音通话配置示例：
 
@@ -433,27 +437,27 @@ ngrok 隧道在容器内运行，并提供公共 webhook URL，而无需暴露 F
 
 ### 安全优势
 
-| 方面 | 公共 | 私有 |
-| --- | --- | --- |
-| 互联网扫描器 | 可被发现 | 隐藏 |
-| 直接攻击 | 可能 | 被阻止 |
-| 控制界面访问 | 浏览器 | 代理/VPN |
-| Webhook 交付 | 直接 | 通过隧道 |
+|| 方面 | 公共 | 私有 |
+|| --- | --- | --- |
+|| 互联网扫描器 | 可被发现 | 隐藏 |
+|| 直接攻击 | 可能 | 被阻止 |
+|| 控制界面访问 | 浏览器 | 代理/VPN |
+|| Webhook 交付 | 直接 | 通过隧道 |
 
 ## 注意事项
 
--   Fly.io 使用 **x86 架构**（非 ARM）
--   Dockerfile 兼容两种架构
--   对于 WhatsApp/Telegram 引导，请使用 `fly ssh console`
--   持久化数据位于卷上的 `/data` 目录
--   Signal 需要 Java + signal-cli；请使用自定义镜像并保持内存为 2GB+。
+- Fly.io 使用 **x86 架构**（非 ARM）
+- Dockerfile 兼容两种架构
+- 对于 WhatsApp/Telegram 引导，请使用 `fly ssh console`
+- 持久化数据位于卷上的 `/data` 目录
+- Signal 需要 Java + signal-cli；请使用自定义镜像并保持内存为 2GB+。
 
 ## 成本
 
 使用推荐配置（`shared-cpu-2x`，2GB RAM）：
 
--   约每月 10-15 美元，具体取决于使用情况
--   免费套餐包含一些额度
+- 约每月 10-15 美元，具体取决于使用情况
+- 免费套餐包含一些额度
 
 详情请参阅 [Fly.io 定价](https://fly.io/docs/about/pricing/)。
 

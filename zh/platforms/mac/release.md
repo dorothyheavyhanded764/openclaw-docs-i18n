@@ -1,6 +1,6 @@
 
 
-  macOS 配套应用
+  macOS 伴侣应用
 
   
 # macOS 发布
@@ -77,7 +77,7 @@ SPARKLE_PRIVATE_KEY_FILE=/path/to/ed25519-private-key scripts/make_appcast.sh di
 -   完整性检查：
     -   `curl -I https://raw.githubusercontent.com/openclaw/openclaw/main/appcast.xml` 返回 200。
     -   资产上传后，`curl -I ` 返回 200。
-    -   在之前的公开构建版本上，从“关于”选项卡运行“检查更新…”，并验证 Sparkle 能干净地安装新构建。
+    -   在之前的公开构建版本上，从"关于"选项卡运行"检查更新…"，并验证 Sparkle 能干净地安装新构建。
 
 完成定义：已发布签名的应用和 appcast，从已安装的旧版本可以正常进行更新流程，并且发布资产已附加到 GitHub 发布页面。
 

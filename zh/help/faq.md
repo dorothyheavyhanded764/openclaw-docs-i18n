@@ -7,6 +7,8 @@
 
 针对实际设置（本地开发、VPS、多智能体、OAuth/API 密钥、模型故障转移）的快速答案和深度故障排除。关于运行时诊断，请参阅 [故障排除](../gateway/troubleshooting.md)。关于完整的配置参考，请参阅 [配置](../gateway/configuration.md)。
 
+**术语约定**：Agent → 智能体（agent），Channel → 频道（channel），Gateway → 网关（Gateway）。
+
 ## 目录
 
 -   \[快速入门和首次运行设置\]
@@ -297,7 +299,7 @@ openclaw doctor
 
 它们的作用：
 
--   `openclaw status`：网关/智能体健康状态 + 基本配置的快速快照。
+-   `openclaw status`：网关（Gateway）/智能体（agent）健康状态 + 基本配置的快速快照。
 -   `openclaw models status`：检查提供商认证 + 模型可用性。
 -   `openclaw doctor`：验证并修复常见的配置/状态问题。
 

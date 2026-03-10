@@ -1,15 +1,15 @@
 
 
-  配置与操作
+  配置与运维
 
   
 # 配置示例
 
-以下示例与当前配置架构保持一致。关于详尽的参考和每个字段的说明，请参阅[配置](./configuration.md)。
+以下示例与当前配置 schema 保持一致。如需完整的字段参考和详细说明，请参阅[配置](./configuration.md)。
 
-## 快速开始
+## 快速入门
 
-### 绝对最小配置
+### 最简配置
 
 ```json
 {
@@ -18,9 +18,9 @@
 }
 ```
 
-保存到 `~/.openclaw/openclaw.json`，你就可以从该号码私信机器人。
+保存到 `~/.openclaw/openclaw.json`，然后你就可以用这个号码给机器人发私信了。
 
-### 推荐入门配置
+### 推荐的基础配置
 
 ```json
 {
@@ -42,13 +42,13 @@
 }
 ```
 
-## 扩展示例（主要选项）
+## 完整示例（主要配置项）
 
-> JSON5 允许你使用注释和尾随逗号。常规 JSON 也可以。
+> JSON5 格式允许使用注释和尾随逗号。标准 JSON 格式也完全兼容。
 
 ```json
 {
-  // 环境 + shell
+  // 环境变量 + shell
   env: {
     OPENROUTER_API_KEY: "sk-or-...",
     vars: {
@@ -60,7 +60,7 @@
     },
   },
 
-  // 认证配置文件元数据（密钥存储在 auth-profiles.json 中）
+  // 认证配置文件元数据（密钥存储在 auth-profiles.json）
   auth: {
     profiles: {
       "anthropic:me@example.com": {
@@ -79,14 +79,14 @@
     },
   },
 
-  // 身份
+  // 身份设定
   identity: {
     name: "Samantha",
     theme: "helpful sloth",
     emoji: "🦥",
   },
 
-  // 日志
+  // 日志配置
   logging: {
     level: "info",
     file: "/tmp/openclaw/openclaw.log",
@@ -95,7 +95,7 @@
     redactSensitive: "tools",
   },
 
-  // 消息格式化
+  // 消息格式
   messages: {
     messagePrefix: "[openclaw]",
     responsePrefix: ">",
@@ -103,7 +103,7 @@
     ackReactionScope: "group-mentions",
   },
 
-  // 路由 + 队列
+  // 路由 + 消息队列
   routing: {
     groupChat: {
       mentionPatterns: ["@openclaw", "openclaw"],
@@ -126,7 +126,7 @@
     },
   },
 
-  // 工具
+  // 工具配置
   tools: {
     media: {
       audio: {
@@ -134,7 +134,7 @@
         maxBytes: 20971520,
         models: [
           { provider: "openai", model: "gpt-4o-mini-transcribe" },
-          // 可选的 CLI 回退方案（Whisper 二进制文件）：
+          // 可选的 CLI 回退（Whisper 二进制）：
           // { type: "cli", command: "whisper", args: ["--model", "base", "{{MediaPath}}"] }
         ],
         timeoutSeconds: 120,
@@ -176,7 +176,7 @@
     },
   },
 
-  // 频道
+  // 频道配置
   channels: {
     whatsapp: {
       dmPolicy: "pairing",
@@ -228,7 +228,7 @@
     },
   },
 
-  // 代理运行时
+  // 智能体运行时
   agents: {
     defaults: {
       workspace: "~/.openclaw/workspace",
@@ -269,7 +269,7 @@
         every: "30m",
         model: "anthropic/claude-sonnet-4-5",
         target: "last",
-        directPolicy: "allow", // allow (默认) | block
+        directPolicy: "allow", // allow（默认）| block
         to: "+15555550123",
         prompt: "HEARTBEAT",
         ackMaxChars: 300,
@@ -441,7 +441,7 @@
 }
 ```
 
-## 常见模式
+## 常见配置模式
 
 ### 多平台设置
 
@@ -466,11 +466,11 @@
 
 ### 安全私信模式（共享收件箱 / 多用户私信）
 
-如果不止一个人可以私信你的机器人（`allowFrom` 中有多个条目，多人配对批准，或 `dmPolicy: "open"`），请启用**安全私信模式**，以便默认情况下来自不同发送者的私信不共享同一个上下文：
+如果有多个人可以给你的机器人发私信（`allowFrom` 有多个条目、批准了多人的配对请求、或设置了 `dmPolicy: "open"`），请启用**安全私信模式**，这样不同发送者的私信默认不会共享同一个上下文：
 
 ```json
 {
-  // 安全私信模式（推荐用于多用户或敏感私信代理）
+  // 安全私信模式（推荐用于多用户或敏感私信智能体）
   session: { dmScope: "per-channel-peer" },
 
   channels: {
@@ -490,9 +490,9 @@
 }
 ```
 
-对于 Discord/Slack/Google Chat/MS Teams/Mattermost/IRC，默认情况下发送者授权是基于 ID 的。只有在明确接受风险的情况下，才启用每个频道的 `dangerouslyAllowNameMatching: true` 以进行直接的可变名称/电子邮件/昵称匹配。
+对于 Discord/Slack/Google Chat/MS Teams/Mattermost/IRC，发送者授权默认基于 ID 进行。只有在你明确接受风险的情况下，才为各频道启用 `dangerouslyAllowNameMatching: true` 来支持直接的可变名称/邮箱/昵称匹配。
 
-### OAuth 与 API 密钥故障转移
+### OAuth 认证 + API 密钥故障回退
 
 ```json
 {
@@ -522,9 +522,9 @@
 }
 ```
 
-### Anthropic 设置令牌 + API 密钥，MiniMax 回退
+### Anthropic setup-token + API 密钥，MiniMax 作为备选
 
-> **⚠️** Anthropic 设置令牌在 Claude Code 之外的使用过去曾对部分用户受到限制。将此视为用户选择风险，并在依赖订阅认证前核实当前的 Anthropic 条款。
+> **⚠️** Anthropic setup-token 在 Claude Code 之外的使用过去曾对部分用户受到限制。请将其视为用户自担风险的选项，并在依赖订阅认证前核实 Anthropic 的最新条款。
 
 ```json
 {
@@ -588,7 +588,7 @@
 }
 ```
 
-### 仅本地模型
+### 纯本地模型
 
 ```json
 {
@@ -620,11 +620,11 @@
 }
 ```
 
-## 提示
+## 小贴士
 
--   如果设置 `dmPolicy: "open"`，匹配的 `allowFrom` 列表必须包含 `"*"`。
--   提供商 ID 格式不同（电话号码、用户 ID、频道 ID）。请使用提供商文档确认格式。
--   可稍后添加的可选部分：`web`、`browser`、`ui`、`discovery`、`canvasHost`、`talk`、`signal`、`imessage`。
--   有关更深入的设置说明，请参阅[提供商](../providers.md)和[故障排除](./troubleshooting.md)。
+-   如果设置了 `dmPolicy: "open"`，对应的 `allowFrom` 列表必须包含 `"*"`。
+-   各平台的用户标识格式不同（电话号码、用户 ID、频道 ID）。请参考各平台文档确认格式。
+-   可以后续添加的可选配置：`web`、`browser`、`ui`、`discovery`、`canvasHost`、`talk`、`signal`、`imessage`。
+-   更深入的配置说明请参考[提供商](../providers.md)和[故障排除](./troubleshooting.md)。
 
 [配置参考](./configuration-reference.md)[认证](./authentication.md)

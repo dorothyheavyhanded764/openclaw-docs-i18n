@@ -9,7 +9,7 @@
 
 ## 快速开始
 
-将此粘贴到你的 AI 助手（Claude、Cursor 等）中：
+将以下内容粘贴给你的 AI 助手（Claude、Cursor 等）：
 
 ```
 I want to set up nix-openclaw on my Mac.
@@ -26,20 +26,20 @@ What I need you to do:
 Reference the nix-openclaw README for module options.
 ```
 
-> **📦 完整指南：[github.com/openclaw/nix-openclaw](https://github.com/openclaw/nix-openclaw)** nix-openclaw 仓库是 Nix 安装的权威信息来源。本页只是一个快速概览。
+> **📦 完整指南：[github.com/openclaw/nix-openclaw](https://github.com/openclaw/nix-openclaw)** nix-openclaw 仓库是 Nix 安装的权威信息来源，本页仅为快速概览。
 
 ## 你将获得
 
--   Gateway + macOS 应用 + 工具（whisper、spotify、cameras）—— 全部固定版本
--   可抵御重启的 Launchd 服务
--   具有声明式配置的插件系统
--   即时回滚：`home-manager switch --rollback`
+- 网关 + macOS 应用 + 工具（whisper、spotify、cameras）——全部锁定版本
+- 可在重启后保持运行的 launchd 服务
+- 具有声明式配置的插件系统
+- 即时回滚：`home-manager switch --rollback`
 
 * * *
 
 ## Nix 模式运行时行为
 
-当设置 `OPENCLAW_NIX_MODE=1` 时（nix-openclaw 会自动设置）：OpenClaw 支持一种 **Nix 模式**，该模式使配置具有确定性并禁用自动安装流程。通过导出以下变量启用：
+当设置 `OPENCLAW_NIX_MODE=1` 时（nix-openclaw 会自动设置）：OpenClaw 支持 **Nix 模式**，该模式使配置具有确定性并禁用自动安装流程。通过导出以下变量启用：
 
 ```
 OPENCLAW_NIX_MODE=1
@@ -55,17 +55,17 @@ defaults write ai.openclaw.mac openclaw.nixMode -bool true
 
 OpenClaw 从 `OPENCLAW_CONFIG_PATH` 读取 JSON5 配置，并将可变数据存储在 `OPENCLAW_STATE_DIR` 中。需要时，你也可以设置 `OPENCLAW_HOME` 来控制用于内部路径解析的基础主目录。
 
--   `OPENCLAW_HOME`（默认优先级：`HOME` / `USERPROFILE` / `os.homedir()`）
--   `OPENCLAW_STATE_DIR`（默认：`~/.openclaw`）
--   `OPENCLAW_CONFIG_PATH`（默认：`$OPENCLAW_STATE_DIR/openclaw.json`）
+- `OPENCLAW_HOME`（默认优先级：`HOME` / `USERPROFILE` / `os.homedir()`）
+- `OPENCLAW_STATE_DIR`（默认：`~/.openclaw`）
+- `OPENCLAW_CONFIG_PATH`（默认：`$OPENCLAW_STATE_DIR/openclaw.json`）
 
-在 Nix 下运行时，请将这些变量显式设置为 Nix 管理的位置，以便运行时状态和配置保持在不可变的存储之外。
+在 Nix 下运行时，请将这些变量显式设置为 Nix 管理的位置，以便运行时状态和配置保持在不可变存储之外。
 
 ### Nix 模式下的运行时行为
 
--   自动安装和自我变异流程被禁用
--   缺少依赖项时会显示 Nix 特定的修复消息
--   存在时，UI 会显示一个只读的 Nix 模式横幅
+- 自动安装和自我变更流程被禁用
+- 缺少依赖项时会显示 Nix 特定的修复消息
+- 存在时，UI 会显示只读的 Nix 模式横幅
 
 ## 打包说明（macOS）
 
@@ -79,8 +79,8 @@ apps/macos/Sources/OpenClaw/Resources/Info.plist
 
 ## 相关链接
 
--   [nix-openclaw](https://github.com/openclaw/nix-openclaw) — 完整设置指南
--   [向导](../start/wizard.md) — 非 Nix CLI 设置
--   [Docker](./docker.md) — 容器化设置
+- [nix-openclaw](https://github.com/openclaw/nix-openclaw) — 完整设置指南
+- [向导](../start/wizard.md) — 非 Nix CLI 设置
+- [Docker](./docker.md) — 容器化设置
 
 [Podman](./podman.md)[Ansible](./ansible.md)

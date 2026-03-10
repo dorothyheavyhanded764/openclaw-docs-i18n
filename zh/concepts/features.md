@@ -7,27 +7,27 @@
 
 ## 亮点
 
-## 消息通道
+### 消息通道
 
-通过单一网关支持 WhatsApp、Telegram、Discord 和 iMessage。
+通过单一网关（Gateway）支持 WhatsApp、Telegram、Discord 和 iMessage。
 
-## 插件
+### 插件
 
 通过扩展添加 Mattermost 等更多平台。
 
-## 路由
+### 路由
 
 支持会话隔离的多智能体路由。
 
-## 媒体
+### 媒体
 
 支持图片、音频和文档的收发。
 
-## 应用与界面
+### 应用与界面
 
 Web 控制界面和 macOS 伴侣应用。
 
-## 移动节点
+### 移动节点
 
 支持配对、语音/聊天和丰富设备命令的 iOS 和 Android 节点。
 
@@ -35,7 +35,7 @@ Web 控制界面和 macOS 伴侣应用。
 
 -   通过 WhatsApp Web (Baileys) 集成 WhatsApp
 -   支持 Telegram 机器人 (grammY)
--   支持 Discord 机器人 (channels.discord.js)
+-   支持 Discord 机器人 (discord.js)
 -   支持 Mattermost 机器人 (插件)
 -   通过本地 imsg CLI 集成 iMessage (macOS)
 -   用于 RPC 模式下 Pi 的智能体桥接，支持工具流式传输

@@ -5,20 +5,26 @@
   
 # browser
 
-管理 OpenClaw 的浏览器控制服务器并运行浏览器操作（标签页、快照、截图、导航、点击、输入）。相关链接：
+这一节帮助你通过命令行控制浏览器——无论是管理标签页、获取页面快照，还是执行点击、输入等自动化操作。
+
+相关链接：
 
 -   浏览器工具 + API：[浏览器工具](../tools/browser.md)
 -   Chrome 扩展中继：[Chrome 扩展](../tools/chrome-extension.md)
 
 ## 常用标志
 
--   `--url `：网关 WebSocket URL（默认为配置值）。
--   `--token `：网关令牌（如果需要）。
--   `--timeout `：请求超时时间（毫秒）。
--   `--browser-profile `：选择浏览器配置文件（默认为配置值）。
--   `--json`：机器可读输出（在支持的地方）。
+以下标志适用于大多数 `browser` 子命令：
+
+-   `--url `：网关 WebSocket URL（默认使用配置值）
+-   `--token `：网关令牌（如需认证）
+-   `--timeout `：请求超时时间（毫秒）
+-   `--browser-profile `：指定浏览器（browser）配置文件（默认使用配置值）
+-   `--json`：输出 JSON 格式（部分命令支持）
 
 ## 快速开始（本地）
+
+先感受一下基本操作：
 
 ```bash
 openclaw browser --browser-profile chrome tabs
@@ -27,12 +33,14 @@ openclaw browser --browser-profile openclaw open https://example.com
 openclaw browser --browser-profile openclaw snapshot
 ```
 
-## 配置文件
+## 配置文件（Profiles）
 
-配置文件是命名的浏览器路由配置。实际使用中：
+配置文件定义了浏览器（browser）的连接方式。OpenClaw 提供两种开箱即用的模式：
 
--   `openclaw`：启动/附加到由 OpenClaw 管理的专用 Chrome 实例（隔离的用户数据目录）。
--   `chrome`：通过 Chrome 扩展中继控制您现有的 Chrome 标签页。
+-   `openclaw`：启动或附加到一个由 OpenClaw 托管的独立 Chrome 实例，使用隔离的用户数据目录，适合自动化任务
+-   `chrome`：通过 Chrome 扩展中继控制你日常使用的 Chrome 标签页，适合需要复用已有浏览环境的场景
+
+管理配置文件：
 
 ```bash
 openclaw browser profiles
@@ -40,13 +48,15 @@ openclaw browser create-profile --name work --color "#FF5A36"
 openclaw browser delete-profile --name work
 ```
 
-使用特定配置文件：
+使用指定配置文件：
 
 ```bash
 openclaw browser --browser-profile work tabs
 ```
 
-## 标签页
+## 标签页操作
+
+查看当前标签页、打开新页面、切换焦点、关闭标签：
 
 ```bash
 openclaw browser tabs
@@ -55,21 +65,21 @@ openclaw browser focus <targetId>
 openclaw browser close <targetId>
 ```
 
-## 快照 / 截图 / 操作
+## 快照、截图与交互操作
 
-快照：
+获取页面快照（用于智能体理解页面结构）：
 
 ```bash
 openclaw browser snapshot
 ```
 
-截图：
+截取页面图片：
 
 ```bash
 openclaw browser screenshot
 ```
 
-导航/点击/输入（基于引用的 UI 自动化）：
+执行导航、点击、输入（基于元素引用的 UI 自动化）：
 
 ```bash
 openclaw browser navigate https://example.com
@@ -77,19 +87,30 @@ openclaw browser click <ref>
 openclaw browser type <ref> "hello"
 ```
 
-## Chrome 扩展中继（通过工具栏按钮附加）
+## Chrome 扩展中继（手动附加模式）
 
-此模式允许代理控制您手动附加的现有 Chrome 标签页（它不会自动附加）。将解压的扩展安装到稳定路径：
+如果你想用智能体（agent）控制自己正在用的 Chrome 标签页，可以通过 Chrome 扩展实现。注意：扩展不会自动附加到标签页，你需要手动点击工具栏按钮来建立连接。
+
+首先安装扩展到本地：
 
 ```bash
 openclaw browser extension install
 openclaw browser extension path
 ```
 
-然后打开 Chrome → `chrome://extensions` → 启用“开发者模式” → “加载已解压的扩展程序” → 选择打印出的文件夹。完整指南：[Chrome 扩展](../tools/chrome-extension.md)
+然后在 Chrome 中操作：打开 `chrome://extensions`，启用"开发者模式"，点击"加载已解压的扩展程序"，选择上面命令输出的文件夹即可。
+
+完整配置指南请参考：[Chrome 扩展](../tools/chrome-extension.md)
 
 ## 远程浏览器控制（节点主机代理）
 
-如果网关运行在与浏览器不同的机器上，请在拥有 Chrome/Brave/Edge/Chromium 的机器上运行一个**节点主机**。网关会将浏览器操作代理到该节点（无需单独的浏览器控制服务器）。使用 `gateway.nodes.browser.mode` 来控制自动路由，如果连接了多个节点，则使用 `gateway.nodes.browser.node` 来固定特定节点。安全与远程设置：[浏览器工具](../tools/browser.md), [远程访问](../gateway/remote.md), [Tailscale](../gateway/tailscale.md), [安全](../gateway/security.md)
+当网关运行在与浏览器不同的机器上时，你可以在装有 Chrome/Brave/Edge/Chromium 的机器上运行一个**节点主机**。网关会自动将浏览器操作代理到该节点，无需单独部署浏览器控制服务。
+
+配置说明：
+
+-   使用 `gateway.nodes.browser.mode` 控制自动路由行为
+-   如果有多个节点连接，使用 `gateway.nodes.browser.node` 指定固定节点
+
+更多远程访问与安全配置请参考：[浏览器工具](../tools/browser.md)、[远程访问](../gateway/remote.md)、[Tailscale](../gateway/tailscale.md)、[安全](../gateway/security.md)
 
 [approvals](./approvals.md)[channels](./channels.md)

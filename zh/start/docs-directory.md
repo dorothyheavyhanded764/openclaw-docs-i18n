@@ -5,18 +5,18 @@
   
 # 文档目录
 
-> **ℹ️** 本页面是一个精选索引。如果你是新手，请从 [入门指南](./getting-started.md) 开始。如需完整的文档地图，请参阅 [文档中心](./hubs.md)。
+> **ℹ️** 本页面是精选索引。如果你刚接触 OpenClaw，建议从 [入门指南](./getting-started.md) 开始。如需完整的文档地图，请参阅 [文档中心](./hubs.md)。
 
 ## 从这里开始
 
--   [文档中心（所有页面链接）](./hubs.md)
+-   [文档中心（全部页面链接）](./hubs.md)
 -   [帮助](../help.md)
 -   [配置](../gateway/configuration.md)
 -   [配置示例](../gateway/configuration-examples.md)
 -   [斜杠命令](../tools/slash-commands.md)
 -   [多智能体路由](../concepts/multi-agent.md)
 -   [更新与回滚](../install/updating.md)
--   [配对（DM 和节点）](../channels/pairing.md)
+-   [配对（私信与节点）](../channels/pairing.md)
 -   [Nix 模式](../install/nix.md)
 -   [OpenClaw 助手设置](./openclaw.md)
 -   [技能](../tools/skills.md)

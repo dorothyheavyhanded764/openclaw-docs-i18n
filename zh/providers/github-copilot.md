@@ -1,39 +1,43 @@
-title: "如何在 OpenClaw 中使用 GitHub Copilot 作为模型提供商"
-description: "学习两种将 GitHub Copilot 与 OpenClaw 集成的方法：内置提供商和 Copilot Proxy 插件。包含设置命令和配置。"
-keywords: ["github copilot", "openclaw", "AI 编程助手", "模型提供商", "copilot proxy", "CLI 设置", "身份验证登录", "gpt-4o"]
----
+
 
   提供商
 
   
 # GitHub Copilot
 
-## 什么是 GitHub Copilot？
+## GitHub Copilot 是什么？
 
-GitHub Copilot 是 GitHub 的 AI 编程助手。它为您 GitHub 账户和订阅计划提供对 Copilot 模型的访问。OpenClaw 可以通过两种不同的方式使用 Copilot 作为模型提供商。
+GitHub Copilot 是 GitHub 推出的 AI 编程助手。根据你的 GitHub 账户和订阅计划，你可以访问相应的 Copilot 模型。在 OpenClaw 中，你有两种方式可以把 Copilot 作为模型提供商来使用。
 
-## 在 OpenClaw 中使用 Copilot 的两种方式
+## 两种接入方式
 
-### 1) 内置 GitHub Copilot 提供商 (github-copilot)
+### 方式一：内置 GitHub Copilot 提供商（`github-copilot`）
 
-使用原生的设备登录流程获取 GitHub 令牌，然后在 OpenClaw 运行时将其交换为 Copilot API 令牌。这是**默认**且最简单的路径，因为它不需要 VS Code。
+这是**默认推荐**的方式，也是最简单的路径——无需安装 VS Code。OpenClaw 会通过原生设备登录流程获取 GitHub 令牌，然后在运行时自动换取 Copilot API 令牌。
 
-### 2) Copilot Proxy 插件 (copilot-proxy)
+### 方式二：Copilot Proxy 插件（`copilot-proxy`）
 
-使用 **Copilot Proxy** VS Code 扩展作为本地桥接。OpenClaw 与代理的 `/v1` 端点通信，并使用您在那里配置的模型列表。当您已经在 VS Code 中运行 Copilot Proxy 或需要通过它路由时，请选择此方式。您必须启用该插件并保持 VS Code 扩展运行。使用 GitHub Copilot 作为模型提供商 (`github-copilot`)。登录命令会运行 GitHub 设备流程，保存一个身份验证配置文件，并更新您的配置以使用该配置文件。
+如果你已经在 VS Code 中运行 **Copilot Proxy** 扩展，或者需要通过它来路由请求，可以选择这种方式。OpenClaw 会与代理的 `/v1` 端点通信，并使用你在那里配置的模型列表。
 
-## CLI 设置
+需要注意的是，你必须启用该插件并保持 VS Code 扩展持续运行。运行 `github-copilot` 登录命令后，系统会执行 GitHub 设备授权流程，保存身份验证配置，并自动更新你的设置。
+
+## 命令行设置
+
+运行以下命令启动登录流程：
 
 ```bash
 openclaw models auth login-github-copilot
 ```
 
-系统将提示您访问一个 URL 并输入一次性代码。请保持终端打开，直到流程完成。
+系统会提示你访问一个网址并输入一次性验证码。请在终端中保持等待，直到流程完成。
 
-### 可选标志
+### 可选参数
 
 ```bash
+# 指定配置文件 ID
 openclaw models auth login-github-copilot --profile-id github-copilot:work
+
+# 跳过确认提示
 openclaw models auth login-github-copilot --yes
 ```
 
@@ -43,7 +47,7 @@ openclaw models auth login-github-copilot --yes
 openclaw models set github-copilot/gpt-4o
 ```
 
-### 配置片段
+### 配置示例
 
 ```json
 {
@@ -53,8 +57,8 @@ openclaw models set github-copilot/gpt-4o
 
 ## 注意事项
 
--   需要交互式 TTY；请直接在终端中运行。
--   Copilot 模型的可用性取决于您的订阅计划；如果某个模型被拒绝，请尝试另一个 ID（例如 `github-copilot/gpt-4.1`）。
--   登录操作会将 GitHub 令牌存储在身份验证配置文件中，并在 OpenClaw 运行时将其交换为 Copilot API 令牌。
+- 此命令需要交互式终端环境，请直接在终端中运行。
+- 可用的 Copilot 模型取决于你的订阅计划。如果某个模型无法使用，请尝试其他模型 ID（例如 `github-copilot/gpt-4.1`）。
+- 登录时，GitHub 令牌会被安全存储在身份验证配置中，OpenClaw 运行时会自动用它换取 Copilot API 令牌。
 
 [Deepgram](./deepgram.md)[Hugging Face (推理)](./huggingface.md)

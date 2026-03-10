@@ -5,29 +5,29 @@
   
 # 安装
 
-已经按照[快速入门](./start/getting-started.md)操作过了吗？那您已经准备就绪了——本页面提供替代安装方法、特定平台说明和维护信息。
+已经按照[快速入门](./start/getting-started.md)操作过了？那您已经准备就绪——本页面提供替代安装方法、特定平台说明和维护信息。
 
 ## 系统要求
 
--   **[Node 22+](./install/node.md)**（如果缺失，[安装脚本](#install-methods)会安装它）
--   macOS、Linux 或 Windows
--   仅当从源码构建时需要 `pnpm`
+- **[Node 22+](./install/node.md)**（如果缺失，[安装脚本](#install-methods)会自动安装）
+- macOS、Linux 或 Windows
+- 仅当从源码构建时需要 `pnpm`
 
 > **ℹ️** 在 Windows 上，我们强烈建议在 [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) 下运行 OpenClaw。
 
 ## 安装方法
 
-> **💡** **安装脚本**是推荐的 OpenClaw 安装方式。它在一个步骤中处理 Node 检测、安装和初始化引导。
+> **💡** **安装脚本**是推荐的 OpenClaw 安装方式。它一步完成 Node 检测、安装和初始化引导。
 
  
 
-> **⚠️** 对于 VPS/云主机，请尽可能避免使用第三方“一键式”市场镜像。优先选择干净的基础操作系统镜像（例如 Ubuntu LTS），然后使用安装脚本自行安装 OpenClaw。
+> **⚠️** 对于 VPS/云主机，请尽可能避免使用第三方"一键式"市场镜像。优先选择干净的基础操作系统镜像（例如 Ubuntu LTS），然后使用安装脚本自行安装 OpenClaw。
 
  
 
 下载 CLI，通过 npm 全局安装，并启动初始化引导向导。
 
-就这样——脚本会处理 Node 检测、安装和引导。要跳过引导，仅安装二进制文件：
+就这样——脚本会自动处理 Node 检测、安装和引导。要跳过引导，仅安装二进制文件：
 
 有关所有标志、环境变量和 CI/自动化选项，请参阅[安装器内部机制](./install/installer.md)。
 
@@ -97,9 +97,9 @@ openclaw dashboard      # 打开浏览器 UI
 
 如果需要自定义运行时路径，请使用：
 
--   `OPENCLAW_HOME` 用于基于主目录的内部路径
--   `OPENCLAW_STATE_DIR` 用于可变状态文件位置
--   `OPENCLAW_CONFIG_PATH` 用于配置文件位置
+- `OPENCLAW_HOME` 用于基于主目录的内部路径
+- `OPENCLAW_STATE_DIR` 用于可变状态文件位置
+- `OPENCLAW_CONFIG_PATH` 用于配置文件位置
 
 有关优先级和完整详细信息，请参阅[环境变量](./help/environment.md)。
 

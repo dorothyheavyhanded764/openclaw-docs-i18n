@@ -5,49 +5,61 @@
   
 # vLLM
 
-vLLM 可以通过 **OpenAI 兼容的** HTTP API 提供开源（以及一些自定义）模型服务。OpenClaw 可以使用 `openai-completions` API 连接到 vLLM。当您通过设置 `VLLM_API_KEY`（如果您的服务器不强制要求身份验证，任何值都有效）选择加入，并且没有定义显式的 `models.providers.vllm` 条目时，OpenClaw 还可以**自动发现** vLLM 中的可用模型。
+想把开源模型跑在本地，还能用 OpenAI 风格的 API 调用？vLLM 就是为此而生的。它可以通过 **OpenAI 兼容**的 HTTP API 来提供开源（以及部分自定义）模型服务。OpenClaw 通过 `openai-completions` API 即可连接到 vLLM。
+
+更方便的是，OpenClaw 还支持**自动发现** vLLM 中的可用模型——只要你设置 `VLLM_API_KEY`（服务器不强制认证的话，随便填个值都行），且没有手动定义 `models.providers.vllm` 配置项，OpenClaw 就会自动拉取模型列表。
 
 ## 快速入门
 
-1.  使用 OpenAI 兼容的服务器启动 vLLM。
+只需三步，就能让 OpenClaw 用上 vLLM 提供的本地模型：
 
-您的基础 URL 应暴露 `/v1` 端点（例如 `/v1/models`、`/v1/chat/completions`）。vLLM 通常运行在：
+1.  **启动 vLLM 服务**
 
--   `http://127.0.0.1:8000/v1`
+    确保你的服务地址包含 `/v1` 端点（比如 `/v1/models`、`/v1/chat/completions`）。vLLM 默认监听：
 
-2.  选择加入（如果未配置身份验证，任何值都有效）：
+    -   `http://127.0.0.1:8000/v1`
 
-```bash
-export VLLM_API_KEY="vllm-local"
-```
+2.  **设置 API Key（启用自动发现）**
 
-3.  选择一个模型（替换为您的 vLLM 模型 ID 之一）：
+    如果服务器没配认证，随便填个值就行：
 
-```json
-{
-  agents: {
-    defaults: {
-      model: { primary: "vllm/your-model-id" },
-    },
-  },
-}
-```
+    ```bash
+    export VLLM_API_KEY="vllm-local"
+    ```
 
-## 模型发现（隐式提供商）
+3.  **选择模型**
 
-当设置了 `VLLM_API_KEY`（或存在身份验证配置文件）并且您**没有**定义 `models.providers.vllm` 时，OpenClaw 将查询：
+    把 `your-model-id` 换成你 vLLM 里实际跑的模型 ID：
+
+    ```json
+    {
+      agents: {
+        defaults: {
+          model: { primary: "vllm/your-model-id" },
+        },
+      },
+    }
+    ```
+
+## 模型自动发现（隐式提供商）
+
+当你设置了 `VLLM_API_KEY`（或已有认证配置），且**没有**手动定义 `models.providers.vllm` 时，OpenClaw 会自动请求：
 
 -   `GET http://127.0.0.1:8000/v1/models`
 
-…并将返回的 ID 转换为模型条目。如果您显式设置了 `models.providers.vllm`，则会跳过自动发现，您必须手动定义模型。
+然后把返回的模型 ID 转成可用的模型条目。简单说：只要 vLLM 跑起来了，OpenClaw 就能自动识别你加载了哪些模型。
 
-## 显式配置（手动模型）
+注意：如果你显式定义了 `models.providers.vllm`，自动发现就会被跳过，你需要自己把模型一个个配进去。
 
-在以下情况下使用显式配置：
+## 手动配置（显式定义模型）
 
--   vLLM 运行在不同的主机/端口上。
--   您希望固定 `contextWindow`/`maxTokens` 值。
--   您的服务器需要真实的 API 密钥（或者您希望控制请求头）。
+有些场景下，自动发现不够用，你需要手动配置：
+
+-   vLLM 跑在别的机器或端口上
+-   想固定 `contextWindow` 和 `maxTokens` 的值
+-   服务器需要真实的 API Key，或者你想自定义请求头
+
+这时候就手动配置一下：
 
 ```json
 {
@@ -76,12 +88,14 @@ export VLLM_API_KEY="vllm-local"
 
 ## 故障排除
 
--   检查服务器是否可达：
+连不上？先检查这些：
 
-```bash
-curl http://127.0.0.1:8000/v1/models
-```
+-   **确认服务能访问**：
 
--   如果请求因身份验证错误而失败，请设置与您的服务器配置匹配的真实 `VLLM_API_KEY`，或者在 `models.providers.vllm` 下显式配置提供商。
+    ```bash
+    curl http://127.0.0.1:8000/v1/models
+    ```
+
+-   **认证报错？** 设置一个和服务器配置匹配的真实 `VLLM_API_KEY`，或者在 `models.providers.vllm` 里显式配置提供商。
 
 [Venice AI](./venice.md)[小米 MiMo](./xiaomi.md)

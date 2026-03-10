@@ -5,7 +5,7 @@
   
 # Windows (WSL2)
 
-在 Windows 上运行 OpenClaw 推荐**通过 WSL2**（推荐 Ubuntu）。CLI + 网关在 Linux 内部运行，这保持了运行时环境的一致性，并使工具链（Node/Bun/pnpm、Linux 二进制文件、技能）兼容性更好。原生 Windows 可能更棘手。WSL2 为您提供完整的 Linux 体验 —— 只需一条命令即可安装：`wsl --install`。原生 Windows 配套应用已在规划中。
+在 Windows 上运行 OpenClaw 推荐**通过 WSL2**（推荐 Ubuntu）。CLI + 网关（Gateway）在 Linux 内部运行，这保持了运行时环境的一致性，并使工具链（Node/Bun/pnpm、Linux 二进制文件、技能）兼容性更好。原生 Windows 可能更棘手。WSL2 给你完整的 Linux 体验 —— 只需一条命令即可安装：`wsl --install`。原生 Windows 伴侣应用已在规划中。
 
 ## 安装 (WSL2)
 
@@ -13,7 +13,7 @@
 -   [安装与更新](../install/updating.md)
 -   官方 WSL2 指南 (Microsoft): [https://learn.microsoft.com/windows/wsl/install](https://learn.microsoft.com/windows/wsl/install)
 
-## 网关
+## 网关（Gateway）
 
 -   [网关运行手册](../gateway.md)
 -   [配置](../gateway/configuration.md)
@@ -38,7 +38,7 @@ openclaw gateway install
 openclaw configure
 ```
 
-提示时选择 **Gateway service**。修复/迁移：
+提示时选择 **网关服务**。修复/迁移：
 
 ```bash
 openclaw doctor
@@ -72,7 +72,7 @@ openclaw gateway install
 schtasks /create /tn "WSL Boot" /tr "wsl.exe -d Ubuntu --exec /bin/true" /sc onstart /ru SYSTEM
 ```
 
-将 `Ubuntu` 替换为您的发行版名称，可通过以下命令查看：
+将 `Ubuntu` 替换为你的发行版名称，可通过以下命令查看：
 
 ```bash
 wsl --list --verbose
@@ -89,7 +89,9 @@ systemctl --user status openclaw-gateway --no-pager
 
 ## 高级：通过局域网暴露 WSL 服务 (portproxy)
 
-WSL 有自己的虚拟网络。如果另一台机器需要访问**在 WSL 内**运行的服务（SSH、本地 TTS 服务器或网关），您必须将 Windows 的一个端口转发到当前 WSL 的 IP 地址。WSL 的 IP 在重启后会改变，因此您可能需要刷新转发规则。示例（在 PowerShell 中**以管理员身份**运行）：
+WSL 有自己的虚拟网络。如果另一台机器需要访问**在 WSL 内**运行的服务（SSH、本地 TTS 服务器或网关），你必须将 Windows 的一个端口转发到当前 WSL 的 IP 地址。WSL 的 IP 在重启后会改变，因此你可能需要刷新转发规则。
+
+示例（在 PowerShell 中**以管理员身份**运行）：
 
 ```powershell
 $Distro = "Ubuntu-24.04"
@@ -105,14 +107,14 @@ netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=$ListenPor
 
 允许端口通过 Windows 防火墙（一次性操作）：
 
-```
+```powershell
 New-NetFirewallRule -DisplayName "WSL SSH $ListenPort" -Direction Inbound `
   -Protocol TCP -LocalPort $ListenPort -Action Allow
 ```
 
 WSL 重启后刷新 portproxy：
 
-```
+```powershell
 netsh interface portproxy delete v4tov4 listenport=$ListenPort listenaddress=0.0.0.0 | Out-Null
 netsh interface portproxy add v4tov4 listenport=$ListenPort listenaddress=0.0.0.0 `
   connectaddress=$WslIp connectport=$TargetPort | Out-Null
@@ -120,10 +122,10 @@ netsh interface portproxy add v4tov4 listenport=$ListenPort listenaddress=0.0.0.
 
 注意事项：
 
--   从另一台机器 SSH 时，目标是 **Windows 主机的 IP**（例如：`ssh user@windows-host -p 2222`）。
--   远程节点必须指向一个**可访问的**网关 URL（不是 `127.0.0.1`）；使用 `openclaw status --all` 来确认。
--   使用 `listenaddress=0.0.0.0` 允许局域网访问；`127.0.0.1` 则仅限本地访问。
--   如果您希望此过程自动化，可以注册一个计划任务，在登录时运行刷新步骤。
+-   从另一台机器 SSH 时，目标是 **Windows 主机的 IP**（例如：`ssh user@windows-host -p 2222`）
+-   远程节点必须指向一个**可访问的**网关 URL（不是 `127.0.0.1`）；使用 `openclaw status --all` 来确认
+-   使用 `listenaddress=0.0.0.0` 允许局域网访问；`127.0.0.1` 则仅限本地访问
+-   如果你希望此过程自动化，可以注册一个计划任务，在登录时运行刷新步骤
 
 ## 分步 WSL2 安装
 
@@ -142,7 +144,7 @@ wsl --install -d Ubuntu-24.04
 
 ### 2) 启用 systemd（网关安装所需）
 
-在您的 WSL 终端中：
+在你的 WSL 终端中：
 
 ```bash
 sudo tee /etc/wsl.conf >/dev/null <<'EOF'
@@ -178,8 +180,8 @@ openclaw onboard
 
 完整指南：[入门指南](../start/getting-started.md)
 
-## Windows 配套应用
+## Windows 伴侣应用
 
-我们目前还没有 Windows 配套应用。如果您希望贡献代码使其实现，欢迎贡献。
+我们还没有 Windows 伴侣应用。如果你想帮助实现它，欢迎贡献。
 
 [Linux 应用](./linux.md)[Android 应用](./android.md)

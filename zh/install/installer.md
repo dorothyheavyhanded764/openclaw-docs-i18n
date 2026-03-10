@@ -7,11 +7,11 @@
 
 OpenClaw 提供了三个安装脚本，由 `openclaw.ai` 提供。
 
-| 脚本 | 平台 | 功能 |
-| --- | --- | --- |
-| [`install.sh`](#installsh) | macOS / Linux / WSL | 如果需要则安装 Node，通过 npm（默认）或 git 安装 OpenClaw，并可运行初始化引导。 |
-| [`install-cli.sh`](#install-clish) | macOS / Linux / WSL | 将 Node + OpenClaw 安装到本地前缀目录（`~/.openclaw`）。无需 root 权限。 |
-| [`install.ps1`](#installps1) | Windows (PowerShell) | 如果需要则安装 Node，通过 npm（默认）或 git 安装 OpenClaw，并可运行初始化引导。 |
+|| 脚本 | 平台 | 功能 |
+|| --- | --- | --- |
+|| [`install.sh`](#installsh) | macOS / Linux / WSL | 如需要则安装 Node，通过 npm（默认）或 git 安装 OpenClaw，并可运行初始化引导。 |
+|| [`install-cli.sh`](#install-clish) | macOS / Linux / WSL | 将 Node + OpenClaw 安装到本地前缀目录（`~/.openclaw`）。无需 root 权限。 |
+|| [`install.ps1`](#installps1) | Windows (PowerShell) | 如需要则安装 Node，通过 npm（默认）或 git 安装 OpenClaw，并可运行初始化引导。 |
 
 ## 快速命令
 
@@ -25,7 +25,7 @@ OpenClaw 提供了三个安装脚本，由 `openclaw.ai` 提供。
 
 > **💡** 推荐用于 macOS/Linux/WSL 上的大多数交互式安装。
 
-### 流程 (install.sh)
+### 流程（install.sh）
 
 ### 步骤 1：检测操作系统
 
@@ -41,57 +41,57 @@ OpenClaw 提供了三个安装脚本，由 `openclaw.ai` 提供。
 
 ### 步骤 4：安装 OpenClaw
 
--   `npm` 方法（默认）：全局 npm 安装
--   `git` 方法：克隆/更新仓库，使用 pnpm 安装依赖，构建，然后在 `~/.local/bin/openclaw` 安装包装器
+- `npm` 方法（默认）：全局 npm 安装
+- `git` 方法：克隆/更新仓库，使用 pnpm 安装依赖，构建，然后在 `~/.local/bin/openclaw` 安装包装器
 
 ### 步骤 5：安装后任务
 
--   在升级和 git 安装时运行 `openclaw doctor --non-interactive`（尽力而为）
--   在适当时尝试运行初始化引导（TTY 可用、未禁用引导且引导/配置检查通过）
--   默认设置 `SHARP_IGNORE_GLOBAL_LIBVIPS=1`
+- 在升级和 git 安装时运行 `openclaw doctor --non-interactive`（尽力而为）
+- 在适当时尝试运行初始化引导（TTY 可用、未禁用引导且引导/配置检查通过）
+- 默认设置 `SHARP_IGNORE_GLOBAL_LIBVIPS=1`
 
 ### 源码检出检测
 
 如果在 OpenClaw 检出目录内运行（存在 `package.json` + `pnpm-workspace.yaml`），脚本会提供选项：
 
--   使用检出目录（`git`），或
--   使用全局安装（`npm`）
+- 使用检出目录（`git`），或
+- 使用全局安装（`npm`）
 
 如果没有可用的 TTY 且未设置安装方法，则默认使用 `npm` 并发出警告。脚本会以退出码 `2` 退出，表示选择了无效的安装方法或提供了无效的 `--install-method` 值。
 
-### 示例 (install.sh)
+### 示例（install.sh）
 
  
 
-| 标志 | 描述 |
-| --- | --- |
-| `--install-method npm\|git` | 选择安装方法（默认：`npm`）。别名：`--method` |
-| `--npm` | npm 方法的快捷方式 |
-| `--git` | git 方法的快捷方式。别名：`--github` |
-| `--version <version\|dist-tag>` | npm 版本或分发标签（默认：`latest`） |
-| `--beta` | 如果可用则使用 beta 分发标签，否则回退到 `latest` |
-| `--git-dir ` | 检出目录（默认：`~/openclaw`）。别名：`--dir` |
-| `--no-git-update` | 跳过现有检出目录的 `git pull` |
-| `--no-prompt` | 禁用提示 |
-| `--no-onboard` | 跳过初始化引导 |
-| `--onboard` | 启用初始化引导 |
-| `--dry-run` | 仅打印操作而不实际应用更改 |
-| `--verbose` | 启用调试输出（`set -x`，npm notice 级别日志） |
-| `--help` | 显示用法（`-h`） |
+|| 标志 | 描述 |
+|| --- | --- |
+|| `--install-method npm\|git` | 选择安装方法（默认：`npm`）。别名：`--method` |
+|| `--npm` | npm 方法的快捷方式 |
+|| `--git` | git 方法的快捷方式。别名：`--github` |
+|| `--version <version\|dist-tag>` | npm 版本或分发标签（默认：`latest`） |
+|| `--beta` | 如果可用则使用 beta 分发标签，否则回退到 `latest` |
+|| `--git-dir ` | 检出目录（默认：`~/openclaw`）。别名：`--dir` |
+|| `--no-git-update` | 跳过现有检出目录的 `git pull` |
+|| `--no-prompt` | 禁用提示 |
+|| `--no-onboard` | 跳过初始化引导 |
+|| `--onboard` | 启用初始化引导 |
+|| `--dry-run` | 仅打印操作而不实际应用更改 |
+|| `--verbose` | 启用调试输出（`set -x`，npm notice 级别日志） |
+|| `--help` | 显示用法（`-h`） |
 
-| 变量 | 描述 |
-| --- | --- |
-| `OPENCLAW_INSTALL_METHOD=git\|npm` | 安装方法 |
-| `OPENCLAW_VERSION=latest\|next\|` | npm 版本或分发标签 |
-| `OPENCLAW_BETA=0\|1` | 如果可用则使用 beta 版本 |
-| `OPENCLAW_GIT_DIR=` | 检出目录 |
-| `OPENCLAW_GIT_UPDATE=0\|1` | 切换 git 更新 |
-| `OPENCLAW_NO_PROMPT=1` | 禁用提示 |
-| `OPENCLAW_NO_ONBOARD=1` | 跳过初始化引导 |
-| `OPENCLAW_DRY_RUN=1` | 干运行模式 |
-| `OPENCLAW_VERBOSE=1` | 调试模式 |
-| `OPENCLAW_NPM_LOGLEVEL=error\|warn\|notice` | npm 日志级别 |
-| `SHARP_IGNORE_GLOBAL_LIBVIPS=0\|1` | 控制 sharp/libvips 行为（默认：`1`） |
+|| 变量 | 描述 |
+|| --- | --- |
+|| `OPENCLAW_INSTALL_METHOD=git\|npm` | 安装方法 |
+|| `OPENCLAW_VERSION=latest\|next\|` | npm 版本或分发标签 |
+|| `OPENCLAW_BETA=0\|1` | 如果可用则使用 beta 版本 |
+|| `OPENCLAW_GIT_DIR=` | 检出目录 |
+|| `OPENCLAW_GIT_UPDATE=0\|1` | 切换 git 更新 |
+|| `OPENCLAW_NO_PROMPT=1` | 禁用提示 |
+|| `OPENCLAW_NO_ONBOARD=1` | 跳过初始化引导 |
+|| `OPENCLAW_DRY_RUN=1` | 干运行模式 |
+|| `OPENCLAW_VERBOSE=1` | 调试模式 |
+|| `OPENCLAW_NPM_LOGLEVEL=error\|warn\|notice` | npm 日志级别 |
+|| `SHARP_IGNORE_GLOBAL_LIBVIPS=0\|1` | 控制 sharp/libvips 行为（默认：`1`） |
 
 * * *
 
@@ -99,7 +99,7 @@ OpenClaw 提供了三个安装脚本，由 `openclaw.ai` 提供。
 
 > **ℹ️** 专为希望将所有内容安装在本地前缀目录（默认 `~/.openclaw`）且不依赖系统 Node 的环境设计。
 
-### 流程 (install-cli.sh)
+### 流程（install-cli.sh）
 
 ### 步骤 1：安装本地 Node 运行时
 
@@ -113,36 +113,36 @@ OpenClaw 提供了三个安装脚本，由 `openclaw.ai` 提供。
 
 使用 `--prefix ` 通过 npm 安装，然后将包装器写入 `/bin/openclaw`。
 
-### 示例 (install-cli.sh)
+### 示例（install-cli.sh）
 
  
 
-| 标志 | 描述 |
-| --- | --- |
-| `--prefix ` | 安装前缀目录（默认：`~/.openclaw`） |
-| `--version ` | OpenClaw 版本或分发标签（默认：`latest`） |
-| `--node-version ` | Node 版本（默认：`22.22.0`） |
-| `--json` | 输出 NDJSON 事件 |
-| `--onboard` | 安装后运行 `openclaw onboard` |
-| `--no-onboard` | 跳过初始化引导（默认） |
-| `--set-npm-prefix` | 在 Linux 上，如果当前 npm 前缀目录不可写，则强制将其设为 `~/.npm-global` |
-| `--help` | 显示用法（`-h`） |
+|| 标志 | 描述 |
+|| --- | --- |
+|| `--prefix ` | 安装前缀目录（默认：`~/.openclaw`） |
+|| `--version ` | OpenClaw 版本或分发标签（默认：`latest`） |
+|| `--node-version ` | Node 版本（默认：`22.22.0`） |
+|| `--json` | 输出 NDJSON 事件 |
+|| `--onboard` | 安装后运行 `openclaw onboard` |
+|| `--no-onboard` | 跳过初始化引导（默认） |
+|| `--set-npm-prefix` | 在 Linux 上，如果当前 npm 前缀目录不可写，则强制将其设为 `~/.npm-global` |
+|| `--help` | 显示用法（`-h`） |
 
-| 变量 | 描述 |
-| --- | --- |
-| `OPENCLAW_PREFIX=` | 安装前缀目录 |
-| `OPENCLAW_VERSION=` | OpenClaw 版本或分发标签 |
-| `OPENCLAW_NODE_VERSION=` | Node 版本 |
-| `OPENCLAW_NO_ONBOARD=1` | 跳过初始化引导 |
-| `OPENCLAW_NPM_LOGLEVEL=error\|warn\|notice` | npm 日志级别 |
-| `OPENCLAW_GIT_DIR=` | 遗留清理查找路径（用于移除旧的 `Peekaboo` 子模块检出） |
-| `SHARP_IGNORE_GLOBAL_LIBVIPS=0\|1` | 控制 sharp/libvips 行为（默认：`1`） |
+|| 变量 | 描述 |
+|| --- | --- |
+|| `OPENCLAW_PREFIX=` | 安装前缀目录 |
+|| `OPENCLAW_VERSION=` | OpenClaw 版本或分发标签 |
+|| `OPENCLAW_NODE_VERSION=` | Node 版本 |
+|| `OPENCLAW_NO_ONBOARD=1` | 跳过初始化引导 |
+|| `OPENCLAW_NPM_LOGLEVEL=error\|warn\|notice` | npm 日志级别 |
+|| `OPENCLAW_GIT_DIR=` | 遗留清理查找路径（用于移除旧的 `Peekaboo` 子模块检出） |
+|| `SHARP_IGNORE_GLOBAL_LIBVIPS=0\|1` | 控制 sharp/libvips 行为（默认：`1`） |
 
 * * *
 
 ## install.ps1
 
-### 流程 (install.ps1)
+### 流程（install.ps1）
 
 ### 步骤 1：确保 PowerShell + Windows 环境
 
@@ -154,33 +154,33 @@ OpenClaw 提供了三个安装脚本，由 `openclaw.ai` 提供。
 
 ### 步骤 3：安装 OpenClaw
 
--   `npm` 方法（默认）：使用指定的 `-Tag` 进行全局 npm 安装
--   `git` 方法：克隆/更新仓库，使用 pnpm 安装/构建，并在 `%USERPROFILE%\.local\bin\openclaw.cmd` 安装包装器
+- `npm` 方法（默认）：使用指定的 `-Tag` 进行全局 npm 安装
+- `git` 方法：克隆/更新仓库，使用 pnpm 安装/构建，并在 `%USERPROFILE%\.local\bin\openclaw.cmd` 安装包装器
 
 ### 步骤 4：安装后任务
 
 在可能的情况下将所需的 bin 目录添加到用户 PATH，然后在升级和 git 安装时运行 `openclaw doctor --non-interactive`（尽力而为）。
 
-### 示例 (install.ps1)
+### 示例（install.ps1）
 
  
 
-| 标志 | 描述 |
-| --- | --- |
-| `-InstallMethod npm\|git` | 安装方法（默认：`npm`） |
-| `-Tag ` | npm 分发标签（默认：`latest`） |
-| `-GitDir ` | 检出目录（默认：`%USERPROFILE%\openclaw`） |
-| `-NoOnboard` | 跳过初始化引导 |
-| `-NoGitUpdate` | 跳过 `git pull` |
-| `-DryRun` | 仅打印操作 |
+|| 标志 | 描述 |
+|| --- | --- |
+|| `-InstallMethod npm\|git` | 安装方法（默认：`npm`） |
+|| `-Tag ` | npm 分发标签（默认：`latest`） |
+|| `-GitDir ` | 检出目录（默认：`%USERPROFILE%\openclaw`） |
+|| `-NoOnboard` | 跳过初始化引导 |
+|| `-NoGitUpdate` | 跳过 `git pull` |
+|| `-DryRun` | 仅打印操作 |
 
-| 变量 | 描述 |
-| --- | --- |
-| `OPENCLAW_INSTALL_METHOD=git\|npm` | 安装方法 |
-| `OPENCLAW_GIT_DIR=` | 检出目录 |
-| `OPENCLAW_NO_ONBOARD=1` | 跳过初始化引导 |
-| `OPENCLAW_GIT_UPDATE=0` | 禁用 git pull |
-| `OPENCLAW_DRY_RUN=1` | 干运行模式 |
+|| 变量 | 描述 |
+|| --- | --- |
+|| `OPENCLAW_INSTALL_METHOD=git\|npm` | 安装方法 |
+|| `OPENCLAW_GIT_DIR=` | 检出目录 |
+|| `OPENCLAW_NO_ONBOARD=1` | 跳过初始化引导 |
+|| `OPENCLAW_GIT_UPDATE=0` | 禁用 git pull |
+|| `OPENCLAW_DRY_RUN=1` | 干运行模式 |
 
  
 

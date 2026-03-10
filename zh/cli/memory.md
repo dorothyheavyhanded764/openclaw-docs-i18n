@@ -5,12 +5,14 @@
   
 # memory
 
-管理语义内存索引与搜索。由活动内存插件提供（默认：`memory-core`；设置 `plugins.slots.memory = "none"` 以禁用）。相关：
+这一组命令帮你管理语义记忆（memory）的索引和搜索功能。它由当前启用的记忆插件提供支持（默认是 `memory-core`；如果你想完全禁用，可以设置 `plugins.slots.memory = "none"`）。
 
--   内存概念：[Memory](../concepts/memory.md)
--   插件：[Plugins](../tools/plugin.md)
+想深入了解？可以参考：
 
-## 示例
+- 记忆的工作原理：[Memory](../concepts/memory.md)
+- 插件机制：[Plugins](../tools/plugin.md)
+
+## 使用示例
 
 ```bash
 openclaw memory status
@@ -25,38 +27,44 @@ openclaw memory status --agent main
 openclaw memory index --agent main --verbose
 ```
 
-## 选项
+## 命令选项详解
 
-`memory status` 和 `memory index`：
+### `memory status` 和 `memory index` 共有选项
 
--   `--agent `：限定到单个智能体。不指定此选项时，这些命令会为每个已配置的智能体运行；如果未配置智能体列表，则回退到默认智能体。
--   `--verbose`：在探测和索引期间输出详细日志。
+- `--agent `：只对指定的智能体（agent）生效。如果不指定，命令会对所有已配置的智能体逐个执行；如果没有配置智能体列表，则使用默认智能体。
+- `--verbose`：在探测和索引过程中输出详细的日志信息，方便排查问题。
 
-`memory status`：
+### `memory status` 专属选项
 
--   `--deep`：探测向量和嵌入可用性。
--   `--index`：如果存储是脏的，则运行重新索引（隐含 `--deep`）。
--   `--json`：打印 JSON 输出。
+- `--deep`：深入检查向量数据库和嵌入模型的可用性。
+- `--index`：如果存储有更新未同步，自动触发重新索引（此选项隐含了 `--deep`）。
+- `--json`：以 JSON 格式输出结果，便于程序解析。
 
-`memory index`：
+### `memory index` 专属选项
 
--   `--force`：强制完全重新索引。
+- `--force`：强制执行完整的重新索引，忽略增量更新。
 
-`memory search`：
+### `memory search` 专属选项
 
--   查询输入：传递位置参数 `[query]` 或 `--query `。
--   如果两者都提供，`--query` 优先。
--   如果两者都未提供，命令将出错退出。
--   `--agent `：限定到单个智能体（默认：默认智能体）。
--   `--max-results `：限制返回的结果数量。
--   `--min-score `：过滤掉低分匹配项。
--   `--json`：打印 JSON 结果。
+查询内容有两种方式：
 
-注意：
+- 位置参数：直接在命令后写查询内容，如 `openclaw memory search "关键词"`
+- `--query `：使用选项参数，如 `openclaw memory search --query "关键词"`
 
--   `memory index --verbose` 会打印每个阶段的详细信息（提供者、模型、来源、批处理活动）。
--   `memory status` 包含通过 `memorySearch.extraPaths` 配置的任何额外路径。
--   如果实际活动的内存远程 API 密钥字段配置为 SecretRefs，该命令将从活动网关快照中解析这些值。如果网关不可用，命令将快速失败。
--   网关版本偏差说明：此命令路径需要支持 `secrets.resolve` 的网关；较旧的网关会返回未知方法错误。
+如果同时提供了两种方式，`--query` 参数优先。如果两者都没提供，命令会报错退出。
+
+其他选项：
+
+- `--agent `：在指定智能体的记忆范围内搜索（默认使用默认智能体）。
+- `--max-results `：限制返回结果的最大数量。
+- `--min-score `：设置最低相似度阈值，过滤掉分数过低的结果。
+- `--json`：以 JSON 格式输出搜索结果。
+
+## 注意事项
+
+- 使用 `memory index --verbose` 可以看到每个阶段的详细处理信息，包括嵌入提供者、模型、数据来源、批处理进度等。
+- `memory status` 的输出会包含通过 `memorySearch.extraPaths` 配置的额外索引路径。
+- 如果记忆远程 API 的密钥字段配置为 SecretRefs，命令会尝试从当前网关快照中解析这些值。如果网关不可用，命令会立即失败并提示错误。
+- **网关版本兼容性**：此命令需要网关支持 `secrets.resolve` 方法。如果你使用的是较旧版本的网关，会收到"未知方法"的错误提示。
 
 [logs](./logs.md)[message](./message.md)

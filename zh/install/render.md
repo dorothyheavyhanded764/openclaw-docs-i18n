@@ -5,26 +5,26 @@
   
 # 在 Render 上部署
 
-使用基础设施即代码在 Render 上部署 OpenClaw。包含的 `render.yaml` 蓝图以声明方式定义您的整个技术栈、服务、磁盘、环境变量，因此您可以一键部署，并将您的基础设施与代码一起进行版本控制。
+本节介绍如何使用基础设施即代码在 Render 上部署 OpenClaw。包含的 `render.yaml` Blueprint 以声明方式定义你的整个技术栈——服务、磁盘、环境变量——因此你可以一键部署，并将基础设施与代码一起进行版本控制。
 
 ## 先决条件
 
--   一个 [Render 账户](https://render.com)（提供免费套餐）
--   来自您首选的 [模型提供商](../providers.md) 的 API 密钥
+- 一个 [Render 账户](https://render.com)（提供免费套餐）
+- 来自你首选的 [模型提供商](../providers.md) 的 API 密钥
 
-## 使用 Render 蓝图部署
+## 使用 Render Blueprint 部署
 
 [部署到 Render](https://render.com/deploy?repo=https://github.com/openclaw/openclaw) 点击此链接将：
 
-1.  根据此仓库根目录下的 `render.yaml` 蓝图创建一个新的 Render 服务。
-2.  提示您设置 `SETUP_PASSWORD`
-3.  构建 Docker 镜像并部署
+1. 根据此仓库根目录下的 `render.yaml` Blueprint 创建一个新的 Render 服务。
+2. 提示你设置 `SETUP_PASSWORD`
+3. 构建 Docker 镜像并部署
 
-部署完成后，您的服务 URL 遵循模式 `https://<service-name>.onrender.com`。
+部署完成后，你的服务 URL 遵循模式 `https://<service-name>.onrender.com`。
 
-## 理解蓝图
+## 理解 Blueprint
 
-Render 蓝图是定义您基础设施的 YAML 文件。此仓库中的 `render.yaml` 配置了运行 OpenClaw 所需的一切：
+Render Blueprint 是定义你基础设施的 YAML 文件。此仓库中的 `render.yaml` 配置了运行 OpenClaw 所需的一切：
 
 ```yaml
 services:
@@ -50,7 +50,7 @@ services:
       sizeGB: 1
 ```
 
-使用的关键蓝图特性：
+使用的关键 Blueprint 特性：
 
 | 特性 | 用途 |
 | --- | --- |
@@ -68,17 +68,17 @@ services:
 | 入门版 | 从不 | 1GB+ | 个人使用、小团队 |
 | 标准版+ | 从不 | 1GB+ | 生产环境、多频道 |
 
-蓝图默认为 `starter`。要使用免费套餐，请在您 fork 的 `render.yaml` 中将 `plan` 改为 `free`（但请注意：没有持久化磁盘意味着每次部署时配置都会重置）。
+Blueprint 默认为 `starter`。要使用免费套餐，请在你的 fork 的 `render.yaml` 中将 `plan` 改为 `free`（但请注意：没有持久化磁盘意味着每次部署时配置都会重置）。
 
 ## 部署后
 
 ### 完成设置向导
 
-1.  访问 `https://<your-service>.onrender.com/setup`
-2.  输入您的 `SETUP_PASSWORD`
-3.  选择一个模型提供商并粘贴您的 API 密钥
-4.  可选配置消息频道（Telegram、Discord、Slack）
-5.  点击 **运行设置**
+1. 访问 `https://<your-service>.onrender.com/setup`
+2. 输入你的 `SETUP_PASSWORD`
+3. 选择一个模型提供商并粘贴你的 API 密钥
+4. 可选配置消息频道（Telegram、Discord、Slack）
+5. 点击 **Run setup**
 
 ### 访问控制界面
 
@@ -88,49 +88,49 @@ Web 仪表板位于 `https://<your-service>.onrender.com/openclaw`。
 
 ### 日志
 
-在 **仪表板 → 您的服务 → 日志** 中查看实时日志。可按以下类型筛选：
+在 **仪表板 → 你的服务 → 日志** 中查看实时日志。可按以下类型筛选：
 
--   构建日志（Docker 镜像创建）
--   部署日志（服务启动）
--   运行时日志（应用程序输出）
+- 构建日志（Docker 镜像创建）
+- 部署日志（服务启动）
+- 运行时日志（应用程序输出）
 
 ### Shell 访问
 
-用于调试，通过 **仪表板 → 您的服务 → Shell** 打开一个 shell 会话。持久化磁盘挂载在 `/data`。
+用于调试，通过 **仪表板 → 你的服务 → Shell** 打开一个 shell 会话。持久化磁盘挂载在 `/data`。
 
 ### 环境变量
 
-在 **仪表板 → 您的服务 → 环境** 中修改变量。更改会触发自动重新部署。
+在 **仪表板 → 你的服务 → 环境** 中修改变量。更改会触发自动重新部署。
 
 ### 自动部署
 
-如果您使用原始的 OpenClaw 仓库，Render 将不会自动部署您的 OpenClaw。要更新它，请从仪表板运行手动蓝图同步。
+如果你使用原始的 OpenClaw 仓库，Render 将不会自动部署你的 OpenClaw。要更新它，请从仪表板运行手动 Blueprint 同步。
 
 ## 自定义域名
 
-1.  前往 **仪表板 → 您的服务 → 设置 → 自定义域名**
-2.  添加您的域名
-3.  按照指示配置 DNS（CNAME 指向 `*.onrender.com`）
-4.  Render 会自动配置 TLS 证书
+1. 前往 **仪表板 → 你的服务 → 设置 → 自定义域名**
+2. 添加你的域名
+3. 按照指示配置 DNS（CNAME 指向 `*.onrender.com`）
+4. Render 会自动配置 TLS 证书
 
 ## 扩展
 
 Render 支持水平和垂直扩展：
 
--   **垂直**：更改套餐以获得更多 CPU/内存
--   **水平**：增加实例数量（标准版及以上套餐）
+- **垂直**：更改套餐以获得更多 CPU/内存
+- **水平**：增加实例数量（标准版及以上套餐）
 
 对于 OpenClaw，垂直扩展通常就足够了。水平扩展需要粘性会话或外部状态管理。
 
 ## 备份与迁移
 
-随时导出您的配置和工作区：
+随时导出你的配置和工作区：
 
 ```
 https://<your-service>.onrender.com/setup/export
 ```
 
-这将下载一个可移植的备份，您可以在任何 OpenClaw 主机上恢复。
+这将下载一个可移植的备份，你可以在任何 OpenClaw 主机上恢复。
 
 ## 故障排除
 
@@ -138,8 +138,8 @@ https://<your-service>.onrender.com/setup/export
 
 检查 Render 仪表板中的部署日志。常见问题：
 
--   缺少 `SETUP_PASSWORD` — 蓝图会提示输入，但请确认它已设置
--   端口不匹配 — 确保 `PORT=8080` 与 Dockerfile 中暴露的端口一致
+- 缺少 `SETUP_PASSWORD` — Blueprint 会提示输入，但请确认它已设置
+- 端口不匹配 — 确保 `PORT=8080` 与 Dockerfile 中暴露的端口一致
 
 ### 冷启动缓慢（免费套餐）
 
@@ -147,13 +147,13 @@ https://<your-service>.onrender.com/setup/export
 
 ### 重新部署后数据丢失
 
-这发生在免费套餐（无持久化磁盘）。升级到付费套餐，或定期通过 `/setup/export` 导出您的配置。
+这发生在免费套餐（无持久化磁盘）。升级到付费套餐，或定期通过 `/setup/export` 导出你的配置。
 
 ### 健康检查失败
 
 Render 期望在 30 秒内从 `/health` 收到 200 响应。如果构建成功但部署失败，可能是服务启动时间过长。检查：
 
--   构建日志中的错误
--   容器是否能在本地通过 `docker build && docker run` 运行
+- 构建日志中的错误
+- 容器是否能在本地通过 `docker build && docker run` 运行
 
 [在 Railway 上部署](./railway.md)[在 Northflank 上部署](./northflank.md)

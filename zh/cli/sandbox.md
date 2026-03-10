@@ -3,19 +3,19 @@
   CLI 命令
 
   
-# 沙盒 CLI
+# 沙盒（sandbox）CLI
 
-管理基于 Docker 的沙盒容器，用于隔离代理执行。
+管理基于 Docker 的沙盒容器，为智能体（agent）提供隔离的执行环境。
 
 ## 概述
 
-OpenClaw 可以在隔离的 Docker 容器中运行代理以确保安全。`sandbox` 命令可帮助您管理这些容器，特别是在更新或配置更改之后。
+OpenClaw 支持在隔离的 Docker 容器中运行智能体，以增强安全性。`sandbox` 命令帮助你管理这些容器——尤其是在更新镜像或修改配置后，让变更及时生效。
 
 ## 命令
 
 ### openclaw sandbox explain
 
-检查**生效的**沙盒模式/范围/工作空间访问权限、沙盒工具策略以及提升的权限门（附带修复配置键路径）。
+查看当前**实际生效的**沙盒配置，包括模式、范围、工作空间访问权限、工具策略，以及权限提升门控（附带对应的配置项路径）。
 
 ```bash
 openclaw sandbox explain
@@ -26,45 +26,45 @@ openclaw sandbox explain --json
 
 ### openclaw sandbox list
 
-列出所有沙盒容器及其状态和配置。
+列出所有沙盒容器，显示其状态和配置信息。
 
 ```bash
 openclaw sandbox list
 openclaw sandbox list --browser  # 仅列出浏览器容器
-openclaw sandbox list --json     # JSON 输出
+openclaw sandbox list --json     # 以 JSON 格式输出
 ```
 
-**输出包括：**
+**输出内容包括：**
 
 -   容器名称和状态（运行中/已停止）
--   Docker 镜像及其是否与配置匹配
--   存在时间（自创建以来的时间）
--   空闲时间（自上次使用以来的时间）
--   关联的会话/代理
+-   Docker 镜像及是否与配置匹配
+-   存在时长（创建以来的时间）
+-   空闲时长（上次使用以来的时间）
+-   关联的会话/智能体
 
 ### openclaw sandbox recreate
 
-移除沙盒容器以强制使用更新的镜像/配置重新创建。
+删除沙盒容器，使其在下次使用时用更新的镜像或配置重新创建。
 
 ```bash
-openclaw sandbox recreate --all                # 重新创建所有容器
-openclaw sandbox recreate --session main       # 特定会话
-openclaw sandbox recreate --agent mybot        # 特定代理
+openclaw sandbox recreate --all                # 重建所有容器
+openclaw sandbox recreate --session main       # 指定会话
+openclaw sandbox recreate --agent mybot        # 指定智能体
 openclaw sandbox recreate --browser            # 仅浏览器容器
-openclaw sandbox recreate --all --force        # 跳过确认
+openclaw sandbox recreate --all --force        # 跳过确认提示
 ```
 
 **选项：**
 
--   `--all`: 重新创建所有沙盒容器
--   `--session `: 为特定会话重新创建容器
--   `--agent `: 为特定代理重新创建容器
--   `--browser`: 仅重新创建浏览器容器
+-   `--all`: 重建所有沙盒容器
+-   `--session `: 重建指定会话的容器
+-   `--agent `: 重建指定智能体的容器
+-   `--browser`: 仅重建浏览器容器
 -   `--force`: 跳过确认提示
 
-**重要提示：** 容器将在代理下次使用时自动重新创建。
+**注意：** 容器会在智能体下次使用时自动重建。
 
-## 使用场景
+## 典型使用场景
 
 ### 更新 Docker 镜像后
 
@@ -74,49 +74,50 @@ docker pull openclaw-sandbox:latest
 docker tag openclaw-sandbox:latest openclaw-sandbox:bookworm-slim
 
 # 更新配置以使用新镜像
-# 编辑配置：agents.defaults.sandbox.docker.image (或 agents.list[].sandbox.docker.image)
+# 编辑 agents.defaults.sandbox.docker.image（或 agents.list[].sandbox.docker.image）
 
-# 重新创建容器
+# 重建容器让变更生效
 openclaw sandbox recreate --all
 ```
 
-### 更改沙盒配置后
+### 修改沙盒配置后
 
 ```bash
-# 编辑配置：agents.defaults.sandbox.* (或 agents.list[].sandbox.*)
+# 编辑 agents.defaults.sandbox.*（或 agents.list[].sandbox.*）
 
-# 重新创建以应用新配置
+# 重建以应用新配置
 openclaw sandbox recreate --all
 ```
 
-### 更改 setupCommand 后
+### 修改 setupCommand 后
 
 ```bash
 openclaw sandbox recreate --all
-# 或仅针对一个代理：
+# 或只针对某个智能体：
 openclaw sandbox recreate --agent family
 ```
 
-### 仅针对特定代理
+### 只更新某个智能体的容器
 
 ```bash
-# 仅更新一个代理的容器
 openclaw sandbox recreate --agent alfred
 ```
 
-## 为什么需要这样做？
+## 为什么需要手动重建？
 
-**问题：** 当您更新沙盒 Docker 镜像或配置时：
+**问题所在：** 当你更新沙盒 Docker 镜像或修改配置后：
 
--   现有容器继续使用旧设置运行
--   容器仅在闲置 24 小时后才会被清理
--   经常使用的代理会无限期地保持旧容器运行
+-   现有容器仍会继续使用旧设置运行
+-   容器默认在闲置 24 小时后才会被自动清理
+-   频繁使用的智能体会让旧容器无限期运行下去
 
-**解决方案：** 使用 `openclaw sandbox recreate` 强制移除旧容器。它们将在下次需要时自动使用当前设置重新创建。提示：优先使用 `openclaw sandbox recreate` 而非手动 `docker rm`。它使用网关的容器命名方式，并避免在范围/会话键更改时出现不匹配。
+**解决方案：** 使用 `openclaw sandbox recreate` 强制删除旧容器。下次需要时，它们会自动用当前配置重新创建。
 
-## 配置
+**小贴士：** 优先使用 `openclaw sandbox recreate` 而非手动执行 `docker rm`。它能正确处理网关的容器命名规则，避免在范围或会话键变更时出现不匹配问题。
 
-沙盒设置位于 `~/.openclaw/openclaw.json` 中的 `agents.defaults.sandbox` 下（每个代理的覆盖设置在 `agents.list[].sandbox` 中）：
+## 配置参考
+
+沙盒设置位于 `~/.openclaw/openclaw.json` 的 `agents.defaults.sandbox` 下（针对单个智能体的覆盖配置在 `agents.list[].sandbox` 中）：
 
 ```json
 {
@@ -132,7 +133,7 @@ openclaw sandbox recreate --agent alfred
         },
         "prune": {
           "idleHours": 24, // 闲置 24 小时后自动清理
-          "maxAgeDays": 7, // 7 天后自动清理
+          "maxAgeDays": 7, // 存在超过 7 天自动清理
         },
       },
     },
@@ -140,12 +141,10 @@ openclaw sandbox recreate --agent alfred
 }
 ```
 
-## 另请参阅
+## 相关文档
 
 -   [沙盒文档](../gateway/sandboxing.md)
--   [代理配置](../concepts/agent-workspace.md)
--   [Doctor 命令](../gateway/doctor.md) - 检查沙盒设置
+-   [智能体配置](../concepts/agent-workspace.md)
+-   [Doctor 命令](../gateway/doctor.md) - 检查沙盒配置是否正确
 
 [reset](./reset.md)[secrets](./secrets.md)
-
----

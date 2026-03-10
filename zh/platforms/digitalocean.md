@@ -21,9 +21,9 @@
 
 **选择提供商：**
 
--   DigitalOcean：最简单的用户体验 + 可预测的设置（本指南）
--   Hetzner：良好的性价比（参见 [Hetzner 指南](../install/hetzner.md)）
--   Oracle Cloud：可以做到每月 0 美元，但更挑剔且仅限 ARM（参见 [Oracle 指南](./oracle.md)）
+-   **DigitalOcean**：最简单的用户体验 + 可预测的设置（本指南）
+-   **Hetzner**：良好的性价比（参见 [Hetzner 指南](../install/hetzner.md)）
+-   **Oracle Cloud**：可以做到每月 0 美元，但更挑剔且仅限 ARM（参见 [Oracle 指南](./oracle.md)）
 
 * * *
 
@@ -31,7 +31,7 @@
 
 -   DigitalOcean 账户（[注册可获得 200 美元免费额度](https://m.do.co/c/signup)）
 -   SSH 密钥对（或愿意使用密码认证）
--   ~20 分钟
+-   约 20 分钟
 
 ## 1) 创建 Droplet
 
@@ -79,7 +79,7 @@ openclaw onboard --install-daemon
 向导将引导你完成：
 
 -   模型认证（API 密钥或 OAuth）
--   频道设置（Telegram, WhatsApp, Discord 等）
+-   频道（channel）设置（Telegram, WhatsApp, Discord 等）
 -   网关令牌（自动生成）
 -   守护进程安装（systemd）
 
@@ -99,6 +99,7 @@ journalctl --user -u openclaw-gateway.service -f
 ## 6) 访问控制面板
 
 网关默认绑定到本地回环地址。要访问控制界面：
+
 **选项 A: SSH 隧道（推荐）**
 
 ```bash
@@ -120,10 +121,12 @@ openclaw config set gateway.tailscale.mode serve
 openclaw gateway restart
 ```
 
-打开：`https:///` 注意：
+打开：`https:///`
 
--   Serve 模式保持网关仅限回环访问，并通过 Tailscale 身份验证头来认证控制界面/WebSocket 流量（无令牌认证假设网关主机是可信的；HTTP API 仍需要令牌/密码）。
--   如果需要令牌/密码认证，请设置 `gateway.auth.allowTailscale: false` 或使用 `gateway.auth.mode: "password"`。
+注意：
+
+-   Serve 模式保持网关仅限回环访问，并通过 Tailscale 身份验证头来认证控制界面/WebSocket 流量（无令牌认证假设网关主机是可信的；HTTP API 仍需要令牌/密码）
+-   如果需要令牌/密码认证，请设置 `gateway.auth.allowTailscale: false` 或使用 `gateway.auth.mode: "password"`
 
 **选项 C: Tailnet 绑定（不使用 Serve）**
 
@@ -134,7 +137,7 @@ openclaw gateway restart
 
 打开：`http://<tailscale-ip>:18789`（需要令牌）。
 
-## 7) 连接你的频道
+## 7) 连接你的频道（channel）
 
 ### Telegram
 
@@ -177,7 +180,7 @@ echo '/swapfile none swap sw 0 0' >> /etc/fstab
 
 ### 监控内存
 
-```
+```bash
 free -h
 htop
 ```

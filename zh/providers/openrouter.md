@@ -5,15 +5,15 @@
   
 # OpenRouter
 
-OpenRouter 提供了一个**统一 API**，通过单个端点和 API 密钥将请求路由到众多模型。它与 OpenAI 兼容，因此大多数 OpenAI SDK 只需切换基础 URL 即可使用。
+如果你想要**一个 API 密钥访问多种模型**，OpenRouter 是个好选择——它提供一个统一 API，把请求路由到各个模型后端。而且它兼容 OpenAI 接口，大多数 OpenAI SDK 只需换个 base URL 就能直接用。
 
-## CLI 设置
+## CLI 快速配置
 
 ```bash
 openclaw onboard --auth-choice apiKey --token-provider openrouter --token "$OPENROUTER_API_KEY"
 ```
 
-## 配置片段
+## 配置文件示例
 
 ```json
 {
@@ -28,8 +28,8 @@ openclaw onboard --auth-choice apiKey --token-provider openrouter --token "$OPEN
 
 ## 注意事项
 
--   模型引用格式为 `openrouter//`。
--   更多模型/提供商选项，请参阅 [/concepts/model-providers](../concepts/model-providers.md)。
--   OpenRouter 在底层使用带有您 API 密钥的 Bearer 令牌。
+-   模型引用格式：`openrouter//`
+-   更多模型和提供商选项，参见 [/concepts/model-providers](../concepts/model-providers.md)
+-   OpenRouter 底层使用 Bearer token 认证，带上你的 API 密钥即可
 
-[OpenCode Zen](./opencode.md)[千帆](./qianfan.md)
+[OpenCode Zen](./opencode.md)[Qianfan](./qianfan.md)

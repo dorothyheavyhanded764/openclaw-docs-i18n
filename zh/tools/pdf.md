@@ -5,73 +5,77 @@
   
 # PDF 工具
 
-`pdf` 工具分析一个或多个 PDF 文档并返回文本。快速行为：
+需要让智能体阅读和分析 PDF 文档？`pdf` 工具可以帮你提取 PDF 中的文本内容。它的核心特性：
 
--   针对 Anthropic 和 Google 模型提供商的本地提供商模式。
--   针对其他提供商的提取回退模式（先提取文本，需要时再提取页面图像）。
--   支持单输入 (`pdf`) 或多输入 (`pdfs`)，每次调用最多 10 个 PDF。
+-   **原生模式**：针对 Anthropic 和 Google 等提供商，直接发送原始 PDF 数据。
+-   **回退模式**：针对其他提供商，先提取文本，必要时再提取页面图像。
+-   **灵活输入**：支持单个 (`pdf`) 或多个 (`pdfs`) PDF 文档，单次调用最多 10 个。
 
-## 可用性
+## 工具可用性
 
-仅当 OpenClaw 能为代理解析到支持 PDF 的模型配置时，才会注册该工具：
+`pdf` 工具只有在 OpenClaw 能为智能体找到支持 PDF 的模型时才会启用。查找顺序如下：
 
 1.  `agents.defaults.pdfModel`
 2.  回退到 `agents.defaults.imageModel`
-3.  回退到基于可用认证的最佳提供商默认值
+3.  最后尝试基于可用认证选择最佳提供商默认值
 
-如果无法解析到可用的模型，则不会暴露 `pdf` 工具。
+如果找不到可用的模型配置，`pdf` 工具就不会被注册。
 
-## 输入参考
+## 输入参数
 
--   `pdf` (`string`): 一个 PDF 路径或 URL
--   `pdfs` (`string[]`): 多个 PDF 路径或 URL，最多总共 10 个
--   `prompt` (`string`): 分析提示词，默认为 `Analyze this PDF document.`
--   `pages` (`string`): 页面过滤器，例如 `1-5` 或 `1,3,7-9`
--   `model` (`string`): 可选的模型覆盖 (`provider/model`)
--   `maxBytesMb` (`number`): 每个 PDF 的大小上限（单位 MB）
+| 参数 | 类型 | 说明 |
+| --- | --- | --- |
+| `pdf` | `string` | 单个 PDF 的路径或 URL |
+| `pdfs` | `string[]` | 多个 PDF 的路径或 URL，最多 10 个 |
+| `prompt` | `string` | 分析提示词，默认为 `Analyze this PDF document.` |
+| `pages` | `string` | 页面范围过滤，格式如 `1-5` 或 `1,3,7-9` |
+| `model` | `string` | 可选，指定使用的模型 (`provider/model`) |
+| `maxBytesMb` | `number` | 每个 PDF 的大小上限（MB） |
 
-输入说明：
+**注意事项：**
 
--   `pdf` 和 `pdfs` 在加载前会合并并去重。
--   如果未提供 PDF 输入，工具会报错。
--   `pages` 被解析为基于 1 的页码，去重、排序并限制在配置的最大页数内。
--   `maxBytesMb` 默认为 `agents.defaults.pdfMaxBytesMb` 或 `10`。
+-   `pdf` 和 `pdfs` 参数可以同时使用，系统会在加载前合并并去重。
+-   如果没有提供任何 PDF 输入，工具会报错。
+-   `pages` 使用从 1 开始的页码，系统会自动去重、排序并限制在最大页数内。
+-   `maxBytesMb` 默认值为 `agents.defaults.pdfMaxBytesMb` 或 `10`。
 
-## 支持的 PDF 引用
+## 支持的文件来源
 
--   本地文件路径（包括 `~` 扩展）
+你可以通过以下方式引用 PDF 文档：
+
+-   本地文件路径（支持 `~` 扩展）
 -   `file://` URL
 -   `http://` 和 `https://` URL
 
-引用说明：
+**限制说明：**
 
--   其他 URI 方案（例如 `ftp://`）会被拒绝，并返回 `unsupported_pdf_reference`。
--   在沙盒模式下，远程 `http(s)` URL 会被拒绝。
--   启用仅工作空间文件策略时，允许根目录之外的本地文件路径会被拒绝。
+-   不支持其他 URI 方案（如 `ftp://`），会返回 `unsupported_pdf_reference` 错误。
+-   沙盒模式下，远程 `http(s)` URL 会被拒绝。
+-   启用仅工作空间文件策略时，工作空间目录外的本地文件路径会被拒绝。
 
-## 执行模式
+## 执行模式详解
 
-### 本地提供商模式
+### 原生提供商模式
 
-本地模式用于 `anthropic` 和 `google` 提供商。该工具将原始 PDF 字节直接发送给提供商 API。本地模式限制：
+当使用 `anthropic` 或 `google` 提供商时，工具采用原生模式——直接将原始 PDF 字节发送给提供商 API。
 
--   不支持 `pages`。如果设置了，工具会返回错误。
+**限制：** 原生模式不支持 `pages` 参数，如果设置了会返回错误。
 
 ### 提取回退模式
 
-回退模式用于非本地提供商。流程：
+对于其他提供商，工具采用提取回退模式，处理流程如下：
 
-1.  从选定的页面提取文本（最多 `agents.defaults.pdfMaxPages`，默认 `20`）。
-2.  如果提取的文本长度低于 `200` 个字符，则将选定页面渲染为 PNG 图像并包含它们。
-3.  将提取的内容加上提示词发送给选定的模型。
+1.  从选定页面提取文本（最多 `agents.defaults.pdfMaxPages` 页，默认 `20`）。
+2.  如果提取的文本不足 200 个字符，则将选定页面渲染为 PNG 图像一并提交。
+3.  将提取的内容和提示词一起发送给目标模型。
 
-回退详情：
+**补充说明：**
 
--   页面图像提取使用 `4,000,000` 的像素预算。
+-   页面图像提取的像素预算为 `4,000,000`。
 -   如果目标模型不支持图像输入且没有可提取的文本，工具会报错。
--   提取回退需要 `pdfjs-dist`（以及用于图像渲染的 `@napi-rs/canvas`）。
+-   提取回退模式依赖 `pdfjs-dist` 库，图像渲染还需要 `@napi-rs/canvas`。
 
-## 配置
+## 配置示例
 
 ```json
 {
@@ -88,32 +92,34 @@
 }
 ```
 
-完整字段详情请参阅[配置参考](../gateway/configuration-reference.md)。
+完整的配置字段说明请参阅[配置参考](../gateway/configuration-reference.md)。
 
-## 输出详情
+## 输出结构
 
-工具在 `content[0].text` 中返回文本，在 `details` 中返回结构化元数据。常见的 `details` 字段：
+工具返回的文本在 `content[0].text` 中，结构化元数据在 `details` 中。常见的 `details` 字段：
 
--   `model`: 解析后的模型引用 (`provider/model`)
--   `native`: 本地提供商模式为 `true`，回退模式为 `false`
+-   `model`: 实际使用的模型 (`provider/model`)
+-   `native`: `true` 表示原生模式，`false` 表示回退模式
 -   `attempts`: 成功前失败的回退尝试次数
 
-路径字段：
+**路径相关字段：**
 
--   单 PDF 输入：`details.pdf`
--   多 PDF 输入：`details.pdfs[]` 包含 `pdf` 条目
+-   单个 PDF 输入：`details.pdf`
+-   多个 PDF 输入：`details.pdfs[]`（包含多个 `pdf` 条目）
 -   沙盒路径重写元数据（如适用）：`rewrittenFrom`
 
-## 错误行为
+## 错误处理
 
--   缺少 PDF 输入：抛出 `pdf required: provide a path or URL to a PDF document`
--   PDF 过多：在 `details.error = "too_many_pdfs"` 中返回结构化错误
--   不支持的引用方案：返回 `details.error = "unsupported_pdf_reference"`
--   本地模式设置了 `pages`：抛出清晰的 `pages is not supported with native PDF providers` 错误
+| 情况 | 行为 |
+| --- | --- |
+| 缺少 PDF 输入 | 抛出错误：`pdf required: provide a path or URL to a PDF document` |
+| PDF 数量超限 | 返回结构化错误：`details.error = "too_many_pdfs"` |
+| 不支持的引用方案 | 返回：`details.error = "unsupported_pdf_reference"` |
+| 原生模式使用 `pages` | 抛出错误：`pages is not supported with native PDF providers` |
 
-## 示例
+## 使用示例
 
-单个 PDF：
+**分析单个 PDF：**
 
 ```json
 {
@@ -122,7 +128,7 @@
 }
 ```
 
-多个 PDF：
+**比较多个 PDF：**
 
 ```json
 {
@@ -131,7 +137,7 @@
 }
 ```
 
-页面过滤的回退模型：
+**指定页面和模型（回退模式）：**
 
 ```json
 {

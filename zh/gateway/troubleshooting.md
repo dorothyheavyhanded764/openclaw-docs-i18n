@@ -21,9 +21,9 @@ openclaw channels status --probe
 
 预期的健康信号：
 
--   `openclaw gateway status` 显示 `Runtime: running` 和 `RPC probe: ok`。
--   `openclaw doctor` 报告没有阻塞性的配置/服务问题。
--   `openclaw channels status --probe` 显示已连接/就绪的频道。
+-   `openclaw gateway status` 显示 `Runtime: running` 和 `RPC probe: ok`
+-   `openclaw doctor` 报告没有阻塞性的配置/服务问题
+-   `openclaw channels status --probe` 显示已连接/就绪的频道
 
 ## Anthropic 429 长上下文需要额外使用量
 
@@ -37,15 +37,15 @@ openclaw config get agents.defaults.models
 
 查找：
 
--   选定的 Anthropic Opus/Sonnet 模型具有 `params.context1m: true`。
--   当前的 Anthropic 凭证不符合长上下文使用资格。
--   请求仅在需要 1M beta 路径的长会话/模型运行时失败。
+-   选定的 Anthropic Opus/Sonnet 模型具有 `params.context1m: true`
+-   当前的 Anthropic 凭证不符合长上下文使用资格
+-   请求仅在需要 1M beta 路径的长会话/模型运行时失败
 
 修复选项：
 
-1.  为该模型禁用 `context1m` 以回退到正常上下文窗口。
-2.  使用具有计费的 Anthropic API 密钥，或在订阅账户上启用 Anthropic 额外使用量。
-3.  配置备用模型，以便在 Anthropic 长上下文请求被拒绝时继续运行。
+1.  为该模型禁用 `context1m` 以回退到正常上下文窗口
+2.  使用具有计费的 Anthropic API 密钥，或在订阅账户上启用 Anthropic 额外使用量
+3.  配置备用模型，以便在 Anthropic 长上下文请求被拒绝时继续运行
 
 相关：
 
@@ -67,15 +67,15 @@ openclaw logs --follow
 
 查找：
 
--   私信发送者的配对待处理。
--   群组提及门控（`requireMention`、`mentionPatterns`）。
--   频道/群组允许列表不匹配。
+-   私信发送者的配对待处理
+-   群组提及门控（`requireMention`、`mentionPatterns`）
+-   频道/群组允许列表不匹配
 
 常见特征：
 
--   `drop guild message (mention required` → 群组消息在被提及前被忽略。
--   `pairing request` → 发送者需要批准。
--   `blocked` / `allowlist` → 发送者/频道被策略过滤。
+-   `drop guild message (mention required` → 群组消息在被提及前被忽略
+-   `pairing request` → 发送者需要批准
+-   `blocked` / `allowlist` → 发送者/频道被策略过滤
 
 相关：
 
@@ -97,17 +97,17 @@ openclaw gateway status --json
 
 查找：
 
--   正确的探测 URL 和仪表板 URL。
--   客户端与网关之间的认证模式/令牌不匹配。
--   需要设备身份验证时使用了 HTTP。
+-   正确的探测 URL 和仪表板 URL
+-   客户端与网关之间的认证模式/令牌不匹配
+-   需要设备身份验证时使用了 HTTP
 
 常见特征：
 
--   `device identity required` → 非安全上下文或缺少设备认证。
--   `device nonce required` / `device nonce mismatch` → 客户端未完成基于挑战的设备认证流程（`connect.challenge` + `device.nonce`）。
--   `device signature invalid` / `device signature expired` → 客户端为当前握手签错了负载（或时间戳过时）。
--   `unauthorized` / 重连循环 → 令牌/密码不匹配。
--   `gateway connect failed:` → 错误的主机/端口/URL 目标。
+-   `device identity required` → 非安全上下文或缺少设备认证
+-   `device nonce required` / `device nonce mismatch` → 客户端未完成基于挑战的设备认证流程（`connect.challenge` + `device.nonce`）
+-   `device signature invalid` / `device signature expired` → 客户端为当前握手签错了负载（或时间戳过时）
+-   `unauthorized` / 重连循环 → 令牌/密码不匹配
+-   `gateway connect failed:` → 错误的主机/端口/URL 目标
 
 设备认证 v2 迁移检查：
 
@@ -143,15 +143,15 @@ openclaw gateway status --deep
 
 查找：
 
--   `Runtime: stopped` 并带有退出提示。
--   服务配置不匹配（`Config (cli)` 与 `Config (service)`）。
--   端口/监听器冲突。
+-   `Runtime: stopped` 并带有退出提示
+-   服务配置不匹配（`Config (cli)` 与 `Config (service)`）
+-   端口/监听器冲突
 
 常见特征：
 
--   `Gateway start blocked: set gateway.mode=local` → 本地网关模式未启用。修复：在配置中设置 `gateway.mode="local"`（或运行 `openclaw configure`）。如果您通过 Podman 使用专用的 `openclaw` 用户运行 OpenClaw，配置位于 `~openclaw/.openclaw/openclaw.json`。
--   `refusing to bind gateway ... without auth` → 非环回绑定缺少令牌/密码。
--   `another gateway instance is already listening` / `EADDRINUSE` → 端口冲突。
+-   `Gateway start blocked: set gateway.mode=local` → 本地网关模式未启用。修复：在配置中设置 `gateway.mode="local"`（或运行 `openclaw configure`）。如果您通过 Podman 使用专用的 `openclaw` 用户运行 OpenClaw，配置位于 `~openclaw/.openclaw/openclaw.json`
+-   `refusing to bind gateway ... without auth` → 非环回绑定缺少令牌/密码
+-   `another gateway instance is already listening` / `EADDRINUSE` → 端口冲突
 
 相关：
 
@@ -173,15 +173,15 @@ openclaw config get channels
 
 查找：
 
--   私信策略（`pairing`、`allowlist`、`open`、`disabled`）。
--   群组允许列表和提及要求。
--   缺少频道 API 权限/范围。
+-   私信策略（`pairing`、`allowlist`、`open`、`disabled`）
+-   群组允许列表和提及要求
+-   缺少频道 API 权限/范围
 
 常见特征：
 
--   `mention required` → 消息被群组提及策略忽略。
--   `pairing` / 待批准跟踪 → 发送者未获批准。
--   `missing_scope`、`not_in_channel`、`Forbidden`、`401/403` → 频道认证/权限问题。
+-   `mention required` → 消息被群组提及策略忽略
+-   `pairing` / 待批准跟踪 → 发送者未获批准
+-   `missing_scope`、`not_in_channel`、`Forbidden`、`401/403` → 频道认证/权限问题
 
 相关：
 
@@ -204,17 +204,17 @@ openclaw logs --follow
 
 查找：
 
--   Cron 已启用且存在下一次唤醒。
--   作业运行历史状态（`ok`、`skipped`、`error`）。
--   心跳跳过原因（`quiet-hours`、`requests-in-flight`、`alerts-disabled`）。
+-   Cron 已启用且存在下一次唤醒
+-   作业运行历史状态（`ok`、`skipped`、`error`）
+-   心跳跳过原因（`quiet-hours`、`requests-in-flight`、`alerts-disabled`）
 
 常见特征：
 
--   `cron: scheduler disabled; jobs will not run automatically` → cron 已禁用。
--   `cron: timer tick failed` → 调度器计时器滴答失败；检查文件/日志/运行时错误。
--   `heartbeat skipped` 且 `reason=quiet-hours` → 在活动时间窗口之外。
--   `heartbeat: unknown accountId` → 心跳传递目标账户 ID 无效。
--   `heartbeat skipped` 且 `reason=dm-blocked` → 心跳目标解析为私信类目的地，而 `agents.defaults.heartbeat.directPolicy`（或每个代理的覆盖）设置为 `block`。
+-   `cron: scheduler disabled; jobs will not run automatically` → cron 已禁用
+-   `cron: timer tick failed` → 调度器计时器滴答失败；检查文件/日志/运行时错误
+-   `heartbeat skipped` 且 `reason=quiet-hours` → 在活动时间窗口之外
+-   `heartbeat: unknown accountId` → 心跳传递目标账户 ID 无效
+-   `heartbeat skipped` 且 `reason=dm-blocked` → 心跳目标解析为私信类目的地，而 `agents.defaults.heartbeat.directPolicy`（或每个代理的覆盖）设置为 `block`
 
 相关：
 
@@ -236,16 +236,16 @@ openclaw status
 
 查找：
 
--   节点在线并具有预期能力。
--   摄像头/麦克风/位置/屏幕的 OS 权限授予。
--   执行批准和允许列表状态。
+-   节点在线并具有预期能力
+-   摄像头/麦克风/位置/屏幕的 OS 权限授予
+-   执行批准和允许列表状态
 
 常见特征：
 
--   `NODE_BACKGROUND_UNAVAILABLE` → 节点应用必须在前台运行。
--   `*_PERMISSION_REQUIRED` / `LOCATION_PERMISSION_REQUIRED` → 缺少 OS 权限。
--   `SYSTEM_RUN_DENIED: approval required` → 执行批准待处理。
--   `SYSTEM_RUN_DENIED: allowlist miss` → 命令被允许列表阻止。
+-   `NODE_BACKGROUND_UNAVAILABLE` → 节点应用必须在前台运行
+-   `*_PERMISSION_REQUIRED` / `LOCATION_PERMISSION_REQUIRED` → 缺少 OS 权限
+-   `SYSTEM_RUN_DENIED: approval required` → 执行批准待处理
+-   `SYSTEM_RUN_DENIED: allowlist miss` → 命令被允许列表阻止
 
 相关：
 
@@ -267,16 +267,16 @@ openclaw doctor
 
 查找：
 
--   有效的浏览器可执行文件路径。
--   CDP 配置文件可达性。
--   `profile="chrome"` 的扩展中继标签页附加。
+-   有效的浏览器可执行文件路径
+-   CDP 配置文件可达性
+-   `profile="chrome"` 的扩展中继标签页附加
 
 常见特征：
 
--   `Failed to start Chrome CDP on port` → 浏览器进程启动失败。
--   `browser.executablePath not found` → 配置的路径无效。
--   `Chrome extension relay is running, but no tab is connected` → 扩展中继未附加。
--   `Browser attachOnly is enabled ... not reachable` → 仅附加配置文件没有可达目标。
+-   `Failed to start Chrome CDP on port` → 浏览器进程启动失败
+-   `browser.executablePath not found` → 配置的路径无效
+-   `Chrome extension relay is running, but no tab is connected` → 扩展中继未附加
+-   `Browser attachOnly is enabled ... not reachable` → 仅附加配置文件没有可达目标
 
 相关：
 
@@ -299,13 +299,13 @@ openclaw config get gateway.auth.mode
 
 需要检查的内容：
 
--   如果 `gateway.mode=remote`，CLI 调用可能针对远程网关，而您的本地服务正常。
--   显式的 `--url` 调用不会回退到存储的凭证。
+-   如果 `gateway.mode=remote`，CLI 调用可能针对远程网关，而您的本地服务正常
+-   显式的 `--url` 调用不会回退到存储的凭证
 
 常见特征：
 
--   `gateway connect failed:` → 错误的 URL 目标。
--   `unauthorized` → 端点可达但认证错误。
+-   `gateway connect failed:` → 错误的 URL 目标
+-   `unauthorized` → 端点可达但认证错误
 
 ### 2) 绑定和认证防护措施更严格
 
@@ -318,13 +318,13 @@ openclaw logs --follow
 
 需要检查的内容：
 
--   非环回绑定（`lan`、`tailnet`、`custom`）需要配置认证。
--   旧键如 `gateway.token` 不会替换 `gateway.auth.token`。
+-   非环回绑定（`lan`、`tailnet`、`custom`）需要配置认证
+-   旧键如 `gateway.token` 不会替换 `gateway.auth.token`
 
 常见特征：
 
--   `refusing to bind gateway ... without auth` → 绑定+认证不匹配。
--   `RPC probe: failed` 但运行时正在运行 → 网关存活但使用当前认证/URL 无法访问。
+-   `refusing to bind gateway ... without auth` → 绑定+认证不匹配
+-   `RPC probe: failed` 但运行时正在运行 → 网关存活但使用当前认证/URL 无法访问
 
 ### 3) 配对和设备身份状态已更改
 
@@ -337,13 +337,13 @@ openclaw doctor
 
 需要检查的内容：
 
--   仪表板/节点的待处理设备批准。
--   策略或身份更改后的待处理私信配对批准。
+-   仪表板/节点的待处理设备批准
+-   策略或身份更改后的待处理私信配对批准
 
 常见特征：
 
--   `device identity required` → 设备认证未满足。
--   `pairing required` → 发送者/设备必须获得批准。
+-   `device identity required` → 设备认证未满足
+-   `pairing required` → 发送者/设备必须获得批准
 
 如果检查后服务配置和运行时仍然不一致，请从相同的配置文件/状态目录重新安装服务元数据：
 

@@ -5,65 +5,72 @@
   
 # Venice AI
 
-**Venice** 是我们为注重隐私优先的推理而重点推荐的 Venice 设置，可选择匿名访问专有模型。Venice AI 提供注重隐私的 AI 推理，支持无审查模型，并通过其匿名代理访问主要的专有模型。所有推理默认都是私密的——不会在您的数据上进行训练，也不会记录日志。
+如果你在寻找一种既能保护隐私、又能使用主流大模型的方案，**Venice AI** 值得关注。它主打隐私优先的 AI 推理服务，支持无审查模型，还可以通过匿名代理访问 Claude、GPT、Gemini 等专有模型。最重要的是，所有推理默认都是私密的——你的数据不会被用于训练，也不会留下日志。
 
-## 为什么在 OpenClaw 中使用 Venice
+## 为什么选择 Venice？
 
--   **私密推理** 适用于开源模型（无日志记录）。
--   **无审查模型** 在您需要时可用。
--   **匿名访问** 专有模型（Opus/GPT/Gemini），当质量至关重要时。
--   OpenAI 兼容的 `/v1` 端点。
+在 OpenClaw 中使用 Venice，主要有这些优势：
 
-## 隐私模式
+-   **私密推理**：开源模型完全不记录日志，你的对话内容不会被存储
+-   **无审查模型**：需要不受内容限制的模型？Venice 提供了专门的选择
+-   **匿名访问专有模型**：当你需要 Claude、GPT、Gemini 的质量，但又不想暴露身份时，Venice 的匿名代理可以帮你
+-   **OpenAI 兼容**：标准的 `/v1` 端点，接入简单
 
-Venice 提供两种隐私级别——理解这一点是选择模型的关键：
+## 隐私模式详解
 
-| 模式 | 描述 | 模型 |
+Venice 提供两种隐私级别，理解它们的区别能帮你做出正确的模型选择：
+
+| 模式 | 说明 | 模型示例 |
 | --- | --- | --- |
-| **私密** | 完全私密。提示/响应**从不存储或记录**。临时性。 | Llama, Qwen, DeepSeek, Kimi, MiniMax, Venice Uncensored 等。 |
-| **匿名** | 通过 Venice 代理，元数据被剥离。底层提供商（OpenAI, Anthropic, Google, xAI）看到的是匿名请求。 | Claude, GPT, Gemini, Grok |
+| **私密模式** | 完全私密。提示词和响应**从不存储或记录**，用完即销毁 | Llama、Qwen、DeepSeek、Kimi、MiniMax、Venice Uncensored 等 |
+| **匿名模式** | 通过 Venice 代理访问，元数据会被剥离。底层提供商（OpenAI、Anthropic、Google、xAI）只能看到匿名请求 | Claude、GPT、Gemini、Grok |
 
-## 特性
+简单来说：追求绝对隐私，选"私密模式"的模型；需要顶级模型能力，选"匿名模式"通过代理访问。
 
--   **注重隐私**：在“私密”（完全私密）和“匿名”（代理）模式之间选择
--   **无审查模型**：访问无内容限制的模型
--   **主要模型访问**：通过 Venice 的匿名代理使用 Claude、GPT、Gemini 和 Grok
--   **OpenAI 兼容 API**：标准的 `/v1` 端点，便于集成
--   **流式传输**：✅ 所有模型均支持
+## 功能特性
+
+-   **隐私优先**：在"私密"（完全私密）和"匿名"（代理访问）两种模式间自由选择
+-   **无审查模型**：可访问无内容限制的模型
+-   **主流模型支持**：通过 Venice 的匿名代理使用 Claude、GPT、Gemini、Grok
+-   **OpenAI 兼容 API**：标准 `/v1` 端点，轻松集成
+-   **流式输出**：✅ 所有模型均支持
 -   **函数调用**：✅ 部分模型支持（请检查模型能力）
--   **视觉**：✅ 具备视觉能力的模型支持
--   **无硬性速率限制**：极端使用情况下可能适用公平使用节流
+-   **视觉能力**：✅ 具备视觉能力的模型支持图像输入
+-   **无硬性速率限制**：极端使用可能触发公平使用节流
 
-## 设置
+## 快速开始
 
-### 1\. 获取 API 密钥
+### 第一步：获取 API 密钥
 
-1.  在 [venice.ai](https://venice.ai) 注册
-2.  前往 **设置 → API 密钥 → 创建新密钥**
-3.  复制您的 API 密钥（格式：`vapi_xxxxxxxxxxxx`）
+1.  前往 [venice.ai](https://venice.ai) 注册账号
+2.  进入 **Settings → API Keys → Create new key**
+3.  复制你的 API 密钥（格式为 `vapi_xxxxxxxxxxxx`）
 
-### 2\. 配置 OpenClaw
+### 第二步：配置 OpenClaw
 
-**选项 A：环境变量**
+有三种方式可选：
+
+**方式 A：设置环境变量**
 
 ```bash
 export VENICE_API_KEY="vapi_xxxxxxxxxxxx"
 ```
 
-**选项 B：交互式设置（推荐）**
+**方式 B：交互式配置（推荐）**
 
 ```bash
 openclaw onboard --auth-choice venice-api-key
 ```
 
-这将：
-
-1.  提示输入您的 API 密钥（或使用现有的 `VENICE_API_KEY`）
+这个命令会引导你完成配置：
+1.  提示输入 API 密钥（或使用已有的 `VENICE_API_KEY` 环境变量）
 2.  显示所有可用的 Venice 模型
-3.  让您选择默认模型
-4.  自动配置提供商
+3.  让你选择默认模型
+4.  自动完成提供商配置
 
-**选项 C：非交互式**
+**方式 C：非交互式配置**
+
+适合脚本或自动化场景：
 
 ```bash
 openclaw onboard --non-interactive \
@@ -71,57 +78,54 @@ openclaw onboard --non-interactive \
   --venice-api-key "vapi_xxxxxxxxxxxx"
 ```
 
-### 3\. 验证设置
+### 第三步：验证配置
+
+运行以下命令确认配置成功：
 
 ```bash
 openclaw agent --model venice/kimi-k2-5 --message "Hello, are you working?"
 ```
 
-## 模型选择
+## 如何选择模型？
 
-设置完成后，OpenClaw 会显示所有可用的 Venice 模型。根据您的需求选择：
+配置完成后，OpenClaw 会列出所有可用的 Venice 模型。以下是选择建议：
 
--   **默认模型**：`venice/kimi-k2-5`，用于强大的私密推理加视觉。
--   **高能力选项**：`venice/claude-opus-4-6`，用于最强的匿名 Venice 路径。
--   **隐私**：选择“私密”模型进行完全私密的推理。
--   **能力**：选择“匿名”模型以通过 Venice 的代理访问 Claude、GPT、Gemini。
+| 使用场景 | 推荐模型 | 理由 |
+| --- | --- | --- |
+| **日常对话（默认）** | `kimi-k2-5` | 私密推理能力强，还支持视觉 |
+| **追求最高质量** | `claude-opus-4-6` | 匿名模式下最强的选择 |
+| **隐私 + 编程** | `qwen3-coder-480b-a35b-instruct` | 私密编程模型，上下文窗口大 |
+| **私密视觉任务** | `kimi-k2-5` | 支持图像输入，无需离开私密模式 |
+| **快速且省钱** | `qwen3-4b` | 轻量级推理模型，响应快 |
+| **复杂私密任务** | `deepseek-v3.2` | 推理能力强，但无 Venice 工具支持 |
+| **无内容限制** | `venice-uncensored` | 无内容审查 |
 
-随时更改您的默认模型：
+你可以随时更改默认模型：
 
 ```bash
 openclaw models set venice/kimi-k2-5
 openclaw models set venice/claude-opus-4-6
 ```
 
-列出所有可用模型：
+查看所有可用模型：
 
 ```bash
 openclaw models list | grep venice
 ```
 
-## 通过 openclaw configure 配置
+## 通过 `openclaw configure` 配置
+
+也可以使用配置工具：
 
 1.  运行 `openclaw configure`
-2.  选择 **模型/认证**
+2.  选择 **Model/auth**
 3.  选择 **Venice AI**
 
-## 我应该使用哪个模型？
-
-| 使用场景 | 推荐模型 | 原因 |
-| --- | --- | --- |
-| **通用聊天（默认）** | `kimi-k2-5` | 强大的私密推理加视觉 |
-| **最佳整体质量** | `claude-opus-4-6` | 最强的匿名 Venice 选项 |
-| **隐私 + 编程** | `qwen3-coder-480b-a35b-instruct` | 具有大上下文的私密编程模型 |
-| **私密视觉** | `kimi-k2-5` | 视觉支持，无需离开私密模式 |
-| **快速 + 便宜** | `qwen3-4b` | 轻量级推理模型 |
-| **复杂的私密任务** | `deepseek-v3.2` | 强大的推理能力，但无 Venice 工具支持 |
-| **无审查** | `venice-uncensored` | 无内容限制 |
-
-## 可用模型（总计 41 个）
+## 可用模型列表（共 41 个）
 
 ### 私密模型（26 个）——完全私密，无日志记录
 
-| 模型 ID | 名称 | 上下文 | 特性 |
+| 模型 ID | 名称 | 上下文窗口 | 特性 |
 | --- | --- | --- | --- |
 | `kimi-k2-5` | Kimi K2.5 | 256k | 默认，推理，视觉 |
 | `kimi-k2-thinking` | Kimi K2 Thinking | 256k | 推理 |
@@ -150,9 +154,9 @@ openclaw models list | grep venice
 | `minimax-m21` | MiniMax M2.1 | 198k | 推理 |
 | `minimax-m25` | MiniMax M2.5 | 198k | 推理 |
 
-### 匿名模型（15 个）——通过 Venice 代理
+### 匿名模型（15 个）——通过 Venice 代理访问
 
-| 模型 ID | 名称 | 上下文 | 特性 |
+| 模型 ID | 名称 | 上下文窗口 | 特性 |
 | --- | --- | --- | --- |
 | `claude-opus-4-6` | Claude Opus 4.6 (通过 Venice) | 1M | 推理，视觉 |
 | `claude-opus-4-5` | Claude Opus 4.5 (通过 Venice) | 198k | 推理，视觉 |
@@ -170,72 +174,74 @@ openclaw models list | grep venice
 | `grok-41-fast` | Grok 4.1 Fast (通过 Venice) | 1M | 推理，视觉 |
 | `grok-code-fast-1` | Grok Code Fast 1 (通过 Venice) | 256k | 推理，编程 |
 
-## 模型发现
+## 模型发现机制
 
-当 `VENICE_API_KEY` 设置后，OpenClaw 会自动从 Venice API 发现模型。如果 API 无法访问，它将回退到静态目录。`/models` 端点是公开的（列出无需认证），但推理需要有效的 API 密钥。
+当设置了 `VENICE_API_KEY` 环境变量后，OpenClaw 会自动从 Venice API 获取可用模型列表。如果 API 暂时无法访问，会回退到内置的静态模型目录。`/models` 端点是公开的（无需认证即可查看模型列表），但推理请求需要有效的 API 密钥。
 
-## 流式传输与工具支持
+## 流式输出与工具支持
 
-| 特性 | 支持 |
+| 特性 | 支持情况 |
 | --- | --- |
-| **流式传输** | ✅ 所有模型 |
-| **函数调用** | ✅ 大多数模型（检查 API 中的 `supportsFunctionCalling`） |
-| **视觉/图像** | ✅ 标记有“视觉”特性的模型 |
-| **JSON 模式** | ✅ 通过 `response_format` 支持 |
+| **流式输出** | ✅ 所有模型 |
+| **函数调用** | ✅ 大多数模型支持（查看 API 中的 `supportsFunctionCalling` 字段） |
+| **视觉/图像** | ✅ 标注了"视觉"特性的模型 |
+| **JSON 模式** | ✅ 通过 `response_format` 参数支持 |
 
-## 定价
+## 定价说明
 
-Venice 使用基于积分的系统。查看 [venice.ai/pricing](https://venice.ai/pricing) 了解当前费率：
+Venice 采用积分计费制。具体费率请查看 [venice.ai/pricing](https://venice.ai/pricing)：
 
--   **私密模型**：通常成本较低
--   **匿名模型**：类似于直接 API 定价 + 少量 Venice 费用
+-   **私密模型**：通常费用较低
+-   **匿名模型**：与直接调用原厂 API 价格相近，外加少量 Venice 服务费
 
-## 对比：Venice 与直接 API
+## Venice 匿名模式 vs 直接调用 API
 
-| 方面 | Venice（匿名） | 直接 API |
+| 对比项 | Venice 匿名模式 | 直接调用 API |
 | --- | --- | --- |
-| **隐私** | 元数据剥离，匿名化 | 关联您的账户 |
-| **延迟** | +10-50ms（代理） | 直接 |
-| **特性** | 支持大多数特性 | 完整特性 |
-| **计费** | Venice 积分 | 提供商计费 |
+| **隐私保护** | 元数据被剥离，完全匿名 | 与你的账户绑定 |
+| **响应延迟** | 增加 10-50ms（代理转发） | 直连 |
+| **功能支持** | 支持大部分功能 | 完整功能 |
+| **计费方式** | Venice 积分 | 原厂计费 |
 
 ## 使用示例
 
 ```bash
-# 使用默认的私密模型
+# 使用默认私密模型
 openclaw agent --model venice/kimi-k2-5 --message "Quick health check"
 
-# 通过 Venice 使用 Claude Opus（匿名）
+# 通过 Venice 匿名访问 Claude Opus
 openclaw agent --model venice/claude-opus-4-6 --message "Summarize this task"
 
 # 使用无审查模型
 openclaw agent --model venice/venice-uncensored --message "Draft options"
 
-# 使用视觉模型处理图像
+# 使用视觉模型分析图像
 openclaw agent --model venice/qwen3-vl-235b-a22b --message "Review attached image"
 
-# 使用编程模型
+# 使用编程专用模型
 openclaw agent --model venice/qwen3-coder-480b-a35b-instruct --message "Refactor this function"
 ```
 
-## 故障排除
+## 常见问题
 
 ### API 密钥未被识别
+
+检查环境变量和模型列表：
 
 ```bash
 echo $VENICE_API_KEY
 openclaw models list | grep venice
 ```
 
-确保密钥以 `vapi_` 开头。
+确认密钥格式正确，应以 `vapi_` 开头。
 
-### 模型不可用
+### 模型显示不可用
 
-Venice 模型目录动态更新。运行 `openclaw models list` 查看当前可用模型。某些模型可能暂时离线。
+Venice 的模型目录会动态更新。运行 `openclaw models list` 查看当前可用模型。部分模型可能因维护暂时下线。
 
-### 连接问题
+### 连接失败
 
-Venice API 位于 `https://api.venice.ai/api/v1`。确保您的网络允许 HTTPS 连接。
+Venice API 地址为 `https://api.venice.ai/api/v1`，请确认你的网络可以访问 HTTPS。
 
 ## 配置文件示例
 
@@ -267,11 +273,11 @@ Venice API 位于 `https://api.venice.ai/api/v1`。确保您的网络允许 HTTP
 }
 ```
 
-## 链接
+## 相关链接
 
--   [Venice AI](https://venice.ai)
+-   [Venice AI 官网](https://venice.ai)
 -   [API 文档](https://docs.venice.ai)
--   [定价](https://venice.ai/pricing)
--   [状态](https://status.venice.ai)
+-   [定价页面](https://venice.ai/pricing)
+-   [服务状态](https://status.venice.ai)
 
 [Vercel AI Gateway](./vercel-ai-gateway.md)[vLLM](./vllm.md)

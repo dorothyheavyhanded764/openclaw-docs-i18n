@@ -9,7 +9,7 @@
 
 ## 向导的功能
 
-本地模式（默认）将引导您完成：
+本地模式（默认）将引导你完成：
 
 -   模型和认证设置（OpenAI Code 订阅 OAuth、Anthropic API 密钥或设置令牌，以及 MiniMax、GLM、Moonshot 和 AI 网关选项）
 -   工作区位置和引导文件
@@ -28,9 +28,9 @@
 ### 步骤 1：现有配置检测
 
 -   如果 `~/.openclaw/openclaw.json` 存在，选择保留、修改或重置。
--   重新运行向导不会清除任何内容，除非您明确选择重置（或传递 `--reset`）。
+-   重新运行向导不会清除任何内容，除非你明确选择重置（或传递 `--reset`）。
 -   CLI `--reset` 默认为 `config+creds+sessions`；使用 `--reset-scope full` 以同时移除工作区。
--   如果配置无效或包含遗留键，向导将停止并要求您在继续之前运行 `openclaw doctor`。
+-   如果配置无效或包含遗留键，向导将停止并要求你在继续之前运行 `openclaw doctor`。
 -   重置使用 `trash` 并提供范围选项：
     -   仅配置
     -   配置 + 凭据 + 会话
@@ -44,7 +44,7 @@
 
 -   默认 `~/.openclaw/workspace`（可配置）。
 -   为首次运行引导仪式所需的工作区文件进行种子填充。
--   工作区布局：[代理工作区](../concepts/agent-workspace.md)。
+-   工作区布局：[智能体工作区](../concepts/agent-workspace.md)。
 
 ### 步骤 4：网关
 
@@ -57,7 +57,7 @@
 -   非交互式令牌 SecretRef 路径：`--gateway-token-ref-env <ENV_VAR>`。
     -   要求引导进程环境中存在非空的环境变量。
     -   不能与 `--gateway-token` 结合使用。
--   仅当您完全信任每个本地进程时才禁用认证。
+-   仅当完全信任每个本地进程时才禁用认证。
 -   非环回绑定仍然需要认证。
 
 ### 步骤 5：频道
@@ -89,14 +89,12 @@
 ### 步骤 8：技能
 
 -   读取可用技能并检查要求。
--   让您选择节点管理器：npm 或 pnpm（不推荐 bun）。
+-   让你选择节点管理器：npm 或 pnpm（不推荐 bun）。
 -   安装可选依赖项（某些在 macOS 上使用 Homebrew）。
 
 ### 步骤 9：完成
 
 -   摘要和后续步骤，包括 iOS、Android 和 macOS 应用选项。
-
- 
 
 > **ℹ️** 如果未检测到 GUI，向导将打印用于控制 UI 的 SSH 端口转发说明，而不是打开浏览器。如果控制 UI 资源缺失，向导会尝试构建它们；回退方案是 `pnpm ui:build`（自动安装 UI 依赖项）。
 
@@ -106,7 +104,7 @@
 
 > **ℹ️** 远程模式不会在远程主机上安装或修改任何内容。
 
- 您需要设置：
+你需要设置：
 
 -   远程网关 URL (`ws://...`)
 -   如果远程网关需要认证（推荐），则提供令牌
@@ -120,12 +118,12 @@
 
 如果存在 `ANTHROPIC_API_KEY` 则使用，否则提示输入密钥，然后保存以供守护进程使用。
 
--   macOS：检查钥匙串项 “Claude Code-credentials”
+-   macOS：检查钥匙串项 "Claude Code-credentials"
 -   Linux 和 Windows：如果存在则重用 `~/.claude/.credentials.json`
 
-在 macOS 上，选择“始终允许”以便 launchd 启动时不会阻塞。
+在 macOS 上，选择"始终允许"以便 launchd 启动时不会阻塞。
 
-在任何机器上运行 `claude setup-token`，然后粘贴令牌。您可以为其命名；留空则使用默认名称。
+在任何机器上运行 `claude setup-token`，然后粘贴令牌。你可以为其命名；留空则使用默认名称。
 
 如果 `~/.codex/auth.json` 存在，向导可以重用。
 
@@ -137,7 +135,7 @@
 
 提示输入 `OPENCODE_API_KEY`（或 `OPENCODE_ZEN_API_KEY`）。设置 URL：[opencode.ai/auth](https://opencode.ai/auth)。
 
-为您存储密钥。
+为你存储密钥。
 
 提示输入 `AI_GATEWAY_API_KEY`。更多详情：[Vercel AI Gateway](../providers/vercel-ai-gateway.md)。
 
@@ -165,7 +163,7 @@ Moonshot (Kimi K2) 和 Kimi Coding 配置自动写入。更多详情：[Moonshot
 
 保持认证未配置。
 
- 模型行为：
+模型行为：
 
 -   从检测到的选项中选择默认模型，或手动输入提供商和模型。
 -   向导运行模型检查，如果配置的模型未知或缺少认证，则发出警告。
@@ -178,13 +176,13 @@ Moonshot (Kimi K2) 和 Kimi Coding 配置自动写入。更多详情：[Moonshot
 凭据存储模式：
 
 -   默认引导行为将 API 密钥作为明文值保存在认证配置文件中。
--   `--secret-input-mode ref` 启用引用模式，而不是明文密钥存储。在交互式引导中，您可以选择：
+-   `--secret-input-mode ref` 启用引用模式，而不是明文密钥存储。在交互式引导中，你可以选择：
     -   环境变量引用（例如 `keyRef: { source: "env", provider: "default", id: "OPENAI_API_KEY" }`）
     -   配置的提供商引用（`file` 或 `exec`），带有提供商别名 + id
 -   交互式引用模式在保存前运行快速预检验证。
     -   环境变量引用：验证当前引导环境中的变量名称 + 非空值。
     -   提供商引用：验证提供商配置并解析请求的 id。
-    -   如果预检失败，引导会显示错误并让您重试。
+    -   如果预检失败，引导会显示错误并让你重试。
 -   在非交互式模式下，`--secret-input-mode ref` 仅支持环境变量。
     -   在引导进程环境中设置提供商环境变量。
     -   内联密钥标志（例如 `--openai-api-key`）要求设置该环境变量；否则引导快速失败。
@@ -208,7 +206,7 @@ Moonshot (Kimi K2) 和 Kimi Coding 配置自动写入。更多详情：[Moonshot
 -   `gateway.*`（模式、绑定、认证、tailscale）
 -   `session.dmScope`（本地引导在未设置时默认为 `per-channel-peer`；现有的显式值会被保留）
 -   `channels.telegram.botToken`、`channels.discord.token`、`channels.signal.*`、`channels.imessage.*`
--   频道允许列表（Slack、Discord、Matrix、Microsoft Teams），当您在提示中选择加入时（名称在可能的情况下解析为 ID）
+-   频道允许列表（Slack、Discord、Matrix、Microsoft Teams），当你在提示中选择加入时（名称在可能的情况下解析为 ID）
 -   `skills.install.nodeManager`
 -   `wizard.lastRunAt`
 -   `wizard.lastRunVersion`
@@ -220,7 +218,7 @@ Moonshot (Kimi K2) 和 Kimi Coding 配置自动写入。更多详情：[Moonshot
 
 > **ℹ️** 某些频道以插件形式提供。在引导过程中选择时，向导会在频道配置之前提示安装插件（npm 或本地路径）。
 
- 网关向导 RPC：
+网关向导 RPC：
 
 -   `wizard.start`
 -   `wizard.next`

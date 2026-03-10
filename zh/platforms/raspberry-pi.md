@@ -7,7 +7,7 @@
 
 ## 目标
 
-在树莓派上运行一个持久化、始终在线的 OpenClaw 网关，一次性成本约为 **35-80 美元**（无月费）。非常适合：
+在树莓派上运行一个持久化、始终在线的 OpenClaw 网关（Gateway），一次性成本约为 **35-80 美元**（无月费）。非常适合：
 
 -   24/7 个人 AI 助手
 -   家庭自动化中心
@@ -25,6 +25,7 @@
 | **Pi Zero 2 W** | 512MB | ❌ | 不推荐 |
 
 **最低配置：** 1GB 内存，1 核心，500MB 磁盘空间
+
 **推荐配置：** 2GB+ 内存，64 位操作系统，16GB+ SD 卡（或 USB SSD）
 
 ## 所需物品
@@ -33,7 +34,7 @@
 -   MicroSD 卡（16GB+）或 USB SSD（性能更佳）
 -   电源适配器（推荐官方树莓派电源）
 -   网络连接（以太网或 WiFi）
--   ~30 分钟时间
+-   约 30 分钟时间
 
 ## 1) 刷写操作系统
 
@@ -46,7 +47,7 @@
     -   启用 SSH
     -   设置用户名/密码
     -   配置 WiFi（如果不使用以太网）
-4.  刷写到您的 SD 卡 / USB 驱动器
+4.  刷写到你的 SD 卡 / USB 驱动器
 5.  插入并启动树莓派
 
 ## 2) 通过 SSH 连接
@@ -67,7 +68,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install -y git curl build-essential
 
 # 设置时区（对 cron/提醒很重要）
-sudo timedatectl set-timezone America/Chicago  # 更改为您的时区
+sudo timedatectl set-timezone America/Chicago  # 更改为你的时区
 ```
 
 ## 4) 安装 Node.js 22 (ARM64)
@@ -119,7 +120,7 @@ npm run build
 npm link
 ```
 
-可修改安装让您可以直接访问日志和代码 — 对调试 ARM 特定问题很有用。
+可修改安装让你可以直接访问日志和代码 — 对调试 ARM 特定问题很有用。
 
 ## 7) 运行初始化向导
 
@@ -131,7 +132,7 @@ openclaw onboard --install-daemon
 
 1.  **网关模式：** 本地
 2.  **认证：** 推荐使用 API 密钥（无头 Pi 上 OAuth 可能不稳定）
-3.  **通道：** Telegram 最容易上手
+3.  **频道（channel）：** Telegram 最容易上手
 4.  **守护进程：** 是 (systemd)
 
 ## 8) 验证安装
@@ -152,7 +153,7 @@ journalctl -u openclaw -f
 由于 Pi 是无头的，请使用 SSH 隧道：
 
 ```bash
-# 从您的笔记本电脑/台式机执行
+# 从你的笔记本电脑/台式机执行
 ssh -L 18789:localhost:18789 user@gateway-host
 
 # 然后在浏览器中打开
@@ -190,7 +191,7 @@ lsblk
 
 在低功耗 Pi 主机上，启用 Node 的模块编译缓存，以便重复的 CLI 运行更快：
 
-```
+```bash
 grep -q 'NODE_COMPILE_CACHE=/var/tmp/openclaw-compile-cache' ~/.bashrc || cat >> ~/.bashrc <<'EOF' # pragma: allowlist secret
 export NODE_COMPILE_CACHE=/var/tmp/openclaw-compile-cache
 mkdir -p /var/tmp/openclaw-compile-cache
@@ -201,10 +202,10 @@ source ~/.bashrc
 
 说明：
 
--   `NODE_COMPILE_CACHE` 可加速后续运行（`status`、`health`、`--help`）。
--   `/var/tmp` 比 `/tmp` 更能经受重启。
--   `OPENCLAW_NO_RESPAWN=1` 避免 CLI 自我重启带来的额外启动开销。
--   首次运行会预热缓存；后续运行受益最大。
+-   `NODE_COMPILE_CACHE` 可加速后续运行（`status`、`health`、`--help`）
+-   `/var/tmp` 比 `/tmp` 更能经受重启
+-   `OPENCLAW_NO_RESPAWN=1` 避免 CLI 自我重启带来的额外启动开销
+-   首次运行会预热缓存；后续运行受益最大
 
 ### systemd 启动调优（可选）
 
@@ -286,7 +287,7 @@ uname -m
 
 ## 推荐的模型设置
 
-由于 Pi 仅作为网关（模型在云端运行），请使用基于 API 的模型：
+由于 Pi 仅作为网关（Gateway）（模型在云端运行），请使用基于 API 的模型：
 
 ```json
 {
@@ -354,7 +355,7 @@ sudo systemctl restart openclaw
 
 ### ARM 二进制文件问题
 
-如果技能失败并显示“exec format error”：
+如果技能失败并显示"exec format error"：
 
 1.  检查二进制文件是否有 ARM64 构建
 2.  尝试从源代码构建
@@ -378,7 +379,7 @@ echo 'wireless-power off' | sudo tee -a /etc/network/interfaces
 
 | 设置 | 一次性成本 | 月度成本 | 备注 |
 | --- | --- | --- | --- |
-| **Pi 4 (2GB)** | ~$45 | $0 | \+ 电费 (~$5/年) |
+| **Pi 4 (2GB)** | ~$45 | $0 | + 电费 (~$5/年) |
 | **Pi 4 (4GB)** | ~$55 | $0 | 推荐 |
 | **Pi 5 (4GB)** | ~$60 | $0 | 最佳性能 |
 | **Pi 5 (8GB)** | ~$80 | $0 | 性能过剩但面向未来 |
@@ -395,6 +396,6 @@ echo 'wireless-power off' | sudo tee -a /etc/network/interfaces
 -   [DigitalOcean 指南](./digitalocean.md) — 云替代方案
 -   [Hetzner 指南](../install/hetzner.md) — Docker 设置
 -   [Tailscale](../gateway/tailscale.md) — 远程访问
--   [节点](../nodes.md) — 将您的笔记本电脑/手机与 Pi 网关配对
+-   [节点](../nodes.md) — 将你的笔记本电脑/手机与 Pi 网关配对
 
 [Oracle Cloud](./oracle.md)[macOS 开发设置](./mac/dev-setup.md)

@@ -5,22 +5,22 @@
   
 # 健康检查
 
-如何从菜单栏应用查看关联频道是否健康。
+了解如何从菜单栏应用查看关联的频道（channel）是否健康。
 
 ## 菜单栏
 
 -   状态点现在反映 Baileys 健康状态：
-    -   绿色：已关联 + 套接字最近已打开。
+    -   绿色：已关联 + Socket 最近已打开。
     -   橙色：正在连接/重试中。
     -   红色：已注销或探测失败。
--   第二行显示“已关联 · 认证 12m”或显示失败原因。
--   “运行健康检查”菜单项触发按需探测。
+-   第二行显示"已关联 · 认证 12m"或显示失败原因。
+-   "运行健康检查"菜单项触发按需探测。
 
 ## 设置
 
--   **常规**选项卡新增一个健康卡片，显示：关联认证时长、会话存储路径/数量、上次检查时间、上次错误/状态码，以及“运行健康检查”/“显示日志”按钮。
+-   **常规**选项卡新增一个健康卡片，显示：关联认证时长、会话存储路径/数量、上次检查时间、上次错误/状态码，以及"运行健康检查"/"显示日志"按钮。
 -   使用缓存的快照，因此 UI 可即时加载，并在离线时优雅降级。
--   **频道**选项卡显示 WhatsApp/Telegram 的频道状态 + 控制项（登录二维码、注销、探测、上次断开连接/错误）。
+-   **频道**选项卡显示 WhatsApp/Telegram 的频道（channel）状态 + 控制项（登录二维码、注销、探测、上次断开连接/错误）。
 
 ## 探测工作原理
 
@@ -29,6 +29,6 @@
 
 ## 如有疑问
 
--   您仍然可以使用 [网关健康](../../gateway/health.md) 中的 CLI 流程（`openclaw status`、`openclaw status --deep`、`openclaw health --json`），并跟踪 `/tmp/openclaw/openclaw-*.log` 中的 `web-heartbeat` / `web-reconnect` 日志。
+-   你仍然可以使用 [网关健康](../../gateway/health.md) 中的 CLI 流程（`openclaw status`、`openclaw status --deep`、`openclaw health --json`），并跟踪 `/tmp/openclaw/openclaw-*.log` 中的 `web-heartbeat` / `web-reconnect` 日志。
 
 [网关生命周期](./child-process.md)[菜单栏图标](./icon.md)

@@ -5,11 +5,11 @@
   
 # NVIDIA
 
-NVIDIA 为 Nemotron 和 NeMo 模型提供了一个 OpenAI 兼容的 API，地址为 `https://integrate.api.nvidia.com/v1`。使用来自 [NVIDIA NGC](https://catalog.ngc.nvidia.com/) 的 API 密钥进行身份验证。
+想使用 NVIDIA 的 Nemotron 和 NeMo 模型？NVIDIA 提供了 OpenAI 兼容的 API 端点 `https://integrate.api.nvidia.com/v1`，只需从 [NVIDIA NGC](https://catalog.ngc.nvidia.com/) 获取 API 密钥（API key）即可开始。
 
 ## CLI 设置
 
-导出密钥一次，然后运行引导程序并设置一个 NVIDIA 模型：
+只需三步：设置环境变量、跳过认证流程、选择模型：
 
 ```bash
 export NVIDIA_API_KEY="nvapi-..."
@@ -17,7 +17,7 @@ openclaw onboard --auth-choice skip
 openclaw models set nvidia/nvidia/llama-3.1-nemotron-70b-instruct
 ```
 
-如果你仍然传递 `--token`，请记住它会进入 shell 历史记录和 `ps` 输出；尽可能优先使用环境变量。
+如果还想用 `--token` 参数，请注意它会留在 shell 历史记录和 `ps` 输出里。能用环境变量就尽量用环境变量。
 
 ## 配置片段
 
@@ -42,13 +42,13 @@ openclaw models set nvidia/nvidia/llama-3.1-nemotron-70b-instruct
 
 ## 模型 ID
 
--   `nvidia/llama-3.1-nemotron-70b-instruct` (默认)
+-   `nvidia/llama-3.1-nemotron-70b-instruct`（默认）
 -   `meta/llama-3.3-70b-instruct`
 -   `nvidia/mistral-nemo-minitron-8b-8k-instruct`
 
 ## 注意事项
 
--   OpenAI 兼容的 `/v1` 端点；使用来自 NVIDIA NGC 的 API 密钥。
--   当设置 `NVIDIA_API_KEY` 时，提供商自动启用；使用静态默认值（131,072 个令牌的上下文窗口，4,096 个最大令牌数）。
+-   使用 OpenAI 兼容的 `/v1` 端点，API 密钥（API key）需从 NVIDIA NGC 获取。
+-   设置 `NVIDIA_API_KEY` 后，提供商（provider）会自动启用。默认配置为 131,072 token 的上下文窗口和 4,096 token 的最大输出长度。
 
 [Mistral](./mistral.md)[Ollama](./ollama.md)

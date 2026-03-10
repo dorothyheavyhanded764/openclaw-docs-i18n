@@ -1,19 +1,19 @@
 
 
-  macOS 配套应用
+  macOS 伴侣应用
 
   
 # Canvas
 
-该 macOS 应用使用 `WKWebView` 嵌入了一个由代理控制的 **Canvas 面板**。它是一个轻量级的可视化工作区，适用于 HTML/CSS/JS、A2UI 以及小型交互式 UI 界面。
+macOS 应用通过 `WKWebView` 内嵌了一个由智能体（agent）控制的 **Canvas 面板**。这是一个轻量级可视化工作区，适用于 HTML/CSS/JS、A2UI 以及小型交互式 UI 界面。
 
 ## Canvas 的存储位置
 
-Canvas 状态存储在应用程序支持目录下：
+Canvas 状态保存在应用程序支持目录下：
 
 -   `~/Library/Application Support/OpenClaw/canvas//...`
 
-Canvas 面板通过 **自定义 URL 方案** 提供这些文件：
+Canvas 面板通过 **自定义 URL Scheme** 提供这些文件：
 
 -   `openclaw-canvas:///`
 
@@ -36,7 +36,7 @@ Canvas 面板通过 **自定义 URL 方案** 提供这些文件：
 
 ## 代理 API 接口
 
-Canvas 通过 **网关 WebSocket** 暴露，因此代理可以：
+Canvas 通过 **网关 WebSocket** 暴露，因此智能体（agent）可以：
 
 -   显示/隐藏面板
 -   导航到路径或 URL
@@ -54,12 +54,12 @@ openclaw nodes canvas snapshot --node <id>
 
 注意：
 
--   `canvas.navigate` 接受 **本地 Canvas 路径**、`http(s)` URL 和 `file://` URL。
--   如果传递 `"/"`，Canvas 将显示本地脚手架页面或 `index.html`。
+-   `canvas.navigate` 支持 **本地 Canvas 路径**、`http(s)` URL 和 `file://` URL。
+-   如果传入 `"/"`，Canvas 将显示本地脚手架页面或 `index.html`。
 
 ## Canvas 中的 A2UI
 
-A2UI 由网关 Canvas 主机托管，并在 Canvas 面板内渲染。当网关通告一个 Canvas 主机时，macOS 应用在首次打开时会自动导航到 A2UI 主机页面。默认的 A2UI 主机 URL：
+A2UI 由网关 Canvas 主机托管，并在 Canvas 面板内渲染。当网关通告 Canvas 主机时，macOS 应用首次打开时会自动导航到 A2UI 主机页面。默认的 A2UI 主机 URL：
 
 ```
 http://<gateway-host>:18789/__openclaw__/a2ui/
@@ -67,7 +67,7 @@ http://<gateway-host>:18789/__openclaw__/a2ui/
 
 ### A2UI 命令 (v0.8)
 
-Canvas 目前接受 **A2UI v0.8** 服务器→客户端消息：
+Canvas 目前支持 **A2UI v0.8** 的服务器→客户端消息：
 
 -   `beginRendering`
 -   `surfaceUpdate`
@@ -91,9 +91,9 @@ openclaw nodes canvas a2ui push --jsonl /tmp/a2ui-v0.8.jsonl --node <id>
 openclaw nodes canvas a2ui push --node <id> --text "Hello from A2UI"
 ```
 
-## 从 Canvas 触发代理运行
+## 从 Canvas 触发智能体运行
 
-Canvas 可以通过深度链接触发新的代理运行：
+Canvas 可以通过深度链接触发新的智能体（agent）运行：
 
 -   `openclaw://agent?...`
 
@@ -103,12 +103,12 @@ Canvas 可以通过深度链接触发新的代理运行：
 window.location.href = "openclaw://agent?message=Review%20this%20design";
 ```
 
-除非提供了有效的密钥，否则应用会提示确认。
+除非提供有效的密钥，否则应用会提示确认。
 
 ## 安全说明
 
--   Canvas 方案阻止目录遍历；文件必须位于会话根目录下。
--   本地 Canvas 内容使用自定义方案（无需环回服务器）。
--   仅当显式导航时，才允许外部 `http(s)` URL。
+-   Canvas Scheme 阻止目录遍历；文件必须位于会话根目录下。
+-   本地 Canvas 内容使用自定义 Scheme（无需环回服务器）。
+-   外部 `http(s)` URL 仅在显式导航时才被允许。
 
 [WebChat](./webchat.md)[网关生命周期](./child-process.md)

@@ -13,4 +13,4 @@ openclaw reset --dry-run
 openclaw reset --scope config+creds+sessions --yes --non-interactive
 ```
 
-[qr](./qr.md)[沙盒 CLI](./sandbox.md)
+[qr](./qr.md)[Sandbox CLI](./sandbox.md)

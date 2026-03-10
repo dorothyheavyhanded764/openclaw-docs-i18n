@@ -13,5 +13,3 @@ openclaw docs sandbox allowHostControl
 ```
 
 [dns](./dns.md)[doctor](./doctor.md)
-
----

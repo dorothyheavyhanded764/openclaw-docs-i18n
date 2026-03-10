@@ -7,7 +7,7 @@
 
 ## 首次运行（推荐）
 
-OpenClaw 为代理使用一个专用工作区目录。默认路径：`~/.openclaw/workspace`（可通过 `agents.defaults.workspace` 配置）。
+OpenClaw 为智能体使用一个专用工作区目录。默认路径：`~/.openclaw/workspace`（可通过 `agents.defaults.workspace` 配置）。
 
 1.  创建工作区（如果尚不存在）：
 
@@ -74,7 +74,7 @@ cp docs/reference/AGENTS.default.md ~/.openclaw/workspace/AGENTS.md
 
 ## 备份提示（推荐）
 
-如果你将此工作区视为 Clawd 的“记忆”，请将其设为 git 仓库（最好是私有的），以便备份 `AGENTS.md` 和你的记忆文件。
+如果你将此工作区视为 Clawd 的"记忆"，请将其设为 git 仓库（最好是私有的），以便备份 `AGENTS.md` 和你的记忆文件。
 
 ```bash
 cd ~/.openclaw/workspace
@@ -86,16 +86,16 @@ git commit -m "Add Clawd workspace"
 
 ## OpenClaw 的功能
 
--   运行 WhatsApp 网关和 Pi 编码代理，使助手能够通过主机 Mac 读写聊天、获取上下文并运行技能。
+-   运行 WhatsApp 网关和 Pi 编码智能体，使助手能够通过主机 Mac 读写聊天、获取上下文并运行技能。
 -   macOS 应用程序管理权限（屏幕录制、通知、麦克风）并通过其捆绑的二进制文件公开 `openclaw` CLI。
--   默认情况下，直接聊天会合并到代理的 `main` 会话中；群组保持隔离，格式为 `agent:::group:`（房间/频道：`agent:::channel:`）；心跳保持后台任务存活。
+-   默认情况下，直接聊天会合并到智能体的 `main` 会话中；群组保持隔离，格式为 `agent:::group:`（房间/频道：`agent:::channel:`）；心跳保持后台任务存活。
 
 ## 核心技能（在 设置 → 技能 中启用）
 
 -   **mcporter** — 用于管理外部技能后端的工具服务器运行时/CLI。
 -   **Peekaboo** — 快速的 macOS 屏幕截图，可选 AI 视觉分析。
 -   **camsnap** — 从 RTSP/ONVIF 安全摄像头捕获帧、剪辑或运动警报。
--   **oracle** — 支持 OpenAI 的代理 CLI，具有会话回放和浏览器控制功能。
+-   **oracle** — 支持 OpenAI 的智能体 CLI，具有会话回放和浏览器控制功能。
 -   **eightctl** — 从终端控制你的睡眠。
 -   **imsg** — 发送、读取、流式传输 iMessage 和 SMS。
 -   **wacli** — WhatsApp CLI：同步、搜索、发送。
@@ -113,13 +113,13 @@ git commit -m "Add Clawd workspace"
 ## 使用说明
 
 -   脚本编写优先使用 `openclaw` CLI；mac 应用程序处理权限。
--   从“技能”选项卡运行安装；如果二进制文件已存在，它会隐藏按钮。
+-   从"技能"选项卡运行安装；如果二进制文件已存在，它会隐藏按钮。
 -   保持心跳启用，以便助手可以安排提醒、监控收件箱并触发摄像头捕获。
 -   Canvas UI 以全屏模式运行，带有原生覆盖层。避免将关键控件放置在左上角/右上角/底部边缘；在布局中添加明确的边距，不要依赖安全区域插入。
 -   对于浏览器驱动的验证，使用 `openclaw browser`（标签/状态/截图）以及 OpenClaw 管理的 Chrome 配置文件。
 -   对于 DOM 检查，使用 `openclaw browser eval|query|dom|snapshot`（当你需要机器输出时，使用 `--json`/`--out`）。
 -   对于交互，使用 `openclaw browser click|type|hover|drag|select|upload|press|wait|navigate|back|evaluate|run`（点击/输入需要快照引用；使用 `evaluate` 处理 CSS 选择器）。
 
-[设备模型数据库](./device-models.md)[AGENTS.md 模板](./templates/AGENTS.md)
+[设备型号数据库](./device-models.md)[AGENTS.md 模板](./templates/AGENTS.md)
 
 ---

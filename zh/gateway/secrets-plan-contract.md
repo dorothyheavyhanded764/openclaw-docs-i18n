@@ -44,7 +44,7 @@
 
 通用规则：
 
--   `target.type` 必须被识别，并且必须与规范化的 `target.path` 形状匹配。
+-   `target.type` 必须被识别，并且必须与规范化的 `target.path` 形状匹配
 
 兼容性别名对现有计划仍然接受：
 
@@ -56,14 +56,14 @@
 
 每个目标都会通过以下所有规则进行验证：
 
--   `type` 必须是已识别的目标类型。
--   `path` 必须是非空的点分隔路径。
--   `pathSegments` 可以省略。如果提供，它必须规范化为与 `path` 完全相同的路径。
--   禁止的片段会被拒绝：`__proto__`、`prototype`、`constructor`。
--   规范化后的路径必须与目标类型注册的路径形状匹配。
--   如果设置了 `providerId` 或 `accountId`，它必须与路径中编码的 id 匹配。
--   `auth-profiles.json` 目标需要 `agentId`。
--   创建新的 `auth-profiles.json` 映射时，需包含 `authProfileProvider`。
+-   `type` 必须是已识别的目标类型
+-   `path` 必须是非空的点分隔路径
+-   `pathSegments` 可以省略。如果提供，它必须规范化为与 `path` 完全相同的路径
+-   禁止的片段会被拒绝：`__proto__`、`prototype`、`constructor`
+-   规范化后的路径必须与目标类型注册的路径形状匹配
+-   如果设置了 `providerId` 或 `accountId`，它必须与路径中编码的 id 匹配
+-   `auth-profiles.json` 目标需要 `agentId`
+-   创建新的 `auth-profiles.json` 映射时，需包含 `authProfileProvider`
 
 ## 失败行为
 
@@ -77,8 +77,8 @@ Invalid plan target path for models.providers.apiKey: models.providers.openai.ba
 
 ## 运行时与审计范围说明
 
--   仅引用类型的 `auth-profiles.json` 条目（`keyRef`/`tokenRef`）包含在运行时解析和审计覆盖范围内。
--   `secrets apply` 写入受支持的 `openclaw.json` 目标、受支持的 `auth-profiles.json` 目标以及可选的清理目标。
+-   仅引用类型的 `auth-profiles.json` 条目（`keyRef`/`tokenRef`）包含在运行时解析和审计覆盖范围内
+-   `secrets apply` 写入受支持的 `openclaw.json` 目标、受支持的 `auth-profiles.json` 目标以及可选的清理目标
 
 ## 操作员检查
 

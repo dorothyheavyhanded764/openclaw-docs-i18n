@@ -5,13 +5,13 @@
   
 # 展示
 
-来自社区的真实项目。看看人们正在用 OpenClaw 构建什么。
+来自社区的真实项目。看看大家正在用 OpenClaw 构建什么。
 
-> **ℹ️** **想要被展示吗？** 在 Discord 的 [#showcase 频道](https://discord.gg/clawd) 分享您的项目，或在 X 上 [@openclaw](https://x.com/openclaw)。
+> **ℹ️** **想要被展示？** 在 Discord 的 [#showcase 频道](https://discord.gg/clawd) 分享你的项目，或在 X 上 [@openclaw](https://x.com/openclaw)。
 
 ## 🎥 OpenClaw 实战
 
-VelvetShark 的完整设置演练 (28分钟)。
+VelvetShark 的完整设置演练（28分钟）。
 
 [在 YouTube 上观看](https://www.youtube.com/watch?v=SaWSPZoPX34)
 
@@ -35,9 +35,9 @@ VelvetShark 的完整设置演练 (28分钟)。
 
 * * *
 
-## 提交您的项目
+## 提交你的项目
 
-有东西要分享吗？我们很乐意展示它！
+有东西要分享？我们很乐意展示它！
 
 ### 步骤 1：分享它
 

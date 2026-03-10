@@ -5,7 +5,7 @@
   
 # macOS IPC
 
-**当前模型：** 一个本地 Unix 套接字将**节点主机服务**连接到 **macOS 应用**，用于执行批准和 `system.run`。存在一个 `openclaw-mac` 调试 CLI 用于发现/连接检查；代理操作仍通过网关 WebSocket 和 `node.invoke` 进行。UI 自动化使用 PeekabooBridge。
+**当前模型：** 一个本地 Unix 套接字将**节点主机服务**连接到 **macOS 应用**，用于执行批准和 `system.run`。存在一个 `openclaw-mac` 调试 CLI 用于发现/连接检查；智能体（agent）操作仍通过网关（Gateway）WebSocket 和 `node.invoke` 进行。UI 自动化使用 PeekabooBridge。
 
 ## 目标
 
@@ -18,7 +18,7 @@
 ### 网关 + 节点传输
 
 -   应用运行网关（本地模式）并作为节点连接到它。
--   代理操作通过 `node.invoke` 执行（例如 `system.run`、`system.notify`、`canvas.*`）。
+-   智能体操作通过 `node.invoke` 执行（例如 `system.run`、`system.notify`、`canvas.*`）。
 
 ### 节点服务 + 应用 IPC
 
@@ -29,7 +29,7 @@
 示意图 (SCI)：
 
 ```
-代理 -> 网关 -> 节点服务 (WS)
+智能体 -> 网关 -> 节点服务 (WS)
                       |  IPC (UDS + 令牌 + HMAC + TTL)
                       v
                   Mac 应用 (UI + TCC + system.run)
@@ -37,7 +37,7 @@
 
 ### PeekabooBridge (UI 自动化)
 
--   UI 自动化使用一个单独的名为 `bridge.sock` 的 UNIX 套接字和 PeekabooBridge JSON 协议。
+-   UI 自动化使用一个单独的名为 `bridge.sock` 的 Unix 套接字和 PeekabooBridge JSON 协议。
 -   主机偏好顺序（客户端）：Peekaboo.app → Claude.app → OpenClaw.app → 本地执行。
 -   安全性：桥接主机需要匹配允许的 TeamID；仅限 DEBUG 模式的同 UID 逃生舱由 `PEEKABOO_ALLOW_UNSIGNED_SOCKET_CLIENTS=1` 保护（Peekaboo 惯例）。
 -   详见：[PeekabooBridge 使用指南](./peekaboo.md)。

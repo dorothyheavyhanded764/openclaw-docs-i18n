@@ -5,13 +5,13 @@
   
 # 钩子
 
-钩子提供了一个可扩展的事件驱动系统，用于在响应代理命令和事件时自动执行操作。钩子会自动从目录中发现，并可以通过 CLI 命令进行管理，类似于 OpenClaw 中技能的工作方式。
+钩子提供了一个可扩展的事件驱动系统，用于在响应智能体（agent）命令和事件时自动执行操作。钩子会自动从目录中发现，并可以通过 CLI 命令进行管理，类似于 OpenClaw 中技能的工作方式。
 
 ## 快速了解
 
 钩子是当某些事件发生时运行的小脚本。有两种类型：
 
--   **钩子**（本页面）：当代理事件触发时在网关内部运行，例如 `/new`、`/reset`、`/stop` 或生命周期事件。
+-   **钩子**（本页面）：当智能体（agent）事件触发时在网关内部运行，例如 `/new`、`/reset`、`/stop` 或生命周期事件。
 -   **Webhooks**：外部 HTTP webhook，允许其他系统在 OpenClaw 中触发工作。请参阅 [Webhook 钩子](./webhook.md) 或使用 `openclaw webhooks` 获取 Gmail 辅助命令。
 
 钩子也可以捆绑在插件内部；请参阅 [插件](../tools/plugin.md#plugin-hooks)。常见用途：
@@ -29,7 +29,7 @@
 
 -   发出 `/new` 命令时将会话上下文保存到记忆
 -   记录所有命令以供审计
--   在代理生命周期事件上触发自定义自动化
+-   在智能体（agent）生命周期事件上触发自定义自动化
 -   无需修改核心代码即可扩展 OpenClaw 的行为
 
 ## 开始使用
@@ -38,10 +38,10 @@
 
 OpenClaw 附带了四个捆绑的钩子，它们会被自动发现：
 
--   **💾 session-memory**：当你发出 `/new` 时，将会话上下文保存到你的代理工作区（默认 `~/.openclaw/workspace/memory/`）
+-   **💾 session-memory**：当你发出 `/new` 时，将会话上下文保存到你的智能体（agent）工作区（默认 `~/.openclaw/workspace/memory/`）
 -   **📎 bootstrap-extra-files**：在 `agent:bootstrap` 期间，从配置的 glob/路径模式注入额外的工作区引导文件
 -   **📝 command-logger**：将所有命令事件记录到 `~/.openclaw/logs/commands.log`
--   **🚀 boot-md**：网关启动时运行 `BOOT.md`（需要启用内部钩子）
+-   **🚀 boot-md**：网关（Gateway）启动时运行 `BOOT.md`（需要启用内部钩子）
 
 列出可用钩子：
 
@@ -75,7 +75,7 @@ openclaw hooks info session-memory
 
 钩子会自动从三个目录中发现（按优先级顺序）：
 
-1.  **工作区钩子**：`/hooks/`（每个代理，最高优先级）
+1.  **工作区钩子**：`/hooks/`（每个智能体，最高优先级）
 2.  **托管钩子**：`~/.openclaw/hooks/`（用户安装，跨工作区共享）
 3.  **捆绑钩子**：`/dist/hooks/bundled/`（随 OpenClaw 一起提供）
 
@@ -233,13 +233,13 @@ export default myHandler;
 
 内部钩子负载将这些事件作为 `type: "session"` 和 `action: "compact:before"` / `action: "compact:after"` 发出；监听器使用上述组合键订阅。特定的处理器注册使用字面键格式 `${type}:${action}`。对于这些事件，请注册 `session:compact:before` 和 `session:compact:after`。
 
-### 代理事件
+### 智能体事件
 
 -   **`agent:bootstrap`**：在工作区引导文件注入之前（钩子可以修改 `context.bootstrapFiles`）
 
 ### 网关事件
 
-网关启动时触发：
+网关（Gateway）启动时触发：
 
 -   **`gateway:startup`**：通道启动且钩子加载后
 
@@ -248,9 +248,9 @@ export default myHandler;
 当消息被接收或发送时触发：
 
 -   **`message`**：所有消息事件（通用监听器）
--   **`message:received`**：当从任何通道接收到入站消息时。在处理早期触发，在媒体理解之前。内容可能包含原始占位符，如用于尚未处理的媒体附件的 `<media:audio>`。
+-   **`message:received`**：当从任何频道（channel）接收到入站消息时。在处理早期触发，在媒体理解之前。内容可能包含原始占位符，如用于尚未处理的媒体附件的 `<media:audio>`。
 -   **`message:transcribed`**：当消息被完全处理时，包括音频转录和链接理解。此时，`transcript` 包含音频消息的完整转录文本。当你需要访问转录的音频内容时，请使用此钩子。
--   **`message:preprocessed`**：在所有媒体 + 链接理解完成后，为每条消息触发，让钩子在代理看到之前访问完全丰富的正文（转录、图像描述、链接摘要）。
+-   **`message:preprocessed`**：在所有媒体 + 链接理解完成后，为每条消息触发，让钩子在智能体（agent）看到之前访问完全丰富的正文（转录、图像描述、链接摘要）。
 -   **`message:sent`**：当出站消息成功发送时
 
 #### 消息事件上下文
@@ -339,7 +339,7 @@ export default handler;
 
 这些钩子不是事件流监听器；它们允许插件在 OpenClaw 持久化之前同步调整工具结果。
 
--   **`tool_result_persist`**：在工具结果写入会话记录之前转换它们。必须是同步的；返回更新后的工具结果负载或 `undefined` 以保持原样。请参阅 [代理循环](../concepts/agent-loop.md)。
+-   **`tool_result_persist`**：在工具结果写入会话记录之前转换它们。必须是同步的；返回更新后的工具结果负载或 `undefined` 以保持原样。请参阅 [智能体循环](../concepts/agent-loop.md)。
 
 ### 插件钩子事件
 
@@ -354,13 +354,13 @@ export default handler;
 
 -   **`session:start`**：新会话开始时
 -   **`session:end`**：会话结束时
--   **`agent:error`**：代理遇到错误时
+-   **`agent:error`**：智能体（agent）遇到错误时
 
 ## 创建自定义钩子
 
 ### 1. 选择位置
 
--   **工作区钩子**（`/hooks/`）：每个代理，最高优先级
+-   **工作区钩子**（`/hooks/`）：每个智能体（agent），最高优先级
 -   **托管钩子**（`~/.openclaw/hooks/`）：跨工作区共享
 
 ### 2. 创建目录结构
@@ -411,7 +411,7 @@ openclaw hooks enable my-hook
 # 重启你的网关进程（macOS 上的菜单栏应用重启，或重启你的开发进程）
 
 # 触发事件
-# 通过你的消息通道发送 /new
+# 通过你的消息频道发送 /new
 ```
 
 ## 配置

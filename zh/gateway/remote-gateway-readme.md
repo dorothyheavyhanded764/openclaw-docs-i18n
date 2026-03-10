@@ -54,7 +54,7 @@ open /path/to/OpenClaw.app
 
 现在，应用程序将通过 SSH 隧道连接到远程网关。
 
-* * *
+---
 
 ## 登录时自动启动隧道
 
@@ -99,7 +99,7 @@ launchctl bootstrap gui/$UID ~/Library/LaunchAgents/ai.openclaw.ssh-tunnel.plist
 
 遗留说明：如果存在旧的 `com.openclaw.ssh-tunnel` LaunchAgent，请将其移除。
 
-* * *
+---
 
 ## 故障排除
 
@@ -122,7 +122,7 @@ launchctl kickstart -k gui/$UID/ai.openclaw.ssh-tunnel
 launchctl bootout gui/$UID/ai.openclaw.ssh-tunnel
 ```
 
-* * *
+---
 
 ## 工作原理
 

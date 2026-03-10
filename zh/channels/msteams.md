@@ -456,7 +456,7 @@ Teams 的 Markdown 比 Slack 或 Discord 更有限：
 ## 路由和会话
 
 -   会话键遵循标准代理格式（参见 [/concepts/session](../concepts/session.md)）：
-    -   直接消息共享主会话（`agent::`）。
+    -   直接消息（direct messages）共享主会话（`agent::`）。
     -   频道/群组消息使用对话 ID：
         -   `agent::msteams:channel:`
         -   `agent::msteams:group:`

@@ -3,137 +3,176 @@
   基础概念
 
   
-# 智能体循环
+# 智能体循环（agent loop）
 
-智能体循环是智能体一次完整的“真实”运行过程：输入 → 上下文组装 → 模型推理 → 工具执行 → 流式回复 → 持久化。这是将消息转化为动作和最终回复的权威路径，同时保持会话状态的一致性。在 OpenClaw 中，一个循环是每个会话的一次串行化运行，在模型思考、调用工具和流式输出时发出生命周期和流事件。本文档解释了这一真实循环是如何端到端连接的。
+智能体循环（agent loop）是一次完整的"真实"执行过程：接收输入 → 组装上下文 → 模型推理 → 执行工具 → 流式输出回复 → 持久化状态。这是将一条消息转化为具体行动和最终回复的核心流程，同时确保会话状态始终保持一致。
+
+在 OpenClaw 中，每个会话的循环都是串行执行的。当模型在思考、调用工具、流式输出时，系统会发出相应的生命周期事件和流事件。本文档将带你深入了解这个循环是如何端到端运作的。
 
 ## 入口点
 
--   网关 RPC: `agent` 和 `agent.wait`。
--   CLI: `agent` 命令。
+- **网关 RPC**：`agent` 和 `agent.wait`
+- **命令行**：`agent` 命令
 
-## 工作原理（高层概述）
+## 整体工作流程
 
-1.  `agent` RPC 验证参数，解析会话（sessionKey/sessionId），持久化会话元数据，立即返回 `{ runId, acceptedAt }`。
-2.  `agentCommand` 运行智能体：
-    -   解析模型 + 思考/详细模式默认值
-    -   加载技能快照
-    -   调用 `runEmbeddedPiAgent`（pi-agent-core 运行时）
-    -   如果嵌入式循环未发出**生命周期结束/错误**事件，则发出该事件
-3.  `runEmbeddedPiAgent`：
-    -   通过每个会话 + 全局队列串行化运行
-    -   解析模型 + 认证配置文件并构建 pi 会话
-    -   订阅 pi 事件并流式传输助手/工具增量
-    -   强制执行超时 -> 如果超时则中止运行
-    -   返回有效载荷 + 使用量元数据
-4.  `subscribeEmbeddedPiSession` 将 pi-agent-core 事件桥接到 OpenClaw `agent` 流：
-    -   工具事件 => `stream: "tool"`
-    -   助手增量 => `stream: "assistant"`
-    -   生命周期事件 => `stream: "lifecycle"` (`phase: "start" | "end" | "error"`)
-5.  `agent.wait` 使用 `waitForAgentJob`：
-    -   等待 `runId` 的**生命周期结束/错误**事件
-    -   返回 `{ status: ok|error|timeout, startedAt, endedAt, error? }`
+整个过程可以分为以下几个关键步骤：
 
-## 队列 + 并发
+1. **`agent` RPC** 接收请求后，会验证参数、解析会话（通过 `sessionKey` 或 `sessionId`）、持久化会话元数据，然后立即返回 `{ runId, acceptedAt }`，让调用方知道请求已受理。
 
--   运行按会话键（会话通道）串行化，并可选择通过全局通道串行化。
--   这可以防止工具/会话竞争并保持会话历史的一致性。
--   消息传递通道可以选择馈送到此通道系统的队列模式（collect/steer/followup）。请参阅[命令队列](./queue.md)。
+2. **`agentCommand`** 负责启动智能体：
+    - 解析模型配置，设置思考模式/详细模式的默认值
+    - 加载技能快照
+    - 调用 `runEmbeddedPiAgent`（这是 pi-agent-core 运行时的核心）
+    - 如果嵌入式循环没有发出生命周期结束/错误事件，则补充发出
 
-## 会话 + 工作区准备
+3. **`runEmbeddedPiAgent`** 是实际执行循环的地方：
+    - 通过会话级队列和全局队列来串行化运行，避免并发冲突
+    - 解析模型和认证配置，构建 pi 会话
+    - 订阅 pi 事件，流式传输助手消息和工具增量
+    - 强制执行超时机制，超时则中止运行
+    - 返回执行结果和使用量元数据
 
--   工作区被解析和创建；沙盒运行可能会重定向到沙盒工作区根目录。
--   技能被加载（或从快照重用）并注入到环境和提示中。
--   引导/上下文文件被解析并注入到系统提示报告中。
--   获取会话写锁；`SessionManager` 在流式传输前被打开并准备就绪。
+4. **`subscribeEmbeddedPiSession`** 负责将 pi-agent-core 的事件桥接到 OpenClaw 的 `agent` 流：
+    - 工具事件 → `stream: "tool"`
+    - 助手增量 → `stream: "assistant"`
+    - 生命周期事件 → `stream: "lifecycle"`（`phase: "start" | "end" | "error"`）
 
-## 提示组装 + 系统提示
+5. **`agent.wait`** 通过 `waitForAgentJob` 等待指定的 `runId` 完成：
+    - 等待生命周期结束/错误事件
+    - 返回 `{ status: ok|error|timeout, startedAt, endedAt, error? }`
 
--   系统提示由 OpenClaw 的基础提示、技能提示、引导上下文和每次运行的覆盖项构建而成。
--   强制执行模型特定的限制和压缩保留令牌。
--   关于模型看到的内容，请参阅[系统提示](./system-prompt.md)。
+## 队列与并发控制
 
-## 钩子点（可以拦截的位置）
+为什么需要队列？因为智能体的运行必须有序。
 
-OpenClaw 有两个钩子系统：
+- 每个会话键（session key）对应一个专属通道，运行在该通道内串行执行
+- 可选的全局通道可以进一步控制整体并发
+- 这种设计有效防止了工具执行和会话状态的竞争条件
+- 消息通道可以选择不同的队列模式（`collect`/`steer`/`followup`），这些模式最终都会馈送到上述队列系统
 
--   **内部钩子**（网关钩子）：用于命令和生命周期事件的事件驱动脚本。
--   **插件钩子**：智能体/工具生命周期和网关管道内部的扩展点。
+更多细节请参阅 [命令队列](./queue.md)。
+
+## 会话与工作区准备
+
+在智能体开始思考之前，系统需要做好准备工作：
+
+- **工作区**：解析并创建工作目录；沙盒运行可能会重定向到沙盒工作区根目录
+- **技能**：加载技能（或从快照复用），注入到环境变量和提示词中
+- **引导上下文**：解析引导文件和上下文文件，注入到系统提示中
+- **会话锁**：获取会话写锁，打开并初始化 `SessionManager`
+
+## 提示词组装与系统提示
+
+系统提示是如何构建的？
+
+它由以下几个部分组装而成：OpenClaw 的基础提示 + 技能提示 + 引导上下文 + 本次运行的覆盖配置。组装完成后，会根据模型特定的上下文限制和压缩保留令牌数进行约束。
+
+想了解模型实际看到的系统提示是什么样的？请参阅 [系统提示](./system-prompt.md)。
+
+## 钩子点：你可以在哪里拦截和扩展
+
+OpenClaw 提供了两套钩子系统，让你可以在关键节点插入自定义逻辑：
+
+- **内部钩子（Gateway hooks）**：基于事件的脚本，用于处理命令和生命周期事件
+- **插件钩子**：深入智能体/工具生命周期和网关管道内部的扩展点
 
 ### 内部钩子（网关钩子）
 
--   **`agent:bootstrap`**：在构建引导文件时运行，在系统提示最终确定之前。使用此钩子添加/移除引导上下文文件。
--   **命令钩子**：`/new`、`/reset`、`/stop` 和其他命令事件（参见钩子文档）。
+- **`agent:bootstrap`**：在构建引导文件时运行，此时系统提示尚未最终确定。你可以用它来添加或移除引导上下文文件。
+- **命令钩子**：`/new`、`/reset`、`/stop` 等命令事件触发。
 
-有关设置和示例，请参阅[钩子](../automation/hooks.md)。
+设置方法和示例请参阅 [钩子](../automation/hooks.md)。
 
-### 插件钩子（智能体 + 网关生命周期）
+### 插件钩子（智能体与网关生命周期）
 
-这些钩子在智能体循环或网关管道内部运行：
+这些钩子运行在智能体循环或网关管道内部：
 
--   **`before_model_resolve`**：在会话之前运行（无 `messages`），用于在模型解析之前确定性地覆盖提供者/模型。
--   **`before_prompt_build`**：在会话加载后运行（带有 `messages`），用于在提示提交前注入 `prependContext`、`systemPrompt`、`prependSystemContext` 或 `appendSystemContext`。使用 `prependContext` 用于每轮动态文本，使用系统上下文字段用于应位于系统提示空间的稳定指导。
--   **`before_agent_start`**：旧版兼容性钩子，可能在任一阶段运行；建议使用上述明确的钩子。
--   **`agent_end`**：在完成后检查最终消息列表和运行元数据。
--   **`before_compaction` / `after_compaction`**：观察或注释压缩周期。
--   **`before_tool_call` / `after_tool_call`**：拦截工具参数/结果。
--   **`tool_result_persist`**：在工具结果写入会话记录之前同步转换它们。
--   **`message_received` / `message_sending` / `message_sent`**：入站 + 出站消息钩子。
--   **`session_start` / `session_end`**：会话生命周期边界。
--   **`gateway_start` / `gateway_stop`**：网关生命周期事件。
+| 钩子 | 触发时机 | 用途 |
+|------|---------|------|
+| `before_model_resolve` | 会话创建前（无 `messages`） | 在模型解析前确定性地覆盖提供者/模型 |
+| `before_prompt_build` | 会话加载后（有 `messages`） | 在提交提示前注入 `prependContext`、`systemPrompt`、`prependSystemContext` 或 `appendSystemContext`。`prependContext` 适合每轮动态内容，系统上下文字段适合放在系统提示中的稳定指导 |
+| `before_agent_start` | 旧版兼容 | 可能在任一阶段运行，建议使用上述明确的新钩子 |
+| `agent_end` | 完成后 | 检查最终消息列表和运行元数据 |
+| `before_compaction` / `after_compaction` | 压缩前后 | 观察或注释压缩周期 |
+| `before_tool_call` / `after_tool_call` | 工具调用前后 | 拦截工具参数和结果 |
+| `tool_result_persist` | 持久化前 | 在工具结果写入会话记录前同步转换 |
+| `message_received` / `message_sending` / `message_sent` | 消息流转时 | 入站和出站消息钩子 |
+| `session_start` / `session_end` | 会话边界 | 会话生命周期事件 |
+| `gateway_start` / `gateway_stop` | 网关启停时 | 网关生命周期事件 |
 
-有关钩子 API 和注册详细信息，请参阅[插件](../tools/plugin.md#plugin-hooks)。
+钩子 API 和注册详情请参阅 [插件](../tools/plugin.md#plugin-hooks)。
 
-## 流式传输 + 部分回复
+## 流式传输与部分回复
 
--   助手增量从 pi-agent-core 流式传输并作为 `assistant` 事件发出。
--   块流式传输可以在 `text_end` 或 `message_end` 时发出部分回复。
--   推理流式传输可以作为单独的流或作为块回复发出。
--   有关分块和块回复行为，请参阅[流式传输](./streaming.md)。
+当智能体在生成回复时，内容是如何流式输出的？
 
-## 工具执行 + 消息传递工具
+- 助手增量从 pi-agent-core 流式传输，以 `assistant` 事件发出
+- 块流式传输可以在 `text_end` 或 `message_end` 时发出部分回复
+- 推理流式传输可以作为独立流发出，也可以作为块回复的一部分
 
--   工具开始/更新/结束事件在 `tool` 流上发出。
--   工具结果在记录/发出前会进行大小和图像有效载荷的清理。
--   消息传递工具的发送被跟踪，以抑制重复的助手确认。
+分块机制和块回复行为详见 [流式传输](./streaming.md)。
 
-## 回复整形 + 抑制
+## 工具执行与消息工具
 
--   最终有效载荷由以下部分组装：
-    -   助手文本（以及可选的推理）
-    -   内联工具摘要（当启用详细模式且允许时）
-    -   模型出错时的助手错误文本
--   `NO_REPLY` 被视为静默令牌并从传出有效载荷中过滤掉。
--   消息传递工具的重复项从最终有效载荷列表中移除。
--   如果没有剩余的可渲染有效载荷且工具出错，则会发出一个后备工具错误回复（除非消息传递工具已经发送了用户可见的回复）。
+工具是智能体与外部世界交互的重要方式：
 
-## 压缩 + 重试
+- 工具的开始、更新、结束事件通过 `tool` 流发出
+- 工具结果在记录或发出前，会进行大小裁剪和图像载荷处理
+- 消息工具的发送会被跟踪，以避免重复的助手确认消息
 
--   自动压缩会发出 `compaction` 流事件，并可能触发重试。
--   重试时，内存缓冲区和工具摘要会被重置，以避免重复输出。
--   有关压缩管道，请参阅[压缩](./compaction.md)。
+## 回复的组装与抑制
 
-## 事件流（当前）
+最终回复是如何组装的？
 
--   `lifecycle`：由 `subscribeEmbeddedPiSession` 发出（以及作为 `agentCommand` 的后备）
--   `assistant`：来自 pi-agent-core 的流式增量
--   `tool`：来自 pi-agent-core 的流式工具事件
+最终载荷由以下部分构成：
+- 助手文本（以及可选的推理内容）
+- 内联工具摘要（当启用详细模式且允许时）
+- 模型出错时的错误提示文本
+
+特殊处理：
+- `NO_REPLY` 被视为静默标记，会从输出载荷中过滤掉
+- 消息工具的重复项会从最终载荷中移除
+- 如果没有可渲染的载荷且工具出错，会发出后备工具错误回复（但如果消息工具已发送了用户可见的回复，则不会重复发送）
+
+## 压缩与重试
+
+当上下文过长时，系统会自动压缩：
+
+- 自动压缩会发出 `compaction` 流事件，并可能触发重试
+- 重试时，内存缓冲区和工具摘要会被重置，避免重复输出
+
+压缩管道的详细说明请参阅 [压缩](./compaction.md)。
+
+## 事件流
+
+当前支持的事件流类型：
+
+- `lifecycle`：生命周期事件，由 `subscribeEmbeddedPiSession` 发出（`agentCommand` 作为后备）
+- `assistant`：助手增量，来自 pi-agent-core 的流式输出
+- `tool`：工具事件，来自 pi-agent-core 的流式输出
 
 ## 聊天通道处理
 
--   助手增量被缓冲到聊天 `delta` 消息中。
--   在**生命周期结束/错误**时发出聊天 `final` 消息。
+对于聊天通道（如 Slack、Discord 等）：
 
-## 超时
+- 助手增量会被缓冲成聊天 `delta` 消息
+- 在生命周期结束/错误时，发出聊天 `final` 消息
 
--   `agent.wait` 默认值：30秒（仅等待）。`timeoutMs` 参数可覆盖。
--   智能体运行时：`agents.defaults.timeoutSeconds` 默认 600秒；在 `runEmbeddedPiAgent` 中止计时器中强制执行。
+## 超时设置
 
-## 可能提前结束的情况
+不同场景有不同的超时配置：
 
--   智能体超时（中止）
--   AbortSignal（取消）
--   网关断开连接或 RPC 超时
--   `agent.wait` 超时（仅等待，不会停止智能体）
+- **`agent.wait` 默认 30 秒**（仅影响等待行为）。可通过 `timeoutMs` 参数覆盖。
+- **智能体运行时默认 600 秒**，通过 `agents.defaults.timeoutSeconds` 配置，在 `runEmbeddedPiAgent` 的中止计时器中强制执行。
+
+## 可能提前终止的情况
+
+以下情况可能导致循环提前结束：
+
+- **智能体超时**：运行时间超过限制，被中止
+- **AbortSignal**：外部取消信号
+- **网关断开或 RPC 超时**：网络或服务问题
+- **`agent.wait` 超时**：仅影响等待，不会停止智能体运行
 
 [智能体运行时](./agent.md)[系统提示](./system-prompt.md)

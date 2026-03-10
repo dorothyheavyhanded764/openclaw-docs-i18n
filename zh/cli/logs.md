@@ -5,9 +5,9 @@
   
 # logs
 
-通过 RPC 实时跟踪网关文件日志（在远程模式下工作）。相关链接：
+通过 RPC 追踪网关日志文件（支持远程模式）。相关内容：
 
--   日志记录概述：[日志记录](../logging.md)
+-   日志概述：[Logging](../logging.md)
 
 ## 示例
 
@@ -20,8 +20,6 @@ openclaw logs --local-time
 openclaw logs --follow --local-time
 ```
 
-使用 `--local-time` 以在您的本地时区呈现时间戳。
+使用 `--local-time` 可以按本地时区显示时间戳。
 
 [hooks](./hooks.md)[memory](./memory.md)
-
----

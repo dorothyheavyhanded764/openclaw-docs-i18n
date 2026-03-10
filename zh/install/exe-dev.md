@@ -5,24 +5,24 @@
   
 # exe.dev
 
-目标：在 exe.dev 虚拟机上运行 OpenClaw Gateway，可通过 `https://<vm-name>.exe.xyz` 从您的笔记本电脑访问。本页面假设使用 exe.dev 默认的 **exeuntu** 镜像。如果您选择了其他发行版，请相应调整软件包。
+**目标：** 在 exe.dev 虚拟机上运行 OpenClaw 网关，可通过 `https://<vm-name>.exe.xyz` 从你的笔记本电脑访问。本页假设使用 exe.dev 默认的 **exeuntu** 镜像。如果选择了其他发行版，请相应调整软件包。
 
-## 初学者快速路径
+## 新手快速路径
 
-1.  [https://exe.new/openclaw](https://exe.new/openclaw)
-2.  根据需要填写您的认证密钥/令牌
-3.  点击虚拟机旁边的“Agent”，然后等待…
-4.  ???
-5.  完成
+1. [https://exe.new/openclaw](https://exe.new/openclaw)
+2. 根据需要填写认证密钥/令牌
+3. 点击虚拟机旁边的"Agent"，然后等待…
+4. ???
+5. 完成
 
 ## 所需条件
 
--   exe.dev 账户
--   对 [exe.dev](https://exe.dev) 虚拟机的 `ssh exe.dev` 访问权限（可选）
+- exe.dev 账户
+- 对 [exe.dev](https://exe.dev) 虚拟机的 `ssh exe.dev` 访问权限（可选）
 
 ## 使用 Shelley 自动安装
 
-Shelley 是 [exe.dev](https://exe.dev) 的代理，可以使用我们的提示词立即安装 OpenClaw。使用的提示词如下：
+Shelley 是 [exe.dev](https://exe.dev) 的智能体，可以使用我们的提示词立即安装 OpenClaw。使用的提示词如下：
 
 ```bash
 Set up OpenClaw (https://docs.openclaw.ai/install) on this VM. Use the non-interactive and accept-risk flags for openclaw onboarding. Add the supplied auth or token as needed. Configure nginx to forward from the default port 18789 to the root location on the default enabled site config, making sure to enable Websocket support. Pairing is done by "openclaw devices list" and "openclaw devices approve <request id>". Make sure the dashboard shows that OpenClaw's health is OK. exe.dev handles forwarding from port 8000 to port 80/443 and HTTPS for us, so the final "reachable" should be <vm-name>.exe.xyz, without port specification.
@@ -32,7 +32,7 @@ Set up OpenClaw (https://docs.openclaw.ai/install) on this VM. Use the non-inter
 
 ## 1) 创建虚拟机
 
-从您的设备执行：
+从你的设备执行：
 
 ```bash
 ssh exe.dev new
@@ -44,7 +44,7 @@ ssh exe.dev new
 ssh <vm-name>.exe.xyz
 ```
 
-提示：请将此虚拟机保持为 **有状态**。OpenClaw 将状态存储在 `~/.openclaw/` 和 `~/.openclaw/workspace/` 下。
+提示：请将此虚拟机保持为**有状态**。OpenClaw 将状态存储在 `~/.openclaw/` 和 `~/.openclaw/workspace/` 下。
 
 ## 2) 安装先决条件（在虚拟机上）
 

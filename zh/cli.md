@@ -863,4 +863,168 @@ openclaw models status
 选项：
 
 -   `get`: `--provider `，`--agent `，`--json`
--   `set`: `--provider `，`--agent `，`&lt
+-   `set`: `--provider `，`--agent `，`<profileIds...>`
+-   `clear`: `--provider `，`--agent `
+
+## 系统
+
+### system event
+
+将系统事件加入队列，并可选择触发心跳（网关 RPC）。必需：
+
+-   `--text `
+
+选项：
+
+-   `--mode <now|next-heartbeat>`
+-   `--json`
+-   `--url`、`--token`、`--timeout`、`--expect-final`
+
+### system heartbeat last|enable|disable
+
+心跳控制（网关 RPC）。选项：
+
+-   `--json`
+-   `--url`、`--token`、`--timeout`、`--expect-final`
+
+### system presence
+
+列出系统在线状态条目（网关 RPC）。选项：
+
+-   `--json`
+-   `--url`、`--token`、`--timeout`、`--expect-final`
+
+## Cron
+
+管理定时任务（网关 RPC）。参见 [/automation/cron-jobs](./automation/cron-jobs.md)。子命令：
+
+-   `cron status [--json]`
+-   `cron list [--all] [--json]`（默认表格输出；使用 `--json` 获取原始数据）
+-   `cron add`（别名：`create`；需要 `--name` 和 `--at` | `--every` | `--cron` 中的任意一个，以及 `--system-event` | `--message` 中的任意一个）
+-   `cron edit `（补丁字段）
+-   `cron rm `（别名：`remove`、`delete`）
+-   `cron enable `
+-   `cron disable `
+-   `cron runs --id  [--limit ]`
+-   `cron run  [--force]`
+
+所有 `cron` 命令都接受 `--url`、`--token`、`--timeout`、`--expect-final`。
+
+## 节点主机
+
+`node` 运行**无头节点主机**或将其作为后台服务管理。参见 [`openclaw node`](./cli/node.md)。子命令：
+
+-   `node run --host <gateway-host> --port 18789`
+-   `node status`
+-   `node install [--host <gateway-host>] [--port ] [--tls] [--tls-fingerprint ] [--node-id ] [--display-name ] [--runtime <node|bun>] [--force]`
+-   `node uninstall`
+-   `node stop`
+-   `node restart`
+
+## 节点
+
+`nodes` 与网关通信并定位已配对的节点。参见 [/nodes](./nodes.md)。通用选项：
+
+-   `--url`、`--token`、`--timeout`、`--json`
+
+子命令：
+
+-   `nodes status [--connected] [--last-connected ]`
+-   `nodes describe --node <id|name|ip>`
+-   `nodes list [--connected] [--last-connected ]`
+-   `nodes pending`
+-   `nodes approve `
+-   `nodes reject `
+-   `nodes rename --node <id|name|ip> --name `
+-   `nodes invoke --node <id|name|ip> --command  [--params ] [--invoke-timeout ] [--idempotency-key ]`
+-   `nodes run --node <id|name|ip> [--cwd ] [--env KEY=VAL] [--command-timeout ] [--needs-screen-recording] [--invoke-timeout ] <command...>`（Mac 节点或无头节点主机）
+-   `nodes notify --node <id|name|ip> [--title ] [--body ] [--sound ] [--priority <passive|active|timeSensitive>] [--delivery <system|overlay|auto>] [--invoke-timeout ]`（仅限 Mac）
+
+摄像头：
+
+-   `nodes camera list --node <id|name|ip>`
+-   `nodes camera snap --node <id|name|ip> [--facing front|back|both] [--device-id ] [--max-width ] [--quality <0-1>] [--delay-ms ] [--invoke-timeout ]`
+-   `nodes camera clip --node <id|name|ip> [--facing front|back] [--device-id ] [--duration <ms|10s|1m>] [--no-audio] [--invoke-timeout ]`
+
+画布 + 屏幕：
+
+-   `nodes canvas snapshot --node <id|name|ip> [--format png|jpg|jpeg] [--max-width ] [--quality <0-1>] [--invoke-timeout ]`
+-   `nodes canvas present --node <id|name|ip> [--target ] [--x ] [--y ] [--width ] [--height ] [--invoke-timeout ]`
+-   `nodes canvas hide --node <id|name|ip> [--invoke-timeout ]`
+-   `nodes canvas navigate  --node <id|name|ip> [--invoke-timeout ]`
+-   `nodes canvas eval [] --node <id|name|ip> [--js ] [--invoke-timeout ]`
+-   `nodes canvas a2ui push --node <id|name|ip> (--jsonl  | --text ) [--invoke-timeout ]`
+-   `nodes canvas a2ui reset --node <id|name|ip> [--invoke-timeout ]`
+-   `nodes screen record --node <id|name|ip> [--screen ] [--duration <ms|10s>] [--fps ] [--no-audio] [--out ] [--invoke-timeout ]`
+
+位置：
+
+-   `nodes location get --node <id|name|ip> [--max-age ] [--accuracy <coarse|balanced|precise>] [--location-timeout ] [--invoke-timeout ]`
+
+## 浏览器
+
+浏览器控制 CLI（专用 Chrome/Brave/Edge/Chromium）。参见 [`openclaw browser`](./cli/browser.md) 和 [浏览器工具](./tools/browser.md)。通用选项：
+
+-   `--url`、`--token`、`--timeout`、`--json`
+-   `--browser-profile `
+
+管理：
+
+-   `browser status`
+-   `browser start`
+-   `browser stop`
+-   `browser reset-profile`
+-   `browser tabs`
+-   `browser open `
+-   `browser focus `
+-   `browser close [targetId]`
+-   `browser profiles`
+-   `browser create-profile --name  [--color ] [--cdp-url ]`
+-   `browser delete-profile --name `
+
+检查：
+
+-   `browser screenshot [targetId] [--full-page] [--ref ] [--element ] [--type png|jpeg]`
+-   `browser snapshot [--format aria|ai] [--target-id ] [--limit ] [--interactive] [--compact] [--depth ] [--selector ] [--out ]`
+
+操作：
+
+-   `browser navigate  [--target-id ]`
+-   `browser resize   [--target-id ]`
+-   `browser click  [--double] [--button <left|right|middle>] [--modifiers ] [--target-id ]`
+-   `browser type   [--submit] [--slowly] [--target-id ]`
+-   `browser press  [--target-id ]`
+-   `browser hover  [--target-id ]`
+-   `browser drag   [--target-id ]`
+-   `browser select  <values...> [--target-id ]`
+-   `browser upload <paths...> [--ref ] [--input-ref ] [--element ] [--target-id ] [--timeout-ms ]`
+-   `browser fill [--fields ] [--fields-file ] [--target-id ]`
+-   `browser dialog --accept|--dismiss [--prompt ] [--target-id ] [--timeout-ms ]`
+-   `browser wait [--time ] [--text ] [--text-gone ] [--target-id ]`
+-   `browser evaluate --fn  [--ref ] [--target-id ]`
+-   `browser console [--level <error|warn|info>] [--target-id ]`
+-   `browser pdf [--target-id ]`
+
+## 文档搜索
+
+### docs \[query...\]
+
+搜索在线文档索引。
+
+## TUI
+
+### tui
+
+打开连接到网关的终端 UI。选项：
+
+-   `--url `
+-   `--token `
+-   `--password `
+-   `--session `
+-   `--deliver`
+-   `--thinking `
+-   `--message `
+-   `--timeout-ms `（默认为 `agents.defaults.timeoutSeconds`）
+-   `--history-limit `
+
+[acp](./cli/acp.md)

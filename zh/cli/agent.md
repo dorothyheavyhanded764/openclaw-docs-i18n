@@ -5,9 +5,9 @@
   
 # agent
 
-通过网关运行一个代理回合（使用 `--local` 参数进行嵌入式运行）。使用 `--agent ` 直接指定一个已配置的代理。相关：
+通过网关运行一个智能体（agent）回合（使用 `--local` 参数进行嵌入式运行）。使用 `--agent ` 直接指定一个已配置的智能体。相关：
 
--   代理发送工具：[Agent send](../tools/agent-send.md)
+-   智能体发送工具：[Agent send](../tools/agent-send.md)
 
 ## 示例
 

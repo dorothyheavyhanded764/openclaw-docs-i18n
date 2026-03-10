@@ -5,7 +5,7 @@
   
 # uninstall
 
-卸载网关服务及本地数据（CLI 保留）。
+卸载网关服务和本地数据（CLI 保留）。
 
 ```bash
 openclaw uninstall

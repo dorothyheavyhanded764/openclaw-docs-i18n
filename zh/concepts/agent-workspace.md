@@ -3,15 +3,21 @@
   基础概念
 
   
-# 代理工作区
+# 智能体工作空间
 
-工作区是代理的家。它是用于文件工具和工作区上下文的唯一工作目录。请将其视为私有并当作记忆来处理。这与存储配置、凭据和会话的 `~/.openclaw/` 是分开的。**重要提示：** 工作区是**默认的当前工作目录**，并非一个严格的沙箱。工具会相对于工作区解析相对路径，但绝对路径仍然可以访问主机上的其他地方，除非启用了沙箱隔离。如果需要隔离，请使用 [`agents.defaults.sandbox`](../gateway/sandboxing.md)（和/或每个代理的沙箱配置）。当启用沙箱隔离且 `workspaceAccess` 不是 `"rw"` 时，工具将在 `~/.openclaw/sandboxes` 下的沙箱工作区内运行，而不是您的主机工作区。
+工作空间（workspace）是智能体（agent）的「家」——它是智能体使用文件工具时唯一的工作目录，也是理解上下文的核心场所。请把它当作私密的「记忆库」来对待。
+
+需要注意的是，工作空间与 `~/.openclaw/` 是分开的：后者存储配置、凭据和会话数据。**关键区别：** 工作空间是**默认的工作目录**，并不是一个严格的沙箱。工具会以工作空间为基准解析相对路径，但绝对路径仍然可以访问主机上的其他位置——除非你启用了沙箱隔离。
+
+如果你需要严格的隔离环境，请使用 [`agents.defaults.sandbox`](../gateway/sandboxing.md)（或为每个智能体单独配置沙箱）。当沙箱启用且 `workspaceAccess` 不是 `"rw"` 时，工具会在 `~/.openclaw/sandboxes` 下的沙箱工作空间内运行，而非你的主机工作空间。
 
 ## 默认位置
 
--   默认：`~/.openclaw/workspace`
--   如果设置了 `OPENCLAW_PROFILE` 且不为 `"default"`，则默认位置变为 `~/.openclaw/workspace-`。
--   在 `~/.openclaw/openclaw.json` 中覆盖：
+工作空间默认存放在以下位置：
+
+-   默认路径：`~/.openclaw/workspace`
+-   如果设置了 `OPENCLAW_PROFILE` 环境变量且值不为 `"default"`，则默认路径变为 `~/.openclaw/workspace-`
+-   你也可以在 `~/.openclaw/openclaw.json` 中自定义：
 
 ```json
 {
@@ -21,81 +27,75 @@
 }
 ```
 
-`openclaw onboard`、`openclaw configure` 或 `openclaw setup` 将创建工作区并填充引导文件（如果它们缺失）。沙箱种子复制仅接受工作区内的常规文件；解析到源工作区之外的符号链接/硬链接别名将被忽略。如果您已自行管理工作区文件，可以禁用引导文件创建：
+当你运行 `openclaw onboard`、`openclaw configure` 或 `openclaw setup` 时，OpenClaw 会自动创建工作空间并生成引导文件（如果文件不存在）。沙箱种子复制只会接受工作空间内的常规文件——解析到工作空间外部的符号链接或硬链接会被忽略。
+
+如果你已经自行管理这些文件，可以禁用引导文件的自动创建：
 
 ```json
 { agent: { skipBootstrap: true } }
 ```
 
-## 额外的工作区文件夹
+## 多余的工作空间目录
 
-旧版本的安装可能创建了 `~/openclaw`。保留多个工作区目录可能会导致令人困惑的认证或状态漂移，因为一次只有一个工作区处于活动状态。**建议：** 保留一个活动工作区。如果您不再使用额外的文件夹，请将其归档或移至回收站（例如 `trash ~/openclaw`）。如果您有意保留多个工作区，请确保 `agents.defaults.workspace` 指向活动的工作区。`openclaw doctor` 在检测到额外的工作区目录时会发出警告。
+早期版本的安装可能会创建 `~/openclaw` 目录。保留多个工作空间目录容易造成认证混乱或状态不同步，因为同一时间只有一个工作空间是活动的。
 
-## 工作区文件说明（每个文件的含义）
+**建议：** 只保留一个活动的工作空间。如果不再使用多余的目录，可以归档或删除（例如 `trash ~/openclaw`）。如果你确实需要维护多个工作空间，请确保 `agents.defaults.workspace` 指向当前活动的那个。`openclaw doctor` 检测到多余的工作空间目录时会发出警告。
 
-这些是 OpenClaw 期望在工作区内存在的标准文件：
+## 工作空间文件一览
 
--   `AGENTS.md`
-    -   代理的操作指南以及它应如何使用记忆。
-    -   在每次会话开始时加载。
-    -   适合放置规则、优先级和“行为准则”细节。
--   `SOUL.md`
-    -   角色设定、语气和边界。
-    -   每次会话加载。
--   `USER.md`
-    -   用户是谁以及如何称呼他们。
-    -   每次会话加载。
--   `IDENTITY.md`
-    -   代理的名称、风格和表情符号。
-    -   在引导仪式期间创建/更新。
--   `TOOLS.md`
-    -   关于您本地工具和约定的笔记。
-    -   不控制工具的可用性；仅为指导性内容。
--   `HEARTBEAT.md`
-    -   可选的心跳运行小清单。
-    -   保持简短以避免令牌消耗。
--   `BOOT.md`
-    -   当内部钩子启用时，在网关重启时执行的可选启动清单。
-    -   保持简短；使用消息工具进行外发发送。
--   `BOOTSTRAP.md`
-    -   一次性首次运行仪式。
-    -   仅为一个全新的工作区创建。
-    -   仪式完成后删除它。
--   `memory/YYYY-MM-DD.md`
-    -   每日记忆日志（每天一个文件）。
-    -   建议在会话开始时读取今天和昨天的日志。
--   `MEMORY.md`（可选）
-    -   精选的长期记忆。
-    -   仅在主要的私有会话中加载（不在共享/群组上下文中）。
+OpenClaw 期望在工作空间中找到以下标准文件。每个文件都有特定的用途：
 
-有关工作流程和自动记忆清理，请参阅[记忆](./memory.md)。
+### 核心配置文件
 
--   `skills/`（可选）
-    -   工作区特定的技能。
-    -   当名称冲突时，覆盖托管/捆绑的技能。
--   `canvas/`（可选）
-    -   用于节点显示的 Canvas UI 文件（例如 `canvas/index.html`）。
+-   `AGENTS.md` — 智能体的操作指南，定义它应该如何使用记忆。每次会话开始时加载。适合放置规则、优先级和「行为准则」。
+-   `SOUL.md` — 人格设定、语气风格和边界。每次会话加载。
+-   `USER.md` — 用户画像：你是谁，智能体该如何称呼你。每次会话加载。
+-   `IDENTITY.md` — 智能体的名字、风格和代表表情。在引导仪式期间创建和更新。
 
-如果任何引导文件缺失，OpenClaw 会向会话中注入一个“文件缺失”标记并继续。大型引导文件在注入时会被截断；可以通过 `agents.defaults.bootstrapMaxChars`（默认值：20000）和 `agents.defaults.bootstrapTotalMaxChars`（默认值：150000）调整限制。`openclaw setup` 可以重新创建缺失的默认文件，而不会覆盖现有文件。
+### 工具与自动化
 
-## 什么不在工作区中
+-   `TOOLS.md` — 本地工具和约定的说明笔记。注意：这只是指导性文档，不会控制工具的实际可用性。
+-   `HEARTBEAT.md` — 可选的心跳任务清单。保持简短，避免消耗过多 token。
+-   `BOOT.md` — 可选的启动清单，当内部钩子启用时会在网关重启时执行。保持简短，使用消息工具进行外发通信。
 
-这些文件位于 `~/.openclaw/` 下，**不应**提交到工作区仓库：
+### 初始化
 
--   `~/.openclaw/openclaw.json`（配置）
--   `~/.openclaw/credentials/`（OAuth 令牌、API 密钥）
--   `~/.openclaw/agents//sessions/`（会话记录 + 元数据）
--   `~/.openclaw/skills/`（托管技能）
+-   `BOOTSTRAP.md` — 一次性首次运行仪式。只会在全新的工作空间中创建。仪式完成后可以删除。
 
-如果您需要迁移会话或配置，请单独复制它们，并将其排除在版本控制之外。
+### 记忆系统
 
-## Git 备份（推荐，私有）
+-   `memory/YYYY-MM-DD.md` — 每日记忆日志，每天一个文件。建议会话开始时读取今天和昨天的日志。
+-   `MEMORY.md`（可选）— 精选的长期记忆。只在主要的私有会话中加载（不在共享或群组上下文中）。
 
-将工作区视为私有记忆。将其放入一个**私有**的 git 仓库中，以便备份和恢复。在运行网关的机器上执行这些步骤（即工作区所在的机器）。
+详细的工作流程和自动记忆清理机制，请参阅 [记忆](./memory.md)。
+
+### 扩展目录
+
+-   `skills/`（可选）— 工作空间专属技能。当名称冲突时，会覆盖托管/内置技能。
+-   `canvas/`（可选）— Canvas UI 文件，用于节点显示（如 `canvas/index.html`）。
+
+如果任何引导文件缺失，OpenClaw 会在会话中注入「文件缺失」标记并继续运行。过大的引导文件会被截断——你可以通过 `agents.defaults.bootstrapMaxChars`（默认 20000）和 `agents.defaults.bootstrapTotalMaxChars`（默认 150000）调整限制。`openclaw setup` 可以重新创建缺失的默认文件，不会覆盖已有文件。
+
+## 什么不应该放在工作空间里
+
+以下内容存放在 `~/.openclaw/` 下，**绝不应该**提交到工作空间仓库：
+
+-   `~/.openclaw/openclaw.json` — 配置文件
+-   `~/.openclaw/credentials/` — OAuth 令牌、API 密钥等凭据
+-   `~/.openclaw/agents//sessions/` — 会话记录和元数据
+-   `~/.openclaw/skills/` — 托管技能
+
+如果需要迁移会话或配置，请单独复制，并确保它们不被纳入版本控制。
+
+## Git 备份（强烈推荐）
+
+把工作空间当作私密的「记忆库」，用 Git 进行版本备份和恢复是最佳实践。请将其放入一个**私有**仓库中。
+
+以下操作请在运行网关的机器上执行（工作空间就存在于那台机器上）。
 
 ### 1) 初始化仓库
 
-如果已安装 git，全新的工作区会自动初始化。如果此工作区还不是一个仓库，请运行：
+如果已安装 Git，全新的工作空间会自动初始化仓库。如果当前工作空间还不是 Git 仓库，请运行：
 
 ```bash
 cd ~/.openclaw/workspace
@@ -104,13 +104,13 @@ git add AGENTS.md SOUL.md TOOLS.md IDENTITY.md USER.md HEARTBEAT.md memory/
 git commit -m "Add agent workspace"
 ```
 
-### 2) 添加私有远程仓库（适合初学者的选项）
+### 2) 添加私有远程仓库
 
-选项 A：GitHub 网页界面
+#### 选项 A：GitHub 网页界面
 
-1.  在 GitHub 上创建一个新的**私有**仓库。
-2.  不要使用 README 初始化（避免合并冲突）。
-3.  复制 HTTPS 远程 URL。
+1.  在 GitHub 上创建一个新的**私有**仓库
+2.  不要勾选「使用 README 初始化」（避免合并冲突）
+3.  复制 HTTPS 远程 URL
 4.  添加远程仓库并推送：
 
 ```bash
@@ -119,18 +119,18 @@ git remote add origin <https-url>
 git push -u origin main
 ```
 
-选项 B：GitHub CLI (`gh`)
+#### 选项 B：GitHub CLI (`gh`)
 
 ```bash
 gh auth login
 gh repo create openclaw-workspace --private --source . --remote origin --push
 ```
 
-选项 C：GitLab 网页界面
+#### 选项 C：GitLab 网页界面
 
-1.  在 GitLab 上创建一个新的**私有**仓库。
-2.  不要使用 README 初始化（避免合并冲突）。
-3.  复制 HTTPS 远程 URL。
+1.  在 GitLab 上创建一个新的**私有**仓库
+2.  不要使用 README 初始化
+3.  复制 HTTPS 远程 URL
 4.  添加远程仓库并推送：
 
 ```bash
@@ -139,7 +139,7 @@ git remote add origin <https-url>
 git push -u origin main
 ```
 
-### 3) 持续更新
+### 3) 日常更新
 
 ```bash
 git status
@@ -148,15 +148,17 @@ git commit -m "Update memory"
 git push
 ```
 
-## 不要提交机密信息
+## 切勿提交机密信息
 
-即使在私有仓库中，也应避免在工作区中存储机密信息：
+即使在私有仓库中，也要避免在工作空间中存储敏感信息：
 
--   API 密钥、OAuth 令牌、密码或私有凭据。
--   `~/.openclaw/` 下的任何内容。
--   聊天记录或敏感附件的原始转储。
+-   API 密钥、OAuth 令牌、密码或其他凭据
+-   `~/.openclaw/` 下的任何内容
+-   聊天记录或敏感附件的原始数据
 
-如果必须存储敏感引用，请使用占位符，并将真实的机密信息保存在其他地方（密码管理器、环境变量或 `~/.openclaw/`）。建议的 `.gitignore` 起始内容：
+如果确实需要引用敏感信息，请使用占位符，将真实的机密存放在密码管理器、环境变量或 `~/.openclaw/` 中。
+
+建议的 `.gitignore` 模板：
 
 ```
 .DS_Store
@@ -166,16 +168,16 @@ git push
 **/secrets*
 ```
 
-## 将工作区迁移到新机器
+## 迁移工作空间到新机器
 
-1.  将仓库克隆到所需路径（默认为 `~/.openclaw/workspace`）。
-2.  在 `~/.openclaw/openclaw.json` 中将 `agents.defaults.workspace` 设置为该路径。
-3.  运行 `openclaw setup --workspace ` 以填充任何缺失的文件。
-4.  如果需要会话，请单独从旧机器复制 `~/.openclaw/agents//sessions/`。
+1.  将仓库克隆到目标路径（默认为 `~/.openclaw/workspace`）
+2.  在 `~/.openclaw/openclaw.json` 中设置 `agents.defaults.workspace` 指向该路径
+3.  运行 `openclaw setup --workspace ` 生成缺失的文件
+4.  如需迁移会话数据，请单独从旧机器复制 `~/.openclaw/agents//sessions/`
 
-## 高级说明
+## 进阶说明
 
--   多智能体路由可以为每个代理使用不同的工作区。有关路由配置，请参阅[通道路由](../channels/channel-routing.md)。
--   如果启用了 `agents.defaults.sandbox`，非主会话可以使用 `agents.defaults.sandbox.workspaceRoot` 下的每个会话沙箱工作区。
+-   多智能体路由可以为不同智能体配置不同的工作空间。详见 [通道路由](../channels/channel-routing.md)。
+-   如果启用了 `agents.defaults.sandbox`，非主会话可以使用 `agents.defaults.sandbox.workspaceRoot` 下的独立沙箱工作空间。
 
 [上下文](./context.md)[OAuth](./oauth.md)
