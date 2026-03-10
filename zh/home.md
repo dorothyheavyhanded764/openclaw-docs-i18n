@@ -3,7 +3,7 @@
   首页
 
   
-# OpenClaw
+# OpenClaw 官方文档中文版（社区翻译版）
 
   ![](../images/openclaw-logo-text-dark.png)
   ![](../images/openclaw-logo-text.png)
@@ -11,6 +11,8 @@
 > *"去角质！去角质！"* — 一只太空龙虾，大概吧
 
   **跨平台 AI 智能体（agent）网关，支持 WhatsApp、Telegram、Discord、iMessage 等更多平台。** 发一条消息，就能从口袋里获得智能体（agent）的回复。插件还支持 Mattermost 等更多平台。
+
+  本站是 OpenClaw 官方英文文档的**中文翻译版**，是面向中文用户的 **OpenClaw 中文文档**，帮助你更容易理解和上手 OpenClaw（以下简称“OpenClaw 翻译”）。
 
   
   
